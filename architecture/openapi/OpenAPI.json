@@ -32,7 +32,9 @@
   "paths": {
     "/auth/signin": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Logs the user in the app",
         "description": "Logs the user",
         "requestBody": {
@@ -53,7 +55,9 @@
     },
     "/auth/register": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Registers a user to the app",
         "description": "Creates a user",
         "operationId": "createUser",
@@ -75,7 +79,9 @@
     },
     "/beverages": {
       "get": {
-        "tags": ["Beverage"],
+        "tags": [
+          "Beverage"
+        ],
         "summary": "returns the beverages",
         "description": "Gets the beverages",
         "operationId": "getBeverages",
@@ -98,7 +104,9 @@
     },
     "/beverages/{resource}": {
       "get": {
-        "tags": ["Beverage"],
+        "tags": [
+          "Beverage"
+        ],
         "summary": "gets a specific beverage",
         "operationId": "getBeverage",
         "parameters": [
@@ -128,7 +136,9 @@
         }
       },
       "post": {
-        "tags": ["Beverage"],
+        "tags": [
+          "Beverage"
+        ],
         "summary": "creates a preference",
         "description": "Creates a preference",
         "operationId": "postPreference",
@@ -173,7 +183,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BeverageResource"
+                  "$ref": "#/components/schemas/Resource"
                 }
               }
             }
@@ -181,7 +191,9 @@
         }
       },
       "delete": {
-        "tags": ["Beverage"],
+        "tags": [
+          "Beverage"
+        ],
         "summary": "deletes a resource",
         "description": "Deletes a beverage",
         "operationId": "deleteBeverage",
@@ -207,10 +219,12 @@
     },
     "/profile": {
       "get": {
-        "tags": ["Profile"],
+        "tags": [
+          "Profile"
+        ],
         "summary": "get user profile",
         "description": "Gets User Profile",
-        "operationId": "getProfile",
+        "operationId": "getProfileMetadata",
         "responses": {
           "200": {
             "description": "successfully got user profile",
@@ -225,10 +239,21 @@
         }
       },
       "post": {
-        "tags": ["Profile"],
+        "tags": [
+          "Profile"
+        ],
         "summary": "update user profile",
         "description": "Updates the user profile",
         "operationId": "updateProfile",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "successfully updated user profile",
@@ -245,7 +270,9 @@
     },
     "/profile/preferences": {
       "get": {
-        "tags": ["Profile"],
+        "tags": [
+          "Profile"
+        ],
         "summary": "gets user preferences",
         "description": "Gets User Preferences",
         "operationId": "getPreferences",
@@ -255,7 +282,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResource"
+                  "$ref": "#/components/schemas/Resource"
                 }
               }
             }
@@ -263,17 +290,28 @@
         }
       },
       "post": {
-        "tags": ["Profile"],
+        "tags": [
+          "Profile"
+        ],
         "summary": "updates user preferences",
         "description": "Updates the user preferences",
         "operationId": "updatePreferences",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Resource"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "succesfully updated user preference",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResource"
+                  "$ref": "#/components/schemas/Resource"
                 }
               }
             }
@@ -285,7 +323,10 @@
   "components": {
     "schemas": {
       "Credentials": {
-        "required": ["password", "username"],
+        "required": [
+          "password",
+          "username"
+        ],
         "type": "object",
         "properties": {
           "username": {
@@ -299,7 +340,10 @@
         }
       },
       "User": {
-        "required": ["id", "name"],
+        "required": [
+          "id",
+          "name"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -330,24 +374,10 @@
           "id": {
             "type": "number",
             "example": 1234
-          }
-        }
-      },
-      "BeverageResource": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1234
-          }
-        }
-      },
-      "UserResource": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1234
+          },
+          "uri": {
+            "type": "string",
+            "example": "www.example.com"
           }
         }
       }

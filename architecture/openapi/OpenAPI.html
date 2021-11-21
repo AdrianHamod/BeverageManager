@@ -689,15 +689,6 @@
   <script>
     // Script section to load models into a JS Var
     var defs = {}
-            defs["BeverageResource"] = {
-  "type" : "object",
-  "properties" : {
-    "id" : {
-      "type" : "number",
-      "example" : 1234
-    }
-  }
-};
             defs["Credentials"] = {
   "required" : [ "password", "username" ],
   "type" : "object",
@@ -718,6 +709,10 @@
     "id" : {
       "type" : "number",
       "example" : 1234
+    },
+    "uri" : {
+      "type" : "string",
+      "example" : "www.example.com"
     }
   }
 };
@@ -744,15 +739,6 @@
     "nationality" : {
       "type" : "string",
       "example" : "Romanian"
-    }
-  }
-};
-            defs["UserResource"] = {
-  "type" : "object",
-  "properties" : {
-    "id" : {
-      "type" : "number",
-      "example" : 1234
     }
   }
 };
@@ -796,8 +782,8 @@
                     <li data-group="Profile" data-name="getPreferences" class="">
                       <a href="#api-Profile-getPreferences">getPreferences</a>
                     </li>
-                    <li data-group="Profile" data-name="getProfile" class="">
-                      <a href="#api-Profile-getProfile">getProfile</a>
+                    <li data-group="Profile" data-name="getProfileMetadata" class="">
+                      <a href="#api-Profile-getProfileMetadata">getProfileMetadata</a>
                     </li>
                     <li data-group="Profile" data-name="updatePreferences" class="">
                       <a href="#api-Profile-updatePreferences">updatePreferences</a>
@@ -2209,7 +2195,7 @@ public class BeverageApiExample {
         String preference = preference_example; // String | the preference of the user
         String context = context_example; // String | the context of the preference
         try {
-            BeverageResource result = apiInstance.postPreference(resource, preference, context);
+            Resource result = apiInstance.postPreference(resource, preference, context);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling BeverageApi#postPreference");
@@ -2230,7 +2216,7 @@ public class BeverageApiExample {
         String preference = preference_example; // String | the preference of the user
         String context = context_example; // String | the context of the preference
         try {
-            BeverageResource result = apiInstance.postPreference(resource, preference, context);
+            Resource result = apiInstance.postPreference(resource, preference, context);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling BeverageApi#postPreference");
@@ -2254,7 +2240,7 @@ BeverageApi *apiInstance = [[BeverageApi alloc] init];
 [apiInstance postPreferenceWith:resource
     preference:preference
     context:context
-              completionHandler: ^(BeverageResource output, NSError* error) {
+              completionHandler: ^(Resource output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -2309,7 +2295,7 @@ namespace Example
             try
             {
                 // creates a preference
-                BeverageResource result = apiInstance.postPreference(resource, preference, context);
+                Resource result = apiInstance.postPreference(resource, preference, context);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2488,7 +2474,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/BeverageResource"
+        "$ref" : "#/components/schemas/Resource"
       }
     }
   }
@@ -2574,7 +2560,7 @@ public class ProfileApiExample {
         
         ProfileApi apiInstance = new ProfileApi();
         try {
-            UserResource result = apiInstance.getPreferences();
+            Resource result = apiInstance.getPreferences();
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProfileApi#getPreferences");
@@ -2592,7 +2578,7 @@ public class ProfileApiExample {
     public static void main(String[] args) {
         ProfileApi apiInstance = new ProfileApi();
         try {
-            UserResource result = apiInstance.getPreferences();
+            Resource result = apiInstance.getPreferences();
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProfileApi#getPreferences");
@@ -2611,7 +2597,7 @@ ProfileApi *apiInstance = [[ProfileApi alloc] init];
 
 // gets user preferences
 [apiInstance getPreferencesWithCompletionHandler: 
-              ^(UserResource output, NSError* error) {
+              ^(Resource output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -2659,7 +2645,7 @@ namespace Example
             try
             {
                 // gets user preferences
-                UserResource result = apiInstance.getPreferences();
+                Resource result = apiInstance.getPreferences();
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2749,7 +2735,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/UserResource"
+        "$ref" : "#/components/schemas/Resource"
       }
     }
   }
@@ -2781,10 +2767,10 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Profile-getProfile">
-                      <article id="api-Profile-getProfile-0" data-group="User" data-name="getProfile" data-version="0">
+                    <div id="api-Profile-getProfileMetadata">
+                      <article id="api-Profile-getProfileMetadata-0" data-group="User" data-name="getProfileMetadata" data-version="0">
                         <div class="pull-left">
-                          <h1>getProfile</h1>
+                          <h1>getProfileMetadata</h1>
                           <p>get user profile</p>
                         </div>
                         <div class="pull-right"></div>
@@ -2798,26 +2784,26 @@ except ApiException as e:
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Profile-getProfile-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Profile-getProfile-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Profile-getProfile-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Profile-getProfile-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Profile-getProfile-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Profile-getProfile-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Profile-getProfile-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Profile-getProfile-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Profile-getProfile-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Profile-getProfile-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Profile-getProfile-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Profile-getProfileMetadata-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Profile-getProfileMetadata-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Profile-getProfileMetadata-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Profile-getProfileMetadata-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Profile-getProfileMetadata-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Profile-getProfileMetadata-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Profile-getProfileMetadata-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Profile-getProfileMetadata-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Profile-getProfileMetadata-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Profile-getProfileMetadata-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Profile-getProfileMetadata-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Profile-getProfile-0-curl">
+                          <div class="tab-pane active" id="examples-Profile-getProfileMetadata-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
 "https://virtserver.swaggerhub.com/BEM-Project/BEM/1.0.0/profile"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Profile-getProfile-0-java">
+                          <div class="tab-pane" id="examples-Profile-getProfileMetadata-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -2832,17 +2818,17 @@ public class ProfileApiExample {
         
         ProfileApi apiInstance = new ProfileApi();
         try {
-            User result = apiInstance.getProfile();
+            User result = apiInstance.getProfileMetadata();
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ProfileApi#getProfile");
+            System.err.println("Exception when calling ProfileApi#getProfileMetadata");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Profile-getProfile-0-android">
+                          <div class="tab-pane" id="examples-Profile-getProfileMetadata-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.ProfileApi;
 
 public class ProfileApiExample {
@@ -2850,25 +2836,25 @@ public class ProfileApiExample {
     public static void main(String[] args) {
         ProfileApi apiInstance = new ProfileApi();
         try {
-            User result = apiInstance.getProfile();
+            User result = apiInstance.getProfileMetadata();
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ProfileApi#getProfile");
+            System.err.println("Exception when calling ProfileApi#getProfileMetadata");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Profile-getProfile-0-groovy">
+  <div class="tab-pane" id="examples-Profile-getProfileMetadata-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Profile-getProfile-0-objc">
+                            <div class="tab-pane" id="examples-Profile-getProfileMetadata-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">
 ProfileApi *apiInstance = [[ProfileApi alloc] init];
 
 // get user profile
-[apiInstance getProfileWithCompletionHandler: 
+[apiInstance getProfileMetadataWithCompletionHandler: 
               ^(User output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -2880,7 +2866,7 @@ ProfileApi *apiInstance = [[ProfileApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Profile-getProfile-0-javascript">
+                            <div class="tab-pane" id="examples-Profile-getProfileMetadata-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var BeverageManagerApp = require('beverage_manager_app');
 
 var api = new BeverageManagerApp.ProfileApi()
@@ -2891,14 +2877,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getProfile(callback);
+api.getProfileMetadata(callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Profile-getProfile-0-angular">
+                            <!--<div class="tab-pane" id="examples-Profile-getProfileMetadata-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Profile-getProfile-0-csharp">
+                            <div class="tab-pane" id="examples-Profile-getProfileMetadata-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -2907,7 +2893,7 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class getProfileExample
+    public class getProfileMetadataExample
     {
         public void main()
         {
@@ -2917,12 +2903,12 @@ namespace Example
             try
             {
                 // get user profile
-                User result = apiInstance.getProfile();
+                User result = apiInstance.getProfileMetadata();
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling ProfileApi.getProfile: " + e.Message );
+                Debug.Print("Exception when calling ProfileApi.getProfileMetadata: " + e.Message );
             }
         }
     }
@@ -2930,22 +2916,22 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Profile-getProfile-0-php">
+                            <div class="tab-pane" id="examples-Profile-getProfileMetadata-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiProfileApi();
 
 try {
-    $result = $api_instance->getProfile();
+    $result = $api_instance->getProfileMetadata();
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling ProfileApi->getProfile: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling ProfileApi->getProfileMetadata: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Profile-getProfile-0-perl">
+                            <div class="tab-pane" id="examples-Profile-getProfileMetadata-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ProfileApi;
@@ -2953,15 +2939,15 @@ use WWW::SwaggerClient::ProfileApi;
 my $api_instance = WWW::SwaggerClient::ProfileApi->new();
 
 eval { 
-    my $result = $api_instance->getProfile();
+    my $result = $api_instance->getProfileMetadata();
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling ProfileApi->getProfile: $@\n";
+    warn "Exception when calling ProfileApi->getProfileMetadata: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Profile-getProfile-0-python">
+                            <div class="tab-pane" id="examples-Profile-getProfileMetadata-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -2973,10 +2959,10 @@ api_instance = swagger_client.ProfileApi()
 
 try: 
     # get user profile
-    api_response = api_instance.get_profile()
+    api_response = api_instance.get_profile_metadata()
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling ProfileApi->getProfile: %s\n" % e)</code></pre>
+    print("Exception when calling ProfileApi->getProfileMetadata: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -2992,14 +2978,14 @@ except ApiException as e:
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-getProfile-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-getProfileMetadata-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-getProfile-200-schema">
-                                  <div id='responses-getProfile-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-getProfileMetadata-200-schema">
+                                  <div id='responses-getProfileMetadata-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
@@ -3025,14 +3011,14 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-getProfile-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-getProfile-200-schema-200');
+                                        $('#responses-getProfileMetadata-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getProfileMetadata-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-getProfile-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-getProfileMetadata-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
@@ -3073,6 +3059,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Profile-updatePreferences-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
+-H "Content-Type: application/json"\
 "https://virtserver.swaggerhub.com/BEM-Project/BEM/1.0.0/profile/preferences"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Profile-updatePreferences-0-java">
@@ -3089,8 +3076,9 @@ public class ProfileApiExample {
     public static void main(String[] args) {
         
         ProfileApi apiInstance = new ProfileApi();
+        Resource body = ; // Resource | 
         try {
-            UserResource result = apiInstance.updatePreferences();
+            Resource result = apiInstance.updatePreferences(body);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProfileApi#updatePreferences");
@@ -3107,8 +3095,9 @@ public class ProfileApiExample {
 
     public static void main(String[] args) {
         ProfileApi apiInstance = new ProfileApi();
+        Resource body = ; // Resource | 
         try {
-            UserResource result = apiInstance.updatePreferences();
+            Resource result = apiInstance.updatePreferences(body);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProfileApi#updatePreferences");
@@ -3122,12 +3111,13 @@ public class ProfileApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Profile-updatePreferences-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">Resource *body = ; //  (optional)
+
 ProfileApi *apiInstance = [[ProfileApi alloc] init];
 
 // updates user preferences
-[apiInstance updatePreferencesWithCompletionHandler: 
-              ^(UserResource output, NSError* error) {
+[apiInstance updatePreferencesWith:body
+              completionHandler: ^(Resource output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -3142,6 +3132,9 @@ ProfileApi *apiInstance = [[ProfileApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var BeverageManagerApp = require('beverage_manager_app');
 
 var api = new BeverageManagerApp.ProfileApi()
+var opts = { 
+  'body':  // {{Resource}} 
+};
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -3149,7 +3142,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.updatePreferences(callback);
+api.updatePreferences(opts, callback);
 </code></pre>
                             </div>
 
@@ -3171,11 +3164,12 @@ namespace Example
         {
 
             var apiInstance = new ProfileApi();
+            var body = new Resource(); // Resource |  (optional) 
 
             try
             {
                 // updates user preferences
-                UserResource result = apiInstance.updatePreferences();
+                Resource result = apiInstance.updatePreferences(body);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -3193,9 +3187,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiProfileApi();
+$body = ; // Resource | 
 
 try {
-    $result = $api_instance->updatePreferences();
+    $result = $api_instance->updatePreferences($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ProfileApi->updatePreferences: ', $e->getMessage(), PHP_EOL;
@@ -3209,9 +3204,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ProfileApi;
 
 my $api_instance = WWW::SwaggerClient::ProfileApi->new();
+my $body = WWW::SwaggerClient::Object::Resource->new(); # Resource | 
 
 eval { 
-    my $result = $api_instance->updatePreferences();
+    my $result = $api_instance->updatePreferences(body => $body);
     print Dumper($result);
 };
 if ($@) {
@@ -3228,10 +3224,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ProfileApi()
+body =  # Resource |  (optional)
 
 try: 
     # updates user preferences
-    api_response = api_instance.update_preferences()
+    api_response = api_instance.update_preferences(body=body)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling ProfileApi->updatePreferences: %s\n" % e)</code></pre>
@@ -3242,6 +3239,48 @@ except ApiException as e:
 
 
 
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body </td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/Resource"
+      }
+    }
+  }
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_updatePreferences_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_updatePreferences_body"></div>
+                                </td>
+                                </tr>
+                            </table>
 
 
 
@@ -3265,7 +3304,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/UserResource"
+        "$ref" : "#/components/schemas/Resource"
       }
     }
   }
@@ -3331,6 +3370,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Profile-updateProfile-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
+-H "Content-Type: application/json"\
 "https://virtserver.swaggerhub.com/BEM-Project/BEM/1.0.0/profile"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Profile-updateProfile-0-java">
@@ -3347,8 +3387,9 @@ public class ProfileApiExample {
     public static void main(String[] args) {
         
         ProfileApi apiInstance = new ProfileApi();
+        User body = ; // User | 
         try {
-            User result = apiInstance.updateProfile();
+            User result = apiInstance.updateProfile(body);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProfileApi#updateProfile");
@@ -3365,8 +3406,9 @@ public class ProfileApiExample {
 
     public static void main(String[] args) {
         ProfileApi apiInstance = new ProfileApi();
+        User body = ; // User | 
         try {
-            User result = apiInstance.updateProfile();
+            User result = apiInstance.updateProfile(body);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProfileApi#updateProfile");
@@ -3380,12 +3422,13 @@ public class ProfileApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Profile-updateProfile-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">User *body = ; //  (optional)
+
 ProfileApi *apiInstance = [[ProfileApi alloc] init];
 
 // update user profile
-[apiInstance updateProfileWithCompletionHandler: 
-              ^(User output, NSError* error) {
+[apiInstance updateProfileWith:body
+              completionHandler: ^(User output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -3400,6 +3443,9 @@ ProfileApi *apiInstance = [[ProfileApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var BeverageManagerApp = require('beverage_manager_app');
 
 var api = new BeverageManagerApp.ProfileApi()
+var opts = { 
+  'body':  // {{User}} 
+};
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -3407,7 +3453,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.updateProfile(callback);
+api.updateProfile(opts, callback);
 </code></pre>
                             </div>
 
@@ -3429,11 +3475,12 @@ namespace Example
         {
 
             var apiInstance = new ProfileApi();
+            var body = new User(); // User |  (optional) 
 
             try
             {
                 // update user profile
-                User result = apiInstance.updateProfile();
+                User result = apiInstance.updateProfile(body);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -3451,9 +3498,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiProfileApi();
+$body = ; // User | 
 
 try {
-    $result = $api_instance->updateProfile();
+    $result = $api_instance->updateProfile($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ProfileApi->updateProfile: ', $e->getMessage(), PHP_EOL;
@@ -3467,9 +3515,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ProfileApi;
 
 my $api_instance = WWW::SwaggerClient::ProfileApi->new();
+my $body = WWW::SwaggerClient::Object::User->new(); # User | 
 
 eval { 
-    my $result = $api_instance->updateProfile();
+    my $result = $api_instance->updateProfile(body => $body);
     print Dumper($result);
 };
 if ($@) {
@@ -3486,10 +3535,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ProfileApi()
+body =  # User |  (optional)
 
 try: 
     # update user profile
-    api_response = api_instance.update_profile()
+    api_response = api_instance.update_profile(body=body)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling ProfileApi->updateProfile: %s\n" % e)</code></pre>
@@ -3500,6 +3550,48 @@ except ApiException as e:
 
 
 
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body </td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/User"
+      }
+    }
+  }
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_updateProfile_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_updateProfile_body"></div>
+                                </td>
+                                </tr>
+                            </table>
 
 
 
