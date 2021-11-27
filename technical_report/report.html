@@ -1,0 +1,71 @@
+<!doctype html>
+  <head>
+    <meta charset="utf-8">
+    <title>Beverage Manager technical report</title>
+  </head>
+
+  <article>
+    <header>
+      <h1>Beverage Manager technical report</h1>
+      <div role="contentinfo">
+        <section typeof="sa:AuthorsList">
+          <h2>Contributors</h2>
+          <ul>
+            <li typeof="sa:ContributorRole" property="schema:author">
+              <span typeof="schema:Person">
+                <meta property="schema:givenName" content="Adrian">
+                <meta property="schema:familyName" content="Hamod">
+                <span property="schema:name">Adrian Hamod</span>
+              </span>
+              <ul>
+                <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
+                  <a href="mailto:adrianhamod@gmail.com" property="schema:email"> adrianhamod@gmail.com
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li typeof="sa:ContributorRole" property="schema:author">
+              <span typeof="schema:Person">
+                <meta property="schema:givenName" content="Dorian">
+                <meta property="schema:additionalName" content="Gheorghe">
+                <meta property="schema:familyName" content="Olărescu">
+                <span property="schema:name">Dorian Olărescu</span>
+              </span>
+              <ul>
+                <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
+                  <a href="mailto:dorian.olarescu@gmail.com" property="schema:email"> dorian.olarescu@gmail.com
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>License and copyright</h2>
+          <h3>
+            <a href="https://creativecommons.org/licenses/by/4.0/" property="schema:license" typeof="CreativeWork">License</a>
+            <h3>
+          <div property="schema:copyrightYear"></div>
+          <h3>Copyright</h3>
+          <ul>
+            <li property="schema:copyrightYear">2021</li>
+            <li property="schema:copyrightHolder" typeof="schema:Organization">
+              Facultatea de Informatică - Universitatea Alexandru Ioan Cuza
+            </li>
+          </ul>
+        </section>
+        <section typeof="sa:Abstract">
+          <h2>Abstract</h2>
+          This report details the technical aspects of building a web application
+          around an ontological model describing the most common non-alcoholic beverages.
+          The application described is statefull by design allowing users interacting
+          with it to express preferences towards beverages. The mentioned preferences are
+          modelled as a knowledge graph whereas the beverage resources are be modelled
+          to include speciffic metadata (e.g.: category, price, ingredients etc.). In terms of features the application should also support browsing, filtering and even
+          suggestions or correlations.
+          The report show cases topics such as internal data structures, linked data principles, technologies used, cost of infrastructure, SLAs. 
+        </section>
+      </div>
+    </header>
+  </article> 
+</html>
