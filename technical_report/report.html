@@ -63,7 +63,27 @@
           modelled as a knowledge graph whereas the beverage resources are be modelled
           to include speciffic metadata (e.g.: category, price, ingredients etc.). In terms of features the application should also support browsing, filtering and even
           suggestions or correlations.
-          The report show cases topics such as internal data structures, linked data principles, technologies used, cost of infrastructure, SLAs. 
+          The report show cases topics such as internal data structures, linked data principles, technologies used, cost of infrastructure, SLAs. For convinience, in the following sections we will reffer to the application as BEM - abvreviation for Beverage Manager, title of the project and application.
+        </section>
+        <section>
+          <h2>1.0 BEM overview</h2>
+          <section>
+            <h3>1.1 Service overview</h3>
+            The BEM service handles requests over an http connection. Over this connection authenticated clients can view queried resources rendered in html format. The frontend service handles delivery of static assets (html, css, js) and forwarding the queries to the query backend service. The backend service exposes and API for retrieving json representations of interlinked resources in RDF format. The API can also be made available for programmatic access or unauthenticated access as long as it accesses immutable resources describing non-user data (beverages excepting user preferences). Beverage related resources can be accessed via the /beverage/{resource} path where {resource} is a path parameter indicating the name of the resource. User preferences are available through the /profile/{user} route where {user} is a path parameter indicating the name of the user. The backend service queries the internal RDF storage to retrieve data and It can also be extended to run SPARQL queries on public sets of data such as DBPedia in order to merge additional metadata and link to external sources of data. RDF4J supports queries on remote SPARKQL endpoints such as DBPedia through the SPARKQLRepository API https://rdf4j.org/documentation/programming/setup/#accessing-a-sparql-endpoint
+          </section>
+          <section>
+            <h3>1.2 Internal data representation</h3>
+            The service internal model representation of data and resources is divided into 2 categories. As mentioned before accessing RDF data stores is done through the RDF4J Repository API. This enables us to work directly with the RDF4J Model API which provides class containers for the abstract RDF concepts. Resources are defined as IRI objects, literals are modeled as Literal objects, Statement objects abstract the concepts of subject, predicate and object through the use of IRIs and lastly blank nodes are represented through BNode object or null values. This model classes are used as entity objects when communicating with a data store such as DBPedia or our own ontology storage.
+            When serving response the http requests the body of the response will contain a JSON-ld representation of the data.
+          </section>
+          <section>
+            <h3>1.3 Internal storage</h3>
+            For our internal ontology storage, we use a dedicated ElasticSearch instance since the Repository API offers a direct integration with it. Storing the data on a separate instance, as opposed to a in memory storage enables us to future proof for extensions such as database replication if there are concerns regarding availability or durability. One advantage of an in-memory storage is the fast access to data. Even so, the data retrievals from a remote server can be improved through caching solutions such as Redis if there are concerns in this sense. 
+          </section>
+          <section>
+            <h3>1.4 Linked data principles</h3>
+            We can outline several ideas mentioned above that describe the linked data feature of the application. Stored data is available on the web through the use of an HTTP connection. The ontology resources are described through unique URIs. The internal data is modelled in RDF format using the RDF4J API and the output is in JSON-LD representation. Outputted resources include links to other internal resources to which they describe relations. This linking is done through metadata links to those resources. This linking can be further improved through querying/merging external data available in other public stores such as DBPedia
+          </section>
         </section>
       </div>
     </header>
