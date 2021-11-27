@@ -115,9 +115,12 @@
             </section>
             <section>
               <h4>2.2.3 Elastic Container Service</h4>
+              The mentioned load balancer front faces an ECS cluster. Amazon ECS is a fully managed container orchestration service with the purpose of easing deployment, service and resources management and scaling. What makes deployments easier is the fact that the ECS cluster is a hybrid enironment in regards to the runtimes and types of applications deployed. Elastic container registry is a service like feature integrated with ECS with the purpose of centralizing docker images used in deployment. We use ECS to deploy the frontend service, the authentication service and the query backend service in sepparate containers. ECS allows us to customize the host resources of each service, which helps with optimizing resource allocation. This also means that each type of service is scaled individually with respect to each container traffic load and each custom setting configured prior to deployment. 
+              In addition to the scaling feature, Amazon also provides it's own on demand serverless containers to use with ECS. ECS with Fargate is the managed AWS alternative to using Kubernetes. The main advantage for us in using Fargate is that there are no upfront expenses since it follows the pay for only what you use paradigm. 
             </section>   
             <section>
               <h4>2.2.4 Amazon Relational Database Service</h4>
+              Amazon RDS, specifically their in house built engine Aurora is a high performance serverless SQL database. The main role of the database is to store user data, including hashed credentials and profile data. The advantages of using Amazon RDS include high performance and scalability while still paying for only what you are using, fully delegation of management and integrations with AWS ecosystem from which main benefits is the ease of securing the database through VPCs and encrpytion services such as AWS KMS. 
             </section>
           </section>
         </section>
