@@ -1,5 +1,12 @@
 <!doctype html>
   <head>
+    <style type="text/css">
+      body {
+        width: 21cm;
+        height: 29.7cm;
+        margin: 30mm 45mm 30mm 45mm; 
+      } 
+    </style>
     <meta charset="utf-8">
     <title>Beverage Manager technical report</title>
   </head>
@@ -83,6 +90,35 @@
           <section>
             <h3>1.4 Linked data principles</h3>
             We can outline several ideas mentioned above that describe the linked data feature of the application. Stored data is available on the web through the use of an HTTP connection. The ontology resources are described through unique URIs. The internal data is modelled in RDF format using the RDF4J API and the output is in JSON-LD representation. Outputted resources include links to other internal resources to which they describe relations. This linking is done through metadata links to those resources. This linking can be further improved through querying/merging external data available in other public stores such as DBPedia
+          </section>
+        </section>
+        <section>
+          <h2>2.0 Technologies used</h2>
+          <section>
+            <h3>2.1 Design and architecture</h3>
+            A general architecture of the application and preliminary design considerations
+            are available in the <a href="https://github.com/AdrianHamod/BeverageManager/tree/main/architecture">project repository</a>. This includes a diagram describing the service oriented architecture, preliminary UML representation of the backend service, OpenAPI specification of the public APIs exposed and descriptions of the application flow, query service and end client use cases. 
+          </section>
+          <section>
+            <h3>2.2 Cloud services</h3>
+            In order to orchestrate, deploy and ease the resource management several AWS services are used. 
+            <section>
+              <h4>2.2.1 API Gateway</h4>
+              API Gateway is a service for managing API routing at service level as opposed to how popular web frameworks manage API routing at application domain level. What this means is requests are handled by central unit which resolves the service appropirate to delegate the request to. This is particularly useful in service oriented architectures where microservices are standalone applications and require an orchestration logic for the application flow to be implemented.
+              API Gateway, being the application entry point, can conveniently handle authorization. We opt for using a 3rd party JWT authorizer which we directly integrate with API Gateway. Thus, once authenticated using the application internal logic, we can delegate authorization to API Gateway and authorize requests based on a speciffic header value.
+              Lastly, we use API Gateway to manage throttling. Managing thortling at service level and delegating it to a trusted 3rd party such as AWS puts aside the operational burden of using intercepetor classes at the framework level with a proprietary implementation which must be maintained and tested.
+            </section>
+            <section>
+              <h4>2.2.2 AWS EC2</h4>
+              The second service in the service flow is a load balancer. Besides being a hosting service, AWS EC2 also provides neat integrations with said hosts such as load balancing, scaling groups, AMI market etc. In order to offload requests of our microservices an Application Load Balancer is used. 
+              A first version of the application also considers self managing and deploying the ElasticSearch storage to an EC2 instance. 
+            </section>
+            <section>
+              <h4>2.2.3 Elastic Container Service</h4>
+            </section>   
+            <section>
+              <h4>2.2.4 Amazon Relational Database Service</h4>
+            </section>
           </section>
         </section>
       </div>
