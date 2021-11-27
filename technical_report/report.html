@@ -65,7 +65,7 @@
           <h2>Abstract</h2>
           This report details the technical aspects of building a web application
           around an ontological model describing the most common non-alcoholic beverages.
-          The application described is statefull by design allowing users interacting
+          The application described is stateful by design allowing users interacting
           with it to express preferences towards beverages. The mentioned preferences are
           modelled as a knowledge graph whereas the beverage resources are be modelled
           to include speciffic metadata (e.g.: category, price, ingredients etc.). In terms of features the application should also support browsing, filtering and even
@@ -100,6 +100,32 @@
             are available in the <a href="https://github.com/AdrianHamod/BeverageManager/tree/main/architecture">project repository</a>. This includes a diagram describing the service oriented architecture, preliminary UML representation of the backend service, OpenAPI specification of the public APIs exposed and descriptions of the application flow, query service and end client use cases. 
           </section>
           <section>
+            <section>
+              <h4>2.1.1 Angular</h4>
+              Angular was our choice as the platform for building the user interface of the application. It is a platform and framework for building single-page web applications using modern web platform capabilities delivering high performance, offline and zero-step installation.
+              Single-Page Applications (or SPAs) refer to the application being dynamic, that is, when a user navigates the app, no page reloading is happening, but the data is received and sent back to the server, but the app itself does not load new pages from the server every time there is some action happening.
+            </section>
+            <section>
+              Angular is considered by many a 'default' front-end tool and some of the reasons are because it is very versatile, has the ability of combining business logic and UI elements offering a lot of features that help to scale, optimize and speed up web applications.
+              It includes numerous structural elements like Injectors, Components, Directives, Pipes, Services, etc. that raise the complexity of Angular as a platform, but creates high quality applications as a result.
+              Some other benefits of using Angular are its very detailed documentation, two-way data binding that allows apps to update in real time if the binding source has changed (the backing value), differential loading that allow creating of two kinds of bundles, one for modern browsers that support ES2015+, and another one for older ones that support ES5 making the app more efficient and speedy by loading less code and polyfills.
+              And finally, it was created by Google, so it has its support with small updates every 6 months, gradually improving the framework.
+            </section>
+            <section>
+              For our use-case, Angular helps with providing a solid web application, that can easily support very large amounts of data, while being fast and responsive, with a minimal footprint.
+              Using Angular with Spring was a very easy choice since the two form a powerful combination. One such benefit it has the controls necessary for displaying complex lists of data, with two way binding allowing for the UI to receive data from the API, but also send UI updates to the API, such as when you click to rate, the rate controller is already bound to a value that, when changed, updates it at API level.
+            </section>
+          </section>
+          <section>
+            <h4>2.1.2 Spring</h4>
+            We have chosen to use Spring to develop a solid backend for our app. It is the most popular application framework for Java. It provides a comprehensive programming and configuration model as well as great support for a SOA architecture with microservices.
+            Spring also offers spring-boot which is an easy solution to make stand-alone, production-grade Spring applications that can just be run with metrics, health checks and externalized configuration with no code generation and no XML configuration requirement.
+            Spring uses servlets behind the scenes, which are based upon a low-level API for handling requests and responses. That means that every part of the web api flow is made much easier, from returning a JSON using @ResponseBody to RESTful URLs, input validation, form data binding to object and much much more.
+            It is also multithreaded, supporting asynchronous request processing where, instead of returning a value, the controller method can return a Callable object and produce the return value from a separate thread, while the main Servlet container thread is released and ready to process other requests. It does so using the TaskExecutor and when the Callable object returns, the request is dispatched back to the Servlet container to resume processing with the value returned by the Callable.
+            In our case, using Spring and Spring-Boot kickstarts our project by having ready-made project templates, easy Angular support, by exposing controllers through API Gateway and rich documentation for AWS integration. It is a strong foundation for any size the app could reach.
+          </section>
+
+          <section>
             <h3>2.2 Cloud services</h3>
             In order to orchestrate, deploy and ease the resource management several AWS services are used. 
             <section>
@@ -121,6 +147,12 @@
             <section>
               <h4>2.2.4 Amazon Relational Database Service</h4>
               Amazon RDS, specifically their in house built engine Aurora is a high performance serverless SQL database. The main role of the database is to store user data, including hashed credentials and profile data. The advantages of using Amazon RDS include high performance and scalability while still paying for only what you are using, fully delegation of management and integrations with AWS ecosystem from which main benefits is the ease of securing the database through VPCs and encrpytion services such as AWS KMS. 
+            </section>
+            <section>
+              <h4>2.2.5 Authentication</h4>
+              Authenticating the user is a very important step of the work-flow of the appliction. While not required, authenticating enables filtering and context based suggestions to a registered user. 
+              The authentication flow starts at the signup/login web page. After the user enters his existing email address and password, or registers for a new account, the app sends his credentials through API Gateway to a spring microservice that hashes the password and stores the user's email address and password, along with all the other required fields, inside RDS, returning a JWT token for further authentication of requests later on.
+              If the user is already registered, sending his login information only verifies it to the existing information based on the email addres the user has provided. If it the hashed password matches the existing one for that email address, the rest is the same as for registering, where the app returns a JWT token for further authentication. In case the password is not a match, the user is prompted with an error, with the ability of trying again.
             </section>
           </section>
         </section>
