@@ -124,6 +124,22 @@
             </section>
           </section>
         </section>
+        <section>
+          <h2>3.0 Infrastructure cost</h2>
+          Although we can't estimate the monthly cost of the infrastructure, we can outline the cost of each provided service as of the time of publishing this report.
+          <p> 
+          API Gateway charges 0.9 USD per a million requests. Keep in mind that each use case encapsulates several requests due to the service oriented architecture. On average each client request will retrieve static assets from the frontend service, the frontend service will forward the request to the backend through the same domain, hitting API Gateway resulting in 2 requests. 
+          </p>
+          <p>
+          The load balancer has a fixed cost of 0.0225 USD per hour since it will always be up and running. As for the EC2 instance hosting the ElasticSearch storage, ideally a m5.2xlarge type instance would be used. For an hourly 0.384 USD the ElasticSearch would benefit from a 8 vCPU, 32 Gb of RAM and high performance network traffic. 
+          </p>
+          <p>
+          ECS Fargate containers price is calculated per second with a 1 minute minimum. For Linux instances the hourly prices per vCPU and GB of RAM are 0.04048 USD, respectively 0.004445 USD. Depending on the necessities of the service multiple incremental configurations are available ranging from 0.25 vCPU and 0.5 GB to 2 GB of ram to 4 vCPU and 8 GB to 30 GB. 
+          </p>
+          <p>
+          Lastly Amazon Aurora charges 0.1 USD per GB of monthly storage along with 0.2 USD per 1 million requests consisting of I/O operations.
+          </p>
+        </section>
       </div>
     </header>
   </article> 
