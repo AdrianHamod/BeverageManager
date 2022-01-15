@@ -84,3 +84,6 @@ node_modules
 
 # Build folder
 build
+
+# VSCode config
+.vscode

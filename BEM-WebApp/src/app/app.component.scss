@@ -1,0 +1,11 @@
+app-header {
+  height: 100px;
+}
+
+.page-container {
+  height: 100vh;
+}
+
+.page-container-logged-in {
+  height: calc(100vh - 100px) !important;
+}
