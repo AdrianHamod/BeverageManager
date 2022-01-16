@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {DashboardServiceService} from "../../services/dashboard-service.service";
+import {Teams} from "../../../common/components/Models/teams";
 
 @Component({
   selector: 'app-dashboard-page',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardPageComponent implements OnInit {
 
-  constructor() { }
+  teams: Teams[]
+
+  constructor(private dashboardService: DashboardServiceService) { }
 
   ngOnInit(): void {
+    this.dashboardService.getTeamsTest().subscribe((data: Teams[]) => this.teams = data);
   }
 
 }

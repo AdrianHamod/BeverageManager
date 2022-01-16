@@ -1,2 +1,2 @@
-<app-header *ngIf="authService.isLoggedIn()"></app-header>
-<router-outlet></router-outlet>
+<app-header-navigation [title]="title" *ngIf="authService.isLoggedIn()"></app-header-navigation>
+<router-outlet (activate)="setHeader()"></router-outlet>
