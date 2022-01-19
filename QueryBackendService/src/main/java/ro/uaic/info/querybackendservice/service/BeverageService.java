@@ -11,6 +11,9 @@ import ro.uaic.info.querybackendservice.model.Beverage;
 import ro.uaic.info.querybackendservice.model.BeverageContext;
 
 import java.util.List;
+import java.util.Map;
+
+import static org.eclipse.rdf4j.model.util.Values.iri;
 
 @Service
 @RequiredArgsConstructor
@@ -31,11 +34,17 @@ public class BeverageService {
     @Transactional
     public List<Beverage> getAllBeverages() {
         List<Beverage> beverages = beverageDao.list();
-        for (Beverage beverage:
-             beverages) {
-            beverage.setContext(
-                    beverageContextDao.getBeverageContextById(beverage.getBeverageId())
-            );
+        Map<IRI, List<BeverageContext>> beverageContexts = beverageContextDao.groupById();
+
+        for (Beverage beverage :
+                beverages) {
+            List<BeverageContext> context = beverageContexts.get(
+                    iri(beverage.getBeverageId().stringValue() + "Context"));
+
+            if (context == null || context.isEmpty()) {
+                continue;
+            }
+            beverage.setContext(context.get(0));
         }
         return beverages;
     }
@@ -49,25 +58,13 @@ public class BeverageService {
     @Transactional
     public BeverageContext getBeverageContextById(IRI id) {
         log.info("[SearchingByContextId] {}", id);
-        return beverageContextDao.getBeverageContextById(id);
+        return beverageContextDao.getById(id);
     }
 
     @Transactional
     public IRI deleteBeverage(IRI id) {
         beverageDao.delete(id);
+        beverageContextDao.delete(iri(id.stringValue() + "Context"));
         return id;
-    }
-
-    /**
-     * Calling BeverageDao::list directly does not work.
-     * But this list call returns the saved beverage. (but not the others)
-     * Same happens if BeverageDao::getById would be called here instead of list
-     */
-    @Transactional
-    public List<Beverage> createThenFetchBeverages(Beverage beverage) {
-        beverageContextDao.save(beverage.getContext());
-        IRI id = beverageDao.saveAndReturnId(beverage, beverage.getBeverageId());
-        log.info("[SearchingById] {}", id);
-        return beverageDao.list();
     }
 }

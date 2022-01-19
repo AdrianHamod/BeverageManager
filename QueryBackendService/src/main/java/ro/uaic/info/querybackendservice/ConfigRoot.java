@@ -1,9 +1,5 @@
 package ro.uaic.info.querybackendservice;
 
-
-import org.eclipse.rdf4j.repository.Repository;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.sail.elasticsearchstore.ElasticsearchStore;
 import org.eclipse.rdf4j.spring.RDF4JConfig;
 import org.eclipse.rdf4j.spring.support.connectionfactory.RepositoryConnectionFactory;
 import org.eclipse.rdf4j.spring.tx.RDF4JRepositoryTransactionManager;
@@ -18,15 +14,6 @@ import org.springframework.transaction.support.AbstractPlatformTransactionManage
 @Configuration
 @Import(RDF4JConfig.class)
 public class ConfigRoot {
-    @Bean
-    Repository repository() {
-        return new SailRepository(
-                new ElasticsearchStore(
-                        "localhost",
-                        9300,
-                        "docker-cluster",
-                        "rdf4j_index"));
-    }
 
     @Bean
     RDF4JRepositoryTransactionManager getTxManager(

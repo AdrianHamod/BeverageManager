@@ -65,34 +65,6 @@ public class BeverageController {
     /**
      * This is just to confirm that read works withing the same transaction with a write.
      */
-    @PostMapping("/with_id")
-    public ResponseEntity<GetAllBeveragesResponse> createBeverageAndPrintId(HttpServletRequest request) {
-        Map<String, String[]> parameters = request.getParameterMap();
-
-        String name = parameters.get("name")[0];
-
-        BeverageContext beverageContext = new BeverageContext(
-                iri("http://www.bem.ro/bem-schema#" + name + "Context"),
-                parameters.get("event")[0],
-                parameters.get("location")[0],
-                parameters.get("season")[0],
-                Arrays.stream(parameters.get("health_restrictions")).collect(Collectors.toSet())
-        );
-        IRI parent = null;
-        String[] parentValues = parameters.get("parent");
-        if (parentValues != null) {
-            parent = iri(parentValues[0]);
-        }
-        Beverage beverage = new Beverage(
-                iri("http://www.bem.ro/bem-schema#" + name),
-                name,
-                parent,
-                beverageContext
-        );
-
-        return ResponseEntity.ok(
-                GetAllBeveragesResponse.builder().beverages(beverageService.createThenFetchBeverages(beverage)).build());
-    }
 
     @PostMapping
     public ResponseEntity<PostBeverageResponse> createBeverage(HttpServletRequest request) {
@@ -141,9 +113,11 @@ public class BeverageController {
                 PostBeverageResponse.builder().beverage(beverageService.createBeverage(beverage)).build());
     }
 
-    @DeleteMapping
-    public ResponseEntity<DeleteBeverageByIdResponse> deleteBeverageById(IRI id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DeleteBeverageByIdResponse> deleteBeverageById(@PathVariable String id) {
         return ResponseEntity.ok(
-                DeleteBeverageByIdResponse.builder().id(beverageService.deleteBeverage(id)).build());
+                DeleteBeverageByIdResponse.builder().id(beverageService.deleteBeverage(
+                        iri("http://www.bem.ro/bem-schema#" + id)))
+                        .build());
     }
 }

@@ -16,9 +16,6 @@ import org.springframework.stereotype.Component;
 import ro.uaic.info.querybackendservice.model.Beverage;
 import ro.uaic.info.querybackendservice.model.ObjectType;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static ro.uaic.info.querybackendservice.model.Beverage.BEVERAGE_ID;
 import static ro.uaic.info.querybackendservice.model.Beverage.NAME;
@@ -40,7 +37,6 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
     @Override
     protected void populateIdBindings(MutableBindings mutableBindings, IRI iri) {
         mutableBindings.add(BEVERAGE_ID, iri);
-
     }
 
     @Override
@@ -62,7 +58,6 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
     @Override
     protected String getReadQuery() {
         SelectQuery selectQuery = Queries.SELECT();
-//        Prefix ex = SparqlBuilder.prefix(iri("http://www.bem.ro/bem-schema/"));
         String readQuery = selectQuery.select(BEVERAGE_ID, NAME, PARENT)
                 .where(BEVERAGE_ID.isA(ObjectType.NA_BEVERAGE)
                         .andHas(FOAF.NAME, NAME)
@@ -97,25 +92,5 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
                         .andHas(RDFS.SUBCLASSOF, PARENT)
                 )
                 .getQueryString());
-    }
-
-
-    public List<Beverage> listBeverages() {
-        return getNamedTupleQuery(QUERY_KEYS.ALL_BEVERAGES)
-                .evaluateAndConvert()
-                .toStream()
-                .map(bs -> QueryResultUtils.getIRI(bs, BEVERAGE_ID))
-                .map(this::getById)
-                .collect(Collectors.toList());
-    }
-
-    public List<Beverage> listBeveragesByType(IRI type) {
-        return getNamedTupleQuery(QUERY_KEYS.BEVERAGES_BY_TYPE)
-                .evaluateAndConvert()
-                .toStream()
-                .map(bs -> QueryResultUtils.getIRI(bs, BEVERAGE_ID))
-                .map(this::getById)
-                .filter(bs -> type.stringValue().equals(String.valueOf(bs.getParent())))
-                .collect(Collectors.toList());
     }
 }

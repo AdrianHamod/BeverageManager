@@ -1,47 +1,104 @@
 package ro.uaic.info.querybackendservice.dao;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.Triple;
-import org.eclipse.rdf4j.model.ValueFactory;
-import org.eclipse.rdf4j.model.impl.DynamicModelFactory;
-import org.eclipse.rdf4j.model.impl.TreeModel;
-import org.eclipse.rdf4j.model.util.RDFContainers;
-import org.eclipse.rdf4j.model.util.Values;
-import org.eclipse.rdf4j.model.vocabulary.RDF;
-import org.eclipse.rdf4j.model.vocabulary.RDFS;
-import org.eclipse.rdf4j.query.QueryResults;
-import org.eclipse.rdf4j.repository.RepositoryResult;
+import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
-import org.eclipse.rdf4j.spring.dao.RDF4JDao;
+import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
+import org.eclipse.rdf4j.spring.dao.SimpleRDF4JCRUDDao;
+import org.eclipse.rdf4j.spring.dao.support.bindingsBuilder.MutableBindings;
+import org.eclipse.rdf4j.spring.dao.support.sparql.NamedSparqlSupplier;
 import org.eclipse.rdf4j.spring.support.RDF4JTemplate;
+import org.eclipse.rdf4j.spring.util.QueryResultUtils;
 import org.springframework.stereotype.Component;
 import ro.uaic.info.querybackendservice.model.BeverageContext;
-import ro.uaic.info.querybackendservice.model.IRILabel;
 import ro.uaic.info.querybackendservice.model.ObjectType;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static ro.uaic.info.querybackendservice.model.BeverageContext.BEVERAGE_CTX_ID;
-import static ro.uaic.info.querybackendservice.model.ObjectType.CTX_HRS;
+import static ro.uaic.info.querybackendservice.model.BeverageContext.EVENT;
+import static ro.uaic.info.querybackendservice.model.BeverageContext.HEALTH_RESTRICTIONS;
+import static ro.uaic.info.querybackendservice.model.BeverageContext.LOCATION;
+import static ro.uaic.info.querybackendservice.model.BeverageContext.SEASON;
 
 /**
  * Using RDF4JDao to experiment with using the connection directly
  */
 @Component
 @Slf4j
-public class BeverageContextDao extends RDF4JDao {
+public class BeverageContextDao extends SimpleRDF4JCRUDDao<BeverageContext, IRI> {
+
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    static abstract class QUERY_KEYS {
+        public static final String BEVERAGE_CONTEXT_BY_ID = "beverage-ctx-by-id";
+    }
 
     public BeverageContextDao(RDF4JTemplate rdf4JTemplate) {
         super(rdf4JTemplate);
     }
 
-    static abstract class QUERY_KEYS {
-        public static final String BEVERAGE_CONTEXT_BY_ID = "beverage-ctx-by-id";
+    @Override
+    protected void populateIdBindings(MutableBindings mutableBindings, IRI iri) {
+        mutableBindings.add(BEVERAGE_CTX_ID, iri);
+    }
+
+    @Override
+    protected void populateBindingsForUpdate(MutableBindings bindingsBuilder, BeverageContext context) {
+        bindingsBuilder
+                .add(EVENT, context.getEvent())
+                .add(LOCATION, context.getLocation())
+                .add(SEASON, context.getSeason());
+        try {
+            bindingsBuilder.add(HEALTH_RESTRICTIONS, mapper.writeValueAsString(context.getHealthRestriction()));
+        } catch (JsonProcessingException ex) {
+            throw new RuntimeException("Unable to serialize health restriction set");
+        }
+    }
+
+    @Override
+    protected BeverageContext mapSolution(BindingSet querySolution) {
+        BeverageContext context = new BeverageContext();
+        context.setId(QueryResultUtils.getIRI(querySolution, BEVERAGE_CTX_ID));
+        context.setEvent(QueryResultUtils.getString(querySolution, EVENT));
+        context.setLocation(QueryResultUtils.getString(querySolution, LOCATION));
+        context.setSeason(QueryResultUtils.getString(querySolution, SEASON));
+
+        String hrs = QueryResultUtils.getString(querySolution, HEALTH_RESTRICTIONS);
+
+        try {
+            Set<String> hrsSet = mapper.readValue(
+                    hrs, new TypeReference<Set<String>>() {
+                    });
+            context.setHealthRestriction(hrsSet);
+        } catch (JsonProcessingException ex) {
+            throw new RuntimeException("Unable to deserialize health restriction set");
+        }
+
+        return context;
+    }
+
+    @Override
+    protected String getReadQuery() {
+        SelectQuery selectQuery = Queries.SELECT();
+        String readQuery = selectQuery.select(
+                BEVERAGE_CTX_ID, EVENT, LOCATION, SEASON, HEALTH_RESTRICTIONS)
+                .where(BEVERAGE_CTX_ID.isA(ObjectType.BEVERAGE_CTX)
+                        .andHas(ObjectType.CTX_EVENT, EVENT)
+                        .andHas(ObjectType.CTX_LOCATION, LOCATION)
+                        .andHas(ObjectType.CTX_SEASON, SEASON)
+                        .andHas(ObjectType.DESCRIBES_HRS, HEALTH_RESTRICTIONS)
+                )
+                .getQueryString();
+        log.info("[READ_QUERY] {}", readQuery);
+        return readQuery;
     }
 
     @Override
@@ -53,96 +110,26 @@ public class BeverageContextDao extends RDF4JDao {
                 );
     }
 
-    public BeverageContext save(BeverageContext beverageContext) {
-        ValueFactory factory = Values.getValueFactory();
-        Model beverageContextModel = (new DynamicModelFactory()).createEmptyModel();
-        Statement eventStatement = factory.createStatement(
-                beverageContext.getId(),
-                ObjectType.CTX_EVENT,
-                factory.createLiteral(beverageContext.getEvent()));
-
-        Statement locationStatement = factory.createStatement(
-                beverageContext.getId(),
-                ObjectType.CTX_LOCATION,
-                factory.createLiteral(beverageContext.getLocation()));
-
-        Statement seasonStatement = factory.createStatement(
-                beverageContext.getId(),
-                ObjectType.CTX_SEASON,
-                factory.createLiteral(beverageContext.getSeason()));
-
-        Statement typeStatement = factory.createStatement(
-                beverageContext.getId(),
-                RDF.TYPE,
-                ObjectType.BEVERAGE_CTX);
-
-
-        beverageContextModel.add(typeStatement);
-        beverageContextModel.add(eventStatement);
-        beverageContextModel.add(locationStatement);
-        beverageContextModel.add(seasonStatement);
-
-        Set<String> hrs = beverageContext.getHealthRestriction();
-        Collection<Statement> hrsStatements = RDFContainers.toRDF(RDF.BAG, hrs, CTX_HRS, new TreeModel());
-        // CAST EXCEPTION TRIPLE TO LITERAL; Model api allows me to do this, but the repository does not like it
-//        for (Statement stmt :
-//                hrsStatements) {
-//            Triple hrsTriple = factory.createTriple(stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
-//            beverageContextModel.add(factory.createStatement(
-//                    beverageContext.getId(),
-//                    DESCRIBES_HRS,
-//                    hrsTriple
-//            ));
-//        }
-
-        getRdf4JTemplate().consumeConnection(con -> con.add(beverageContextModel));
-
-        return beverageContext;
+    @Override
+    protected IRI getInputId(BeverageContext context) {
+        return context.getId();
     }
 
-    public BeverageContext getBeverageContextById(IRI id) {
-        Model beverageById = QueryResults.asModel(getAllStatementsById(id));
-        return map(beverageById);
+    @Override
+    protected NamedSparqlSupplier getInsertSparql(BeverageContext beverage) {
+        return NamedSparqlSupplier.of("insert", () ->
+                Queries.INSERT(BEVERAGE_CTX_ID.isA(ObjectType.BEVERAGE_CTX)
+                            .andHas(ObjectType.CTX_EVENT, EVENT)
+                            .andHas(ObjectType.CTX_LOCATION, LOCATION)
+                            .andHas(ObjectType.CTX_SEASON, SEASON)
+                            .andHas(ObjectType.DESCRIBES_HRS, HEALTH_RESTRICTIONS)
+                )
+                .getQueryString());
     }
 
-    protected RepositoryResult<Statement> getAllStatementsById(IRI id) {
-        return getRdf4JTemplate().applyToConnection(con -> con.getStatements(id, null, null));
-        /*
-         * return getRdf4JTemplate().applyToConnection(con -> con.getStatements(null, null, null));
-         * Commented call works as expected, fetching all BeveragesContext statements.
-         * Uncommented call by id returns nothing.
-         */
-    }
-    
-    public BeverageContext map(Model beverageModel) {
-        BeverageContext beverageContext = new BeverageContext();
-        Set<String> healthRestrictions = new HashSet<>();
-        for (Statement stmt :
-                beverageModel) {
-            log.info("[BeverageContext] {} {} {}", stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
-            switch (String.valueOf(stmt.getPredicate())) {
-                case "http://www.w3.org/1999/02/22-rdf-syntax-ns#type":
-                    beverageContext.setId((IRI) stmt.getSubject());
-                    break;
-                case IRILabel.CTX_EVENT:
-                    beverageContext.setEvent(stmt.getObject().stringValue());
-                    break;
-                case IRILabel.CTX_LOCATION:
-                    beverageContext.setLocation(stmt.getObject().stringValue());
-                    break;
-                case IRILabel.CTX_SEASON:
-                    beverageContext.setSeason(stmt.getObject().stringValue());
-                    break;
-                case IRILabel.DESCRIBES_HRS:
-                    Triple hrs = (Triple) stmt.getObject();
-                    if (hrs.getPredicate().equals(RDFS.MEMBER)) {
-                        healthRestrictions.add(hrs.getObject().stringValue());
-                    }
-                    break;
-            }
-
-        }
-        beverageContext.setHealthRestriction(healthRestrictions);
-        return beverageContext;
+    public Map<IRI, List<BeverageContext>> groupById() {
+        return list().stream().collect(Collectors.groupingBy(
+                BeverageContext::getId
+        ));
     }
 }
