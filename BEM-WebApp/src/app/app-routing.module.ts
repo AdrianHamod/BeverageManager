@@ -1,17 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {DashboardPageComponent} from "./dash/pages/dashboard-page/dashboard-page.component";
-import {LoginPageComponent} from "./auth/pages/login-page/login-page.component";
-import {RegisterPageComponent} from "./auth/pages/register-page/register-page.component";
-import {ProfilePageComponent} from "./profile/pages/profile-page/profile-page.component";
-import {SettingsPageComponent} from "./settings/pages/settings-page/settings-page.component";
+import {AuthGuard} from "./helpers/guard/auth.guard";
+import {ProfilePageComponent} from "./profile/profile-page/profile-page.component";
+import {BeverageListComponent} from "./beverages/beverage-list/beverage-list.component";
+
+const authModule = () => import('./auth/auth.module').then(x => x.AuthModule);
 
 const routes: Routes = [
-  {path: 'login', component: LoginPageComponent},
-  {path: 'register', component: RegisterPageComponent},
-  {path: 'profile', component: ProfilePageComponent},
-  {path: 'settings', component: SettingsPageComponent},
-  {path: '**', component: DashboardPageComponent},
+  { path: '', component: BeverageListComponent, canActivate: [AuthGuard]},
+  { path: 'auth', loadChildren: authModule},
+  { path: 'profile', component: ProfilePageComponent},
+  { path: '**', redirectTo: ''}
+  // {path: 'login', component: LoginPageComponent},
+  // {path: 'register', component: RegisterPageComponent},
+  // {path: 'profile', component: ProfilePageComponent},
+  // {path: 'settings', component: SettingsPageComponent},
+  // {path: '**', component: DashboardPageComponent},
 
 ];
 

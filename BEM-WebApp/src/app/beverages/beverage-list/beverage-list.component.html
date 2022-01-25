@@ -1,0 +1,58 @@
+<div class="card">
+  <p-dataView #dv [value]="filteredBeverages" [paginator]="true" [rows]="12" filterBy="strDrink" layout="list">
+    <ng-template pTemplate="header">
+      <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
+        <span class="p-input-icon-left p-mb-2 p-mb-md-0">
+          <i class="pi pi-search"></i>
+          <input type="search" placeholder="Search..." pInputText [formControl]="myControl" [matAutocomplete]="auto">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </span>
+        <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+      </div>
+    </ng-template>
+    <ng-template let-beverage pTemplate="listItem">
+      <div class="col-12">
+        <div class="product-list-item">
+          <img [src]="beverage.strDrinkThumb" [alt]="beverage.strDrink"/>
+          <div class="product-list-detail">
+            <div class="product-name">{{beverage.strDrink}}</div>
+            <div class="product-description">{{beverage.strDrink}}</div>
+<!--            <p-rating [ngModel]="beverage.idDrink" [readonly]="true" [cancel]="false"></p-rating>-->
+              <bem-tag-list [beverage]="beverage"></bem-tag-list>
+
+          </div>
+
+          <div class="product-list-action">
+            <a mat-raised-button color="primary" [routerLink]="['/beverages', beverage.idDrink]" >
+              <mat-icon>info</mat-icon>
+              More Info</a>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template let-beverage pTemplate="gridItem">
+      <div class="p-col-12 p-xl-2 p-mb-6 p-sm-4">
+        <div class="product-grid-item card">
+          <div class="product-grid-item-top">
+            <bem-tag-list></bem-tag-list>
+          </div>
+          <div class="product-grid-item-content">
+            <img [src]="beverage.strDrinkThumb" [alt]="beverage.strDrink"/>
+            <div class="product-name">{{beverage.strDrink}}</div>
+            <div class="product-description">{{beverage.strDrink}}</div>
+<!--            <p-rating [ngModel]="team.id" [readonly]="true" [cancel]="false"></p-rating>-->
+          </div>
+          <div class="product-grid-item-bottom">
+            <a mat-raised-button color="primary" [routerLink]="['/beverages', beverage.idDrink]">
+              <mat-icon>info</mat-icon>
+              More Info</a>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-dataView>
+</div>

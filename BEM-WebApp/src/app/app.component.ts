@@ -1,8 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "./auth/services/auth.service";
-import {PrimeNGConfig} from "primeng/api";
-import {Router} from "@angular/router";
-
+import {AuthService} from "./auth/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -12,17 +9,13 @@ import {Router} from "@angular/router";
 export class AppComponent implements OnInit {
   title = 'BEM-WebApp';
 
-  constructor(public authService: AuthService, private primengConfig: PrimeNGConfig, private route: Router) {
-    this.authService = authService;
+  constructor(public authService: AuthService) {
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   ngOnInit() {
-    this.authService.saveToken("123");
-    this.primengConfig.ripple = true;
-  }
-
-  setHeader() {
-    let path = this.route.url.split('/')[1];
-    this.title = decodeURIComponent(path);
   }
 }

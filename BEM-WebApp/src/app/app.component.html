@@ -1,2 +1,8 @@
-<app-header-navigation [title]="title" *ngIf="authService.isLoggedIn()"></app-header-navigation>
-<router-outlet (activate)="setHeader()"></router-outlet>
+
+<bem-header [title]="title"></bem-header>
+
+<!-- main app container -->
+<div class="app-container" [ngClass]="{ 'bg-light': authService.user }">
+  <p-toast></p-toast>
+  <router-outlet></router-outlet>
+</div>
