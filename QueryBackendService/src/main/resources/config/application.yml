@@ -1,0 +1,15 @@
+#logging:
+#  level:
+#    org:
+#      eclipse:
+#        rdf4j:
+#          sail:
+#            elasticsearchstore: DEBUG
+#      elasticsearch:
+#        index:
+#          search:
+#            slowlog:
+#              query: INFO
+#        client: TRACE
+#      apache:
+#        http: TRACE
