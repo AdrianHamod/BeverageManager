@@ -13,4 +13,7 @@ public class ObjectType {
     public final static IRI CTX_EVENT = iri(IRILabel.CTX_EVENT);
     public final static IRI CTX_HRS = iri(IRILabel.CTX_HRS);
     public final static IRI DESCRIBES_HRS = iri(IRILabel.DESCRIBES_HRS);
+    public final static IRI USER_PROFILE = iri(IRILabel.USER_PROFILE);
+    public final static IRI FROM = iri(IRILabel.FROM);
+    public final static IRI PREFERENCE = iri(IRILabel.PREFERENCE);
 }

@@ -43,19 +43,25 @@
             <version>4.0.0-M1</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.eclipse.rdf4j/rdf4j-sail-elasticsearch-store -->
         <dependency>
-            <groupId>org.eclipse.rdf4j</groupId>
-            <artifactId>rdf4j-sail-elasticsearch-store</artifactId>
-            <version>4.0.0-M1</version>
+            <groupId>com.neovisionaries</groupId>
+            <artifactId>nv-i18n</artifactId>
+            <version>1.29</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.eclipse.rdf4j/rdf4j-sail-elasticsearch -->
-        <dependency>
-            <groupId>org.eclipse.rdf4j</groupId>
-            <artifactId>rdf4j-sail-elasticsearch</artifactId>
-            <version>4.0.0-M1</version>
-        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.rdf4j/rdf4j-sail-elasticsearch-store -->
+<!--        <dependency>-->
+<!--            <groupId>org.eclipse.rdf4j</groupId>-->
+<!--            <artifactId>rdf4j-sail-elasticsearch-store</artifactId>-->
+<!--            <version>4.0.0-M1</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.eclipse.rdf4j/rdf4j-sail-elasticsearch &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.eclipse.rdf4j</groupId>-->
+<!--            <artifactId>rdf4j-sail-elasticsearch</artifactId>-->
+<!--            <version>4.0.0-M1</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
