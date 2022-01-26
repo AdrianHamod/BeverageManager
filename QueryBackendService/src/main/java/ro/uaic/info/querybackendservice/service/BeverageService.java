@@ -67,4 +67,9 @@ public class BeverageService {
         beverageContextDao.delete(iri(id.stringValue() + "Context"));
         return id;
     }
+
+    @Transactional
+    public List<Beverage> fullTextSearchOnDescription(String term) {
+        return beverageDao.searchBeveragesMatchingDescription(term);
+    }
 }

@@ -1,6 +1,7 @@
 package ro.uaic.info.querybackendservice.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.rdf4j.model.IRI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/beverages")
 public class BeverageController {
 
@@ -106,9 +109,10 @@ public class BeverageController {
                 iri("http://www.bem.ro/bem-schema#" + name),
                 name,
                 parent,
+                parameters.get("description")[0],
                 beverageContext
         );
-
+        log.info("{}", beverage);
         return ResponseEntity.ok(
                 PostBeverageResponse.builder().beverage(beverageService.createBeverage(beverage)).build());
     }
@@ -119,5 +123,10 @@ public class BeverageController {
                 DeleteBeverageByIdResponse.builder().id(beverageService.deleteBeverage(
                         iri("http://www.bem.ro/bem-schema#" + id)))
                         .build());
+    }
+
+    @GetMapping("/search/{term}")
+    public List<Beverage> getBeveragesByTermInDescription(@PathVariable String term) {
+        return beverageService.fullTextSearchOnDescription(term);
     }
 }
