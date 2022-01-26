@@ -3,24 +3,30 @@ package ro.uaic.info.querybackendservice.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.rdf4j.model.IRI;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ro.uaic.info.querybackendservice.api.errors.DefaultError;
 import ro.uaic.info.querybackendservice.api.errors.ErrorData;
+import ro.uaic.info.querybackendservice.api.request.PostBeverageRequest;
 import ro.uaic.info.querybackendservice.api.response.DeleteBeverageByIdResponse;
 import ro.uaic.info.querybackendservice.api.response.GetAllBeveragesResponse;
 import ro.uaic.info.querybackendservice.api.response.GetBeverageByIdResponse;
 import ro.uaic.info.querybackendservice.api.response.PostBeverageResponse;
 import ro.uaic.info.querybackendservice.model.Beverage;
 import ro.uaic.info.querybackendservice.model.BeverageContext;
+import ro.uaic.info.querybackendservice.model.IRILabel;
 import ro.uaic.info.querybackendservice.service.BeverageService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -69,49 +75,26 @@ public class BeverageController {
      * This is just to confirm that read works withing the same transaction with a write.
      */
 
-    @PostMapping
-    public ResponseEntity<PostBeverageResponse> createBeverage(HttpServletRequest request) {
-        Map<String, String[]> parameters = request.getParameterMap();
-
-        if (parameters.get("name") == null) {
-            return ResponseEntity.badRequest().body(PostBeverageResponse.builder()
-                    .errorData(new ErrorData(
-                            Collections.singletonList(DefaultError.InvalidInputMissingBeverageName.details),
-                            LocalDateTime.now()
-                    ))
-                    .build());
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<PostBeverageResponse> createBeverage(@Valid @ModelAttribute PostBeverageRequest req) {
+        Beverage beverage = new Beverage();
+        beverage.setBeverageId(iri(IRILabel.NS + req.getBeverageName()));
+        beverage.setDescription(req.getDescription());
+        beverage.setName(req.getBeverageName());
+        if (req.getParentName() != null && !req.getParentName().isEmpty()) {
+            beverage.setParent(iri(IRILabel.NS + req.getParentName()));
         }
-
-        if (parameters.get("name").length > 1) {
-            return ResponseEntity.badRequest().body(PostBeverageResponse.builder()
-                            .errorData(new ErrorData(
-                                    Collections.singletonList(DefaultError.InvalidInputMultipleBeverageNames.details),
-                                    LocalDateTime.now()
-                            ))
-                    .build());
-        }
-
-        String name = parameters.get("name")[0];
-
-        BeverageContext beverageContext = new BeverageContext(
-                iri("http://www.bem.ro/bem-schema#" + name + "Context"),
-                parameters.get("event")[0],
-                parameters.get("location")[0],
-                parameters.get("season")[0],
-                Arrays.stream(parameters.get("health_restrictions")).collect(Collectors.toSet())
+        BeverageContext beverageContext = new BeverageContext();
+        beverageContext.setId(
+                iri(IRILabel.NS + req.getBeverageName() + "Context")
         );
-        IRI parent = null;
-        String[] parentValues = parameters.get("parent");
-        if (parentValues != null) {
-            parent = iri(parentValues[0]);
-        }
-        Beverage beverage = new Beverage(
-                iri("http://www.bem.ro/bem-schema#" + name),
-                name,
-                parent,
-                parameters.get("description")[0],
-                beverageContext
-        );
+        beverageContext.setSeason(req.getSeason());
+        beverageContext.setLocation(req.getLocation());
+        beverageContext.setEvent(req.getEvent());
+        beverageContext.setHealthRestriction(req.getHealthRestriction());
+
+        beverage.setContext(beverageContext);
+
         log.info("{}", beverage);
         return ResponseEntity.ok(
                 PostBeverageResponse.builder().beverage(beverageService.createBeverage(beverage)).build());
