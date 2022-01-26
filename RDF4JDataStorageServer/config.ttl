@@ -1,0 +1,25 @@
+@prefix ns: <http://www.openrdf.org/config/sail/native#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rep: <http://www.openrdf.org/config/repository#> .
+@prefix sail: <http://www.openrdf.org/config/sail#> .
+@prefix sb: <http://www.openrdf.org/config/sail/base#> .
+@prefix sr: <http://www.openrdf.org/config/repository/sail#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ls: <http://www.openrdf.org/config/sail/lucene#> .
+
+<#native_lucene_repo> a rep:Repository;
+  rep:repositoryID "native_lucene_repo";
+  rep:repositoryImpl [
+      rep:repositoryType "openrdf:SailRepository";
+      sr:sailImpl [
+          sail:sailType "openrdf:LuceneSail";
+          ls:useramdir "true";
+          ls:indexDir ".";
+          sail:delegate [
+            sail:sailType "openrdf:NativeStore";
+            sb:evaluationStrategyFactory "org.eclipse.rdf4j.query.algebra.evaluation.impl.StrictEvaluationStrategyFactory";
+            ns:tripleIndexes "spoc,posc"
+          ]
+        ]
+    ];
+  rdfs:label "Native repo using lucene sail created manually" .
