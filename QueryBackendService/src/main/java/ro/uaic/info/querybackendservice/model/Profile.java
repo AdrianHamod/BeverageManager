@@ -8,15 +8,13 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 
-import javax.validation.constraints.NotNull;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class Profile {
 
     public static final Variable ID = SparqlBuilder.var("profile_id");
@@ -27,22 +25,18 @@ public class Profile {
     public static final Variable BEVERAGE_PREFERENCES = SparqlBuilder.var("profile_beverage_preferences");
 
     private IRI id;
-    @NotNull
     private String username;
-    @NotNull
     private int age;
-    @NotNull
     private Gender gender;
-    @NotNull
     private CountryCode countryCode;
-    private Map<Boolean, Set<IRI>> beveragePreferences;
+    private List<BeverageContext> beveragePreferences;
 
     public Profile(
             String username,
             int age,
             Gender gender,
             CountryCode countryCode,
-            Map<Boolean, Set<IRI>> beveragePreferences) {
+            List<BeverageContext> beveragePreferences) {
         this(
                 iri(IRILabel.NS, username),
                 username,

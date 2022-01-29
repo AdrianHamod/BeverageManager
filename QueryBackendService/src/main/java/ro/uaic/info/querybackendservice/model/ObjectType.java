@@ -16,4 +16,5 @@ public class ObjectType {
     public final static IRI USER_PROFILE = iri(IRILabel.USER_PROFILE);
     public final static IRI FROM = iri(IRILabel.FROM);
     public final static IRI PREFERENCE = iri(IRILabel.PREFERENCE);
+    public final static IRI ALLERGENS = iri(IRILabel.ALLERGENS);
 }

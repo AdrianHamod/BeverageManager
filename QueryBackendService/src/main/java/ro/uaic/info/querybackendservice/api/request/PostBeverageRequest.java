@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,8 +18,5 @@ public class PostBeverageRequest {
     private String beverageName;
     private String parentName;
     private String description;
-    private String season;
-    private String location;
-    private String event;
-    private Set<String> healthRestriction;
+    private List<String> allergens;
 }
