@@ -101,7 +101,7 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
                         .andHas(FOAF.AGE, AGE)
                         .andHas(FOAF.GENDER, GENDER)
                         .andHas(LOCN.LOCATION, COUNTRY_CODE)
-                        .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)).optional()
+                        .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
                 )
                 .getQueryString();
         log.info("[READ_QUERY] {}", readQuery);
@@ -120,13 +120,13 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
 
     @Override
     protected NamedSparqlSupplier getInsertSparql(Profile profile) {
-        return NamedSparqlSupplier.of("insert", () ->
-                Queries.INSERT((TriplePattern) ID.isA(ObjectType.USER_PROFILE)
+        return NamedSparqlSupplier.of("insert", () -> Queries.INSERT(
+                (TriplePattern) ID.isA(ObjectType.USER_PROFILE)
                                 .andHas(FOAF.NAME, USERNAME)
                                 .andHas(FOAF.AGE, AGE)
                                 .andHas(FOAF.GENDER, GENDER)
                                 .andHas(LOCN.LOCATION, COUNTRY_CODE)
-                                .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)).optional()
+                                .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
                         )
                         .getQueryString());
     }
