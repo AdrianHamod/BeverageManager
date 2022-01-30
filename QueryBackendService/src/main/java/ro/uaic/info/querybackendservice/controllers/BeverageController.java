@@ -96,4 +96,11 @@ public class BeverageController {
     public List<Beverage> getBeveragesByTermInDescription(@PathVariable String term) {
         return beverageService.fullTextSearchOnDescription(term);
     }
+
+    @GetMapping("/{id}/children")
+    public List<Beverage> getAllBeveragesByParentId(@PathVariable String id) {
+        return beverageService.getAllChildrenByParentId(
+                iri(IRILabel.NS, id)
+        );
+    }
 }

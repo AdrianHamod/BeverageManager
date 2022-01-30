@@ -51,4 +51,9 @@ public class BeverageService {
     public List<Beverage> fullTextSearchOnDescription(String term) {
         return beverageDao.searchBeveragesMatchingDescription(term);
     }
+
+    @Transactional
+    public List<Beverage> getAllChildrenByParentId(IRI id) {
+        return beverageDao.listChildren(id);
+    }
 }

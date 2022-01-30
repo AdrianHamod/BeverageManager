@@ -6,6 +6,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.vocabulary.DC;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.OWL;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -44,6 +45,7 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
 
     static abstract class QUERY_KEYS {
         public static final String DESCRIPTION_FULL_TEXT_SEARCH = "descriptionSearch";
+        public static final String LIST_CHILDREN = "listChildren";
     }
 
     public BeverageDao(RDF4JTemplate rdf4JTemplate) {
@@ -106,8 +108,21 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
                 " search:query ?term ; " +
                 " search:snippet ?beverage_description ] } ";
 
+        String listAllChildren = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#> " +
+                "SELECT ?beverage_id " +
+                "WHERE { ?beverage_id rdfs:subClassOf ?beverage_parent . } ";
+//                "WHERE { ?beverage_id rdf:type owl:Class ; ?beverage_parent rdfs:subClassOf ?parent_id . } ";
+
+//                "WHERE { ?beverage_id search:matches [" +
+//                " search:query ?parent_id ; " +
+//                " search:snippet ?beverage_parent ] } ";
+
         return preparer.forKey(QUERY_KEYS.DESCRIPTION_FULL_TEXT_SEARCH)
-                .supplySparql(descriptionFullTextSearch);
+                .supplySparql(descriptionFullTextSearch)
+                .forKey(QUERY_KEYS.LIST_CHILDREN)
+                .supplySparql(listAllChildren);
     }
 
     @Override
@@ -131,6 +146,16 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
     public List<Beverage> searchBeveragesMatchingDescription(String term) {
         return getNamedTupleQuery(QUERY_KEYS.DESCRIPTION_FULL_TEXT_SEARCH)
                 .withBinding("term", literal(term + "*"))
+                .evaluateAndConvert()
+                .toStream()
+                .map(bs -> QueryResultUtils.getIRI(bs, BEVERAGE_ID))
+                .map(this::getById)
+                .collect(Collectors.toList());
+    }
+
+    public List<Beverage> listChildren(IRI id) {
+        return getNamedTupleQuery(QUERY_KEYS.LIST_CHILDREN)
+                .withBinding("beverage_parent", id)
                 .evaluateAndConvert()
                 .toStream()
                 .map(bs -> QueryResultUtils.getIRI(bs, BEVERAGE_ID))

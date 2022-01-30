@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,7 +65,6 @@ public class RecommendationService {
                     neighboursToGather--;
                 }
                 if (current.isEmpty()) {
-                    // may produce infinite loop?
                     emptyListsToRemove.add(current);
                     continue;
                 }
@@ -83,15 +83,18 @@ public class RecommendationService {
     }
 
     private IRI getParent(IRI current) {
-        Beverage currentBeverage = beverageDao.getById(current);
-        return currentBeverage.getParent();
+        Optional<Beverage> beverage = beverageDao.getByIdOptional(current);
+        if (beverage.isEmpty()) {
+            return null;
+        }
+        return beverage.get().getParent();
     }
 
     private List<IRI> getChildren(IRI current) {
-        //TODO implement getBeverageByParent in BeverageDao
-        Beverage currentBeverage = beverageDao.getById(current);
-        return null;
+        return beverageDao.listChildren(current)
+                .stream()
+                .map(Beverage::getBeverageId)
+                .collect(Collectors.toList());
     }
-
-
 }
+
