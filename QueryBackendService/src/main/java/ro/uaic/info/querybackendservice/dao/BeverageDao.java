@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.vocabulary.DC;
+import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.OWL;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.query.BindingSet;
@@ -33,13 +34,13 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 import static ro.uaic.info.querybackendservice.model.Beverage.ALLERGENS;
 import static ro.uaic.info.querybackendservice.model.Beverage.BEVERAGE_ID;
 import static ro.uaic.info.querybackendservice.model.Beverage.DESCRIPTION;
+import static ro.uaic.info.querybackendservice.model.Beverage.IMAGE_URL;
 import static ro.uaic.info.querybackendservice.model.Beverage.NAME;
 import static ro.uaic.info.querybackendservice.model.Beverage.PARENT;
 
 @Component
 @Slf4j
 public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
-
 
     static abstract class QUERY_KEYS {
         public static final String DESCRIPTION_FULL_TEXT_SEARCH = "descriptionSearch";
@@ -59,7 +60,8 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
         bindingsBuilder
                 .add(NAME, beverage.getName())
                 .add(PARENT, beverage.getParent())
-                .add(DESCRIPTION, beverage.getDescription());
+                .add(DESCRIPTION, beverage.getDescription())
+                .add(IMAGE_URL, beverage.getImageUrl());
 
         bindingsBuilder.add(ALLERGENS, String.join(", ", beverage.getAllergens()));
     }
@@ -71,6 +73,7 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
         beverage.setName(QueryResultUtils.getStringMaybe(querySolution, NAME));
         beverage.setParent(QueryResultUtils.getIRI(querySolution, PARENT));
         beverage.setDescription(QueryResultUtils.getString(querySolution, DESCRIPTION));
+        beverage.setImageUrl(QueryResultUtils.getStringMaybe(querySolution, IMAGE_URL));
         beverage.setAllergens(
                 List.of(QueryResultUtils.getStringOptional(querySolution, ALLERGENS)
                         .orElse("").split(", "))
@@ -81,12 +84,13 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
     @Override
     protected String getReadQuery() {
         SelectQuery selectQuery = Queries.SELECT();
-        String readQuery = selectQuery.select(BEVERAGE_ID, NAME, PARENT, DESCRIPTION)
+        String readQuery = selectQuery.select(BEVERAGE_ID, NAME, PARENT, DESCRIPTION, NAME, IMAGE_URL, ALLERGENS)
                 .where(
                         BEVERAGE_ID.isA(OWL.CLASS)
                                 .andHas(RDFS.SUBCLASSOF, PARENT)
                                 .andHas(DC.DESCRIPTION, DESCRIPTION)
-                                .and(BEVERAGE_ID.has(RDFS.LABEL, NAME).optional())
+                                .and(BEVERAGE_ID.has(FOAF.NAME, NAME).optional())
+                                .and(BEVERAGE_ID.has(ObjectType.IMAGE, IMAGE_URL).optional())
                                 .and(BEVERAGE_ID.has(ObjectType.ALLERGENS, ALLERGENS).optional())
                 )
                 .getQueryString();
@@ -117,7 +121,8 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
                         (TriplePattern) BEVERAGE_ID.isA(OWL.CLASS)
                                 .andHas(RDFS.SUBCLASSOF, PARENT)
                                 .andHas(DC.DESCRIPTION, DESCRIPTION)
-                                .and(BEVERAGE_ID.has(RDFS.LABEL, NAME).optional())
+                                .and(BEVERAGE_ID.has(FOAF.NAME, NAME).optional())
+                                .and(BEVERAGE_ID.has(ObjectType.IMAGE, IMAGE_URL).optional())
                                 .and(BEVERAGE_ID.has(ObjectType.ALLERGENS, ALLERGENS).optional())
                 )
                 .getQueryString());
@@ -131,17 +136,5 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
                 .map(bs -> QueryResultUtils.getIRI(bs, BEVERAGE_ID))
                 .map(this::getById)
                 .collect(Collectors.toList());
-    }
-
-    public void loadFromResource() throws FileNotFoundException {
-        File dataFile = new File("src/main/resources/data.ttl");
-        InputStream data = new FileInputStream(dataFile);
-        getRdf4JTemplate().consumeConnection(con -> {
-            try {
-                con.add(data, "", RDFFormat.TURTLE);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
     }
 }

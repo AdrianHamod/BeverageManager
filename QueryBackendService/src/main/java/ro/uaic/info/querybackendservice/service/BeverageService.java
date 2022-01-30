@@ -51,9 +51,4 @@ public class BeverageService {
     public List<Beverage> fullTextSearchOnDescription(String term) {
         return beverageDao.searchBeveragesMatchingDescription(term);
     }
-
-    @Transactional
-    public void loadData() throws FileNotFoundException {
-        beverageDao.loadFromResource();
-    }
 }

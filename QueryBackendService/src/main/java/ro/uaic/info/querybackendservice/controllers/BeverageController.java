@@ -73,6 +73,7 @@ public class BeverageController {
         beverage.setBeverageId(iri(IRILabel.NS + req.getBeverageName()));
         beverage.setDescription(req.getDescription());
         beverage.setName(req.getBeverageName());
+        beverage.setImageUrl(req.getImage());
         beverage.setAllergens(req.getAllergens());
         if (req.getParentName() != null && !req.getParentName().isEmpty()) {
             beverage.setParent(iri(IRILabel.NS + req.getParentName()));

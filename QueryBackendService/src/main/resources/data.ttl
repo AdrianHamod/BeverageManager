@@ -1,0 +1,717 @@
+@prefix : <http://www.bem.ro/bem-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.bem.ro/bem-schema> .
+
+<http://www.bem.ro/bem-schema> rdf:type owl:Ontology ;
+                                rdfs:comment "Ontology for Beverage Manager project." ;
+                                rdfs:seeAlso "https://github.com/AdrianHamod/BeverageManager" .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/elements/1.1/description
+<http://purl.org/dc/elements/1.1/description> rdf:type owl:AnnotationProperty .
+
+
+###  http://www.bem.ro/bem-schema#allergens
+:allergens rdf:type owl:AnnotationProperty .
+
+###  http://www.bem.ro/bem-schema#season
+:season rdf:type owl:AnnotationProperty .
+
+###  http://www.bem.ro/bem-schema#event
+:event rdf:type owl:AnnotationProperty .
+
+###  http://www.schema.org/image
+<http://www.schema.org/image> rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag
+rdf:Bag rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2006/time#TemporalEntity
+<http://www.w3.org/2006/time#TemporalEntity> rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/ns/locn#location
+<http://www.w3.org/ns/locn#location> rdf:type owl:AnnotationProperty .
+
+
+###  http://xmlns.com/foaf/0.1/knows
+<http://xmlns.com/foaf/0.1/knows> rdf:type owl:AnnotationProperty .
+
+
+###  http://xmlns.com/foaf/0.1/name
+<http://xmlns.com/foaf/0.1/name> rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Datatypes
+#################################################################
+
+###  http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag
+rdf:Bag rdf:type rdfs:Datatype .
+
+
+###  http://www.w3.org/2006/time#TemporalEntity
+<http://www.w3.org/2006/time#TemporalEntity> rdf:type rdfs:Datatype .
+
+
+###  http://www.w3.org/ns/locn#location
+<http://www.w3.org/ns/locn#location> rdf:type rdfs:Datatype .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.bem.ro/bem-schema#Americano
+:Americano rdf:type owl:Class ;
+           rdfs:subClassOf :Coffee ;
+           <http://purl.org/dc/elements/1.1/description> """Caffè Americano (also known as Americano or American; Italian pronunciation: [kafˈfɛ ameriˈkaːno]; Spanish: café americano, literally American coffee) is a type of coffee drink prepared by diluting an espresso with hot water, giving it a similar strength to, but different flavor from, traditionally brewed coffee. Its strength varies with the number of shots of espresso and amount of water added. The name is also spelled with varying capitalization and use of diacritics: e.g., café americano.
+
+In Italy, caffè americano may mean either espresso with hot water or long-filtered coffee, but the latter is more precisely called caffè all'americana (\"café in the American style\").""" ;
+           :allergens "Caffeine" ;
+           <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Hokitika_Cheese_and_Deli%2C_Hokitika_%283526706594%29.jpg/1024px-Hokitika_Cheese_and_Deli%2C_Hokitika_%283526706594%29.jpg" ;
+           <http://xmlns.com/foaf/0.1/name> "Americano" .
+
+
+###  http://www.bem.ro/bem-schema#Ayran
+:Ayran rdf:type owl:Class ;
+       rdfs:subClassOf :Dairy ;
+       <http://purl.org/dc/elements/1.1/description> """Ayran is a frothy beverage made with yogurt and cold water, which is the reason why it is sometimes described as \"diluted yogurt.\" It dates back to the times of ancient Persia, when it was made with curdled milk and water that was seasoned with mint.
+
+Apart from Iran, ayran is quite popular in Azerbaijan, Armenia, Afghanistan, Lebanon, and Turkey – where it has even been promoted as a national drink. Traditionally, ayran is mixed manually until it develops a frothy consistency and produces foam.""" ;
+       :allergens "Lactose" ;
+       <http://www.schema.org/image> "https://cdn.tasteatlas.com//images/ingredients/48c722a3639d4b02affcbdd8338d7f73.jpg?w=905&h=510" ;
+       <http://xmlns.com/foaf/0.1/name> "Ayran" .
+
+
+###  http://www.bem.ro/bem-schema#Berry_Bulesque
+:Berry_Bulesque rdf:type owl:Class ;
+                rdfs:subClassOf :Mocktails ;
+                <http://purl.org/dc/elements/1.1/description> "Combine and shake all ingredients except ginger beer in a shaker tin with ice, and then strain over fresh ice. Top with ginger beer." ;
+                <http://www.schema.org/image> "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/berry-burlesque-photo-credit-aria-bardot-brasserie-med-rez-1576513463.jpg" ;
+                <http://xmlns.com/foaf/0.1/name> "Berry Burlesque" .
+
+
+###  http://www.bem.ro/bem-schema#Beverage_Context
+:Beverage_Context rdf:type owl:Class .
+
+
+###  http://www.bem.ro/bem-schema#Beverages
+:Beverages rdf:type owl:Class .
+
+
+###  http://www.bem.ro/bem-schema#Black_Tea
+:Black_Tea rdf:type owl:Class ;
+           rdfs:subClassOf :Tea ;
+           <http://purl.org/dc/elements/1.1/description> """Black tea, also translated to red tea in various Asian languages, is a type of tea that is more oxidized than oolong, yellow, white and green teas. Black tea is generally stronger in flavor than other teas. All five types are made from leaves of the shrub (or small tree) Camellia sinensis.
+
+Two principal varieties of the species are used – the small-leaved Chinese variety plant (C. sinensis var. sinensis), used for most other types of teas, and the large-leaved Assamese plant (C. sinensis var. assamica), which was traditionally mainly used for black tea, although in recent years some green and white teas have been produced.
+
+First originating in China, the beverage's name there is hong cha (Chinese: 紅茶, \"red tea\") due to the color of the oxidized leaves when processed appropriately. Today, the drink is widespread throughout East and Southeast Asia, both in consumption and harvesting, including in Indonesia, Japan, Korea and Singapore. Similar variants are also available in South Asian countries.
+
+While green tea usually loses its flavor within a year, black tea retains its flavor for several years. For this reason, it has long been an article of trade, and compressed bricks of black tea even served as a form of de facto currency in Mongolia, Tibet and Siberia into the 19th century.""" ;
+           <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Cup_of_black_tea.JPG/800px-Cup_of_black_tea.JPG" ;
+           <http://xmlns.com/foaf/0.1/name> "Black Tea" .
+
+
+###  http://www.bem.ro/bem-schema#Blackberry_Tea
+:Blackberry_Tea rdf:type owl:Class ;
+                rdfs:subClassOf :Tea ;
+                <http://purl.org/dc/elements/1.1/description> "Instructions Checklist. Combine blackberries and sugar in a large container, and crush with a wooden spoon; stir in mint and baking soda. Pour 4 cups boiling water over tea bags; cover and steep 5 minutes. Discard tea bags. Pour tea over blackberry mixture; let stand at room temperature 1 hour." ;
+                <http://www.schema.org/image> "https://driscolls.imgix.net/-/media/assets/recipes/blackberry-mint-iced-tea.ashx" ;
+                <http://xmlns.com/foaf/0.1/name> "Blackberry Tea" .
+
+
+###  http://www.bem.ro/bem-schema#Brown
+:Brown rdf:type owl:Class ;
+       rdfs:subClassOf :Lemonade ;
+       <http://purl.org/dc/elements/1.1/description> "There are various drinks called brown lemonade. In Ulster, the northern province in Ireland, brown lemonade is flavoured with brown sugar. A variant from Venezuela has cane sugar and lime." ;
+       <http://www.schema.org/image> "https://www.dixiecrystals.com/sites/default/files/recipe/Brown-Sugar-Lemonade-imperial.jpg" ;
+       <http://xmlns.com/foaf/0.1/name> "Brown Lemonade" .
+
+
+###  http://www.bem.ro/bem-schema#Carbonated
+:Carbonated rdf:type owl:Class ;
+            rdfs:subClassOf :Beverages ,
+                            :Water ;
+            <http://purl.org/dc/elements/1.1/description> "Carbonated Water" ;
+            <http://www.schema.org/image> "https://static01.nyt.com/images/2021/09/21/well/ASKWELL-SELTZER2/ASKWELL-SELTZER2-mobileMasterAt3x.jpg" ;
+            <http://xmlns.com/foaf/0.1/name> "Carbonated Water" .
+
+
+###  http://www.bem.ro/bem-schema#Cholado
+:Cholado rdf:type owl:Class ;
+         rdfs:subClassOf :Dairy ;
+         <http://purl.org/dc/elements/1.1/description> """Cholado is an icy cross between a fruit salad, a cocktail, and a frozen dessert. Also known as raspao, the beverage is prepared with fresh fruit such as strawberries, bananas, kiwi, papaya, pineapple, and maracuya, along with milk and a sweet syrup made with Colombian blackberries.
+
+Cholado has a perfect balance of aromas and textures, and it is considered both a dessert and a drink because it is crunchy, fruity, and creamy at the same time. It is typically served cold in a tall glass with a lot of crushed ice, then topped with shredded coconut and garnished with a cherry.""" ;
+         :allergens "Lactose" ;
+         <http://www.schema.org/image> "https://cdn.tasteatlas.com//images/ingredients/f6103d8689174ae398b1645749b009e0.jpg?w=905&h=510" ;
+         <http://xmlns.com/foaf/0.1/name> "Chocolado" .
+
+
+###  http://www.bem.ro/bem-schema#Citron_Pressé
+:Citron_Pressé rdf:type owl:Class ;
+               rdfs:subClassOf :Lemonade ;
+               <http://purl.org/dc/elements/1.1/description> """To make lemon syrup: put the sugar and lemon in a saucepan with water. Bring to a boil just 5 minutes. Remove from the heat and cool. Store in a glass jar in the refrigerator.
+Put 1 tablespoon of lemon syrup in a glass with a few ice cubes and a sprig of mint. Squeeze in the juice of half a lemon. Stir in cold water to taste. Sweeten with more syrup, if you like.""" ;
+               <http://www.schema.org/image> "https://img.sndimg.com/food/image/upload/c_thumb,q_80,w_562,h_316/v1/img/recipes/48/25/62/picy469ju.jpg" ;
+               <http://xmlns.com/foaf/0.1/name> "Citron Pressé" .
+
+
+###  http://www.bem.ro/bem-schema#Citrus_Fizz
+:Citrus_Fizz rdf:type owl:Class ;
+             rdfs:subClassOf :Mocktails ;
+             <http://purl.org/dc/elements/1.1/description> """Combine Seedlip and cordial in a champagne flute and top with chilled sparkling water.
+
+*Instructions for organic marmalade cordial: Mix 300g organic marmalade with 150 mL hot water, Fine strain and store in the fridge.""" ;
+             <http://www.schema.org/image> "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/grove-citrus-fizz-1576525538.jpg" ;
+             <http://xmlns.com/foaf/0.1/name> "Citrus Fizz" .
+
+
+###  http://www.bem.ro/bem-schema#Clear
+:Clear rdf:type owl:Class ;
+       rdfs:subClassOf :Lemonade ;
+       <http://purl.org/dc/elements/1.1/description> "The predominant form of lemonade in the UK, Ireland, South Africa, and Australia is a clear, lemon-flavoured carbonated beverage. Schweppes, R. White's Lemonade and C&C are common brands, and shops usually carry a store-branded lemonade as well. Schweppes uses a blend of lemon and lime oils. Other fizzy drinks, soft-drinks (or pop) which are both lemon and lime flavoured may also sometimes be referred to as lemonade, such as Sprite and 7 up. There are also speciality flavours, such as Fentimans Rose Lemonade, which is sold in the UK, the US, and Canada. Shandy, a mixture of beer and clear lemonade, is often sold pre-bottled, or ordered in pubs." ;
+       <http://www.schema.org/image> "https://previews.123rf.com/images/yodrak/yodrak1710/yodrak171000243/88799745-lemonade-refreshing-and-pieces-of-lemon-put-on-clear-white-glass-for-drinking-old-wooden-background-.jpg" ;
+       <http://xmlns.com/foaf/0.1/name> "Clear Lemonade" .
+
+
+###  http://www.bem.ro/bem-schema#Cloudy
+:Cloudy rdf:type owl:Class ;
+        rdfs:subClassOf :Lemonade ;
+        <http://purl.org/dc/elements/1.1/description> """Begin by making the sugar syrup by adding 200g of caster sugar and 250ml of water in a pan. Dissolve the sugar in the water and then allow to cool. Any remaining sugar syrup can be kept in the fridge for a later date.
+Fill a jug with ice and add the lemon juice and sugar syrup. Mix well, then add the lemon slices and top up with sparkling water. Garnish with fresh mint to serve, if you like.
+Tip
+
+To give this cocktail a grown-up kick, add 50ml (2fl oz) of gin or vodka. Rum or tequila will also work well.""" ;
+        <http://www.schema.org/image> "https://realfood.tesco.com/media/images/cloudy-lemonade-HERO-e5b5a491-f4b2-4734-a053-bff3372ef769-0-472x310.jpg" ;
+        <http://xmlns.com/foaf/0.1/name> "Cloudy Lemonade" .
+
+
+###  http://www.bem.ro/bem-schema#Coca-Cola_Blāk
+:Coca-Cola_Blāk rdf:type owl:Class ;
+                rdfs:subClassOf :Energy ;
+                <http://purl.org/dc/elements/1.1/description> """Coca-Cola Blak (stylized as Coca-Cola BlāK) was a coffee-flavored soft drink introduced by Coca-Cola in 2006 and discontinued in 2008. The mid-calorie drink was introduced first in France and subsequently in other markets, including Czech Republic, Slovakia, and Lithuania.
+
+Coca-Cola Blak launched in the United States on April 3, and in Canada on August 29, 2006 in Toronto, Ontario, at Dundas Square. In August 2007, trade magazine Beverage Digest noted that Coca-Cola would discontinue the drink within the United States.""" ;
+                :allergens "Taurine, Coffeine" ;
+                <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Coca-Cola_Blak_bottle.jpg/1920px-Coca-Cola_Blak_bottle.jpg" ;
+                <http://xmlns.com/foaf/0.1/name> "Coca-Cola Blãk" .
+
+
+###  http://www.bem.ro/bem-schema#Coffee
+:Coffee rdf:type owl:Class ;
+        rdfs:subClassOf :Beverages ;
+        <http://purl.org/dc/elements/1.1/description> "Coffee drinks are made by brewing hot water and, occasionally, cold water with ground coffee beans. The brewing is either done slowly by drip, filter, French press, cafetière or percolator, or done very quickly under pressure by an espresso machine. When put under the pressure of an espresso machine, the coffee is termed espresso while slow-brewed coffees are generally termed brewed coffee. While all coffee drinks are based on either coffee or espresso, some drinks add milk or cream, some are made with steamed milk or non-dairy milks, or add water (like the americano). Upon milk additions, coffee's flavor can vary with different syrups or sweeteners, alcoholic liqueurs, and even combinations of coffee with espresso or tea. There are many variations to the basic coffee or espresso bases." ;
+        <http://xmlns.com/foaf/0.1/name> "Coffee" .
+
+
+###  http://www.bem.ro/bem-schema#Crema
+:Crema rdf:type owl:Class ;
+       rdfs:subClassOf :Coffee ;
+       <http://purl.org/dc/elements/1.1/description> """Caffè crema (Italian: \"cream coffee\") refers to two different coffee drinks:
+
+An old name for espresso (1940s and 1950s).
+A long espresso drink served primarily in Germany, Switzerland and Austria and northern Italy (1980s onwards), along the Italian/Swiss and Italian/Austrian border. In Germany it is generally known as a \"Café Crème\" or just \"Kaffee\" and is generally the default type of black coffee served, unless there is a filter machine.
+As a colorful term it generally means \"espresso\", while in technical discussions, referring to the long drink, it may more narrowly be referred to as Swiss caffè crema. In addition, there is also Italian iced crema caffè.
+
+Variant terms include \"crema caffè\" and the hyperforeignism \"café crema\" – \"café\" is French, while \"caffè\" and \"crema\" are Italian, thus \"café crema\" mixes French and Italian.""" ;
+       :allergens "Caffeine" ;
+       <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/CremaWithSwirls.jpg/1920px-CremaWithSwirls.jpg" ;
+       <http://xmlns.com/foaf/0.1/name> "Crema" .
+
+
+###  http://www.bem.ro/bem-schema#Cubano
+:Cubano rdf:type owl:Class ;
+        rdfs:subClassOf :Coffee ;
+        <http://purl.org/dc/elements/1.1/description> """Café Cubano (also known as Cuban espresso, Colada, Cuban coffee, cafecito, Cuban pull, and Cuban shot) is a type of espresso that originated in Cuba. Specifically, it refers to an espresso shot which is sweetened (traditionally with natural brown sugar which has been whipped with the first and strongest drops of espresso). However, the name is sometimes used to refer to coffee-based drinks that include Cuban espresso as the main ingredient, such as café con leche.
+
+Drinking café cubano remains a prominent social and cultural activity in Cuba and in Cuban-American communities, particularly in Miami, Tampa and the Florida Keys.""" ;
+        :allergens "Caffeine" ;
+        <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Cuban_coffee-_2013-04-05_14-30.jpg/1024px-Cuban_coffee-_2013-04-05_14-30.jpg" ;
+        <http://xmlns.com/foaf/0.1/name> "Cubano" .
+
+
+###  http://www.bem.ro/bem-schema#Dairy
+:Dairy rdf:type owl:Class ;
+       rdfs:subClassOf :Beverages ;
+       <http://purl.org/dc/elements/1.1/description> """Flavored and chocolate milk drinks are a longtime favorite. Modern dairy beverages carry a positive image with consumers, particularly when they combine the nutritional benefits of milk and fruit juices or are based on soy. They are an ideal platform for further fortification with probiotics, omega 3 fatty acids, phytosterols, minerals, fibers or other bioactive components.
+
+Given local taste preferences and cultural trends, there is no “one size - fits all” approach. Whether the challenge is in stabilizing the beverage (e.g., in cocoa particle suspension), optimizing production according to shelf life, accommodating various packages or optimizing the level of fat vs. milk solid content – we know how, and we have the right expertise and products to make it work.""" ;
+       <http://xmlns.com/foaf/0.1/name> "Dairy" .
+
+
+###  http://www.bem.ro/bem-schema#Doppio
+:Doppio rdf:type owl:Class ;
+        rdfs:subClassOf :Coffee ;
+        <http://purl.org/dc/elements/1.1/description> """Doppio espresso (Italian pronunciation: [ˈdoppjo]) is a double shot which is extracted using double the amount of ground coffee in a larger-sized portafilter basket. This results in 60 ml (2.1 imp fl oz; 2.0 US fl oz) of drink, double the amount of a single shot espresso. Doppio is Italian multiplier, meaning \"double\". It is commonly called a standard double, due to its standard in judging the espresso quality in barista competitions, where four single espresso are made using two double portafilters.
+
+A single shot of espresso, by contrast, is called a solo (\"single\") and was developed because it was the maximum amount of ground coffee that could practically be extracted by lever espresso machines. At most cafés outside of Italy, a doppio is the standard shot. Because solos require a smaller portafilter basket, solo shots are often produced by making (\"pulling\") a doppio in a two-spout portafilter and only serving one of the streams; the other stream may be discarded or used in another drink.""" ;
+        :allergens "Caffeine" ;
+        <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Doppio.jpg/1920px-Doppio.jpg" ;
+        <http://xmlns.com/foaf/0.1/name> "Doppio" .
+
+
+###  http://www.bem.ro/bem-schema#Energy
+:Energy rdf:type owl:Class ;
+        rdfs:subClassOf :Beverages ;
+        <http://purl.org/dc/elements/1.1/description> "An energy drink is a type of drink containing stimulant compounds, usually caffeine, which is marketed as providing mental and physical stimulation (marketed as \"energy\", but distinct from food energy). They may or may not be carbonated and may also contain sugar, other sweeteners, herbal extracts, taurine, and amino acids. They are a subset of the larger group of energy products, which includes bars and gels, and distinct from sports drinks, which are advertised to enhance sports performance. There are many brands and varieties in this drink category." ;
+        <http://xmlns.com/foaf/0.1/name> "Energy Drinks" .
+
+
+###  http://www.bem.ro/bem-schema#Espresso_Roberto
+:Espresso_Roberto rdf:type owl:Class ;
+                  rdfs:subClassOf :Coffee ;
+                  <http://purl.org/dc/elements/1.1/description> "An espresso Roberto is a double shot espresso with a small amount of steamed milk on the side. Made properly a splash of steamed whole milk is added." ;
+                  :allergens "Caffeine" ;
+                  <http://xmlns.com/foaf/0.1/name> "Espresso Roberto" .
+
+
+###  http://www.bem.ro/bem-schema#Fermented
+:Fermented rdf:type owl:Class ;
+           rdfs:subClassOf :Beverages ;
+           <http://purl.org/dc/elements/1.1/description> "Fermentation is a metabolic process that produces chemical changes in organic substrates through the action of enzymes. In biochemistry, it is narrowly defined as the extraction of energy from carbohydrates in the absence of oxygen. In food production, it may more broadly refer to any process in which the activity of microorganisms brings about a desirable change to a foodstuff or beverage. The science of fermentation is known as zymology." ;
+           <http://xmlns.com/foaf/0.1/name> "Fermented" .
+
+
+###  http://www.bem.ro/bem-schema#Flat_white
+:Flat_white rdf:type owl:Class ;
+            rdfs:subClassOf :Coffee ;
+            <http://purl.org/dc/elements/1.1/description> "A flat white is a coffee drink consisting of espresso with microfoam (steamed milk with small, fine bubbles and a glossy or velvety consistency). It is comparable to a latte, but smaller in volume and with less microfoam, therefore having a higher proportion of coffee to milk, and milk that is more velvety in consistency – allowing the espresso to dominate the flavour, while being supported by the milk." ;
+            :allergens "Caffeine" ;
+            <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Flat_white_coffee_with_pretty_feather_pattern.jpg/1024px-Flat_white_coffee_with_pretty_feather_pattern.jpg" ;
+            <http://xmlns.com/foaf/0.1/name> "Flat White" .
+
+
+###  http://www.bem.ro/bem-schema#Flavored_Syrup
+:Flavored_Syrup rdf:type owl:Class ;
+                rdfs:subClassOf :Beverages ;
+                <http://purl.org/dc/elements/1.1/description> """Flavored syrups typically consist of a simple syrup, that is sugar (fully mixed with water while heated), with naturally occurring or artificial (synthesized) flavorings also dissolved in them. A sugar substitute may also be used.
+
+Flavored syrups may be used or mixed with carbonated water, coffee, pancakes, waffles, tea, cake, ice cream, and other foods. There are hundreds of flavors ranging from cherry and peach to vanilla to malt, hazelnut, coconut, almond, gingerbread, chocolate, peppermint, rootbeer, and even toasted marshmallow.
+
+In addition to food and drink, flavored syrups are commonly used in pharmaceutical compounding.""" ;
+                <http://xmlns.com/foaf/0.1/name> "Flavored Syrup" .
+
+
+###  http://www.bem.ro/bem-schema#Green_Tea
+:Green_Tea rdf:type owl:Class ;
+           rdfs:subClassOf :Tea ;
+           <http://purl.org/dc/elements/1.1/description> """Green tea is a type of tea that is made from Camellia sinensis leaves and buds that have not undergone the same withering and oxidation process used to make oolong teas and black teas. Green tea originated in China, and since then its production and manufacture has spread to other countries in East and Southeast Asia.
+
+Several varieties of green tea exist, which differ substantially based on the variety of C. sinensis used, growing conditions, horticultural methods, production processing, and time of harvest. Although there has been considerable research on the possible health effects of consuming green tea regularly, there is little evidence that drinking green tea has any effects on health.""" ;
+           <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Green_Tea_Color.jpg/1280px-Green_Tea_Color.jpg" ;
+           <http://xmlns.com/foaf/0.1/name> "Green Tea" .
+
+
+###  http://www.bem.ro/bem-schema#Hell
+:Hell rdf:type owl:Class ;
+      rdfs:subClassOf :Energy ;
+      <http://purl.org/dc/elements/1.1/description> "Hell Energy Drink (stylized as HELL) is a popular energy drink brand distributed primarily in Europe and Asia. The brand was initiated in 2006 by a privately owned company, founded in Hungary, 2004, which took the name \"Hell Energy Magyarország Kft.\" in 2009. Within three years it became the market leader in Hungary. A major milestone for the brand's popularity was a two-year sponsorship deal with the AT&T Williams Formula 1 Team, where Hell Energy became second in the energy drink sector to enter the world of Formula 1 Racing. Hell Energy is now also a market leader in Bulgaria, Romania, Slovakia, Cyprus, Azerbaijan, North Macedonia, Greece, Croatia and Serbia and is available in more than 50 countries worldwide.[5] Hell produces the energy drink Speedstar for NORMA supermarkets. Hell Energy has headquarters in Hungary, Romania, the United Kingdom, Russia and also in Cyprus." ;
+      :allergens "Taurine, Coffeine" ;
+      <http://www.schema.org/image> "https://5.imimg.com/data5/SELLER/Default/2021/2/DZ/FJ/FU/114420150/hell-energy-drink-jpg-500x500.jpg" ;
+      <http://xmlns.com/foaf/0.1/name> "Hell" .
+
+
+###  http://www.bem.ro/bem-schema#Hot_Apple_Cider
+:Hot_Apple_Cider rdf:type owl:Class ;
+                 rdfs:subClassOf :Mocktails ;
+                 <http://purl.org/dc/elements/1.1/description> """Heat apple cider and stir in pumpkin butter. Garnish with star anise and cinnamon.
+
+Created by Liana Oster of Dante in NYC.""" ;
+                 <http://www.schema.org/image> "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/big-apple-cider-1543941663.jpg" ;
+                 <http://xmlns.com/foaf/0.1/name> "Hot Apple Cider" .
+
+
+###  http://www.bem.ro/bem-schema#Iced_Tea
+:Iced_Tea rdf:type owl:Class ;
+          rdfs:subClassOf :Tea ;
+          <http://purl.org/dc/elements/1.1/description> """Iced tea (or ice tea) is a form of cold tea. Though usually served in a glass with ice, it can refer to any tea that has been chilled or cooled. It may be sweetened with sugar, syrup and/or apple slices. Iced tea is also a popular packaged drink and can be mixed with flavored syrup, with multiple common flavors including lemon, raspberry, lime, passion fruit, peach, orange, strawberry, and cherry.
+
+While most iced teas get their flavor from tea leaves (Camellia sinensis), herbal teas are sometimes served cold and referred to as iced tea. Iced tea is sometimes made by a particularly long steeping of tea leaves at a lower temperature (one hour in the sun versus five minutes at 80 to 100 °C (176 to 212 °F), which is known as sun tea.""" ;
+          <http://xmlns.com/foaf/0.1/name> "Iced Tea" .
+
+
+###  http://www.bem.ro/bem-schema#Kefir
+:Kefir rdf:type owl:Class ;
+       rdfs:subClassOf :Dairy ;
+       <http://purl.org/dc/elements/1.1/description> """Kefir is a tangy probiotic drink made with milk that is fermented with kefir grains—small clusters containing a mixture of bacteria and yeasts. It is a slightly effervescent beverage with a consistency of a thin yogurt and a mildly acidic flavor.
+
+The preparation is simple and involves soaking the grains with milk and leaving the combination at room temperature. The bacteria ferment the lactose and turn it into lactic acid. The liquid is strained, the kefir grains are removed, and are then ready to be used in the next batch.""" ;
+       :allergens "Lactose" ;
+       <http://www.schema.org/image> "https://cdn.tasteatlas.com//images/ingredients/6a1c343fc03a4dbdb0fb8915a015fd6e.jpg?w=905&h=510" ;
+       <http://xmlns.com/foaf/0.1/name> "Kefir" .
+
+
+###  http://www.bem.ro/bem-schema#Kombucha
+:Kombucha rdf:type owl:Class ;
+          rdfs:subClassOf :Fermented ,
+                          :Tea ;
+          <http://purl.org/dc/elements/1.1/description> "Kombucha is a fermented, lightly effervescent, sweetened black or green tea drink commonly consumed for its purported health benefits. Sometimes the beverage is called kombucha tea to distinguish it from the culture of bacteria and yeast. Juice, spices, fruit or other flavorings are often added." ;
+          <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/4/48/Kombucha_Mature.jpg" ;
+          <http://xmlns.com/foaf/0.1/name> "Kombucha" .
+
+
+###  http://www.bem.ro/bem-schema#Kumis
+:Kumis rdf:type owl:Class ;
+       rdfs:subClassOf :Dairy ;
+       <http://purl.org/dc/elements/1.1/description> """Kumis is a fermented dairy product that originated in ancient Mongolia, but over time it has spread throughout Central Asia. The drink is similar to kefir, but is traditionally produced from mare’s raw milk, which contains more sugar than goat’s or cow’s milk, and it is also rich in proteins and vitamin C.
+
+Due to the amount of sugar in mare’s milk, kumis has a higher level of alcohol than kefir when fermented. If distilled into the spirit, kumis becomes araka or arkhi. This light-bodied dairy drink has a slightly sour flavor and an aftertaste reminiscent of almonds.""" ;
+       :allergens "Lactose" ;
+       <http://www.schema.org/image> "https://cdn.tasteatlas.com//images/ingredients/106370f34c254079a64c8d424af1f1a3.jpg?w=905&h=510" ;
+       <http://xmlns.com/foaf/0.1/name> "Kumis" .
+
+
+###  http://www.bem.ro/bem-schema#Kvass
+:Kvass rdf:type owl:Class ;
+       rdfs:subClassOf :Fermented ;
+       <http://purl.org/dc/elements/1.1/description> "Kvass is a fermented cereal-based non-alcoholic or low alcoholic (0.5–1.0% or 1–2 proof) beverage with a slightly cloudy appearance, light-dark brown colour and sweet-sour taste. It may be flavoured with fruits such as strawberries or raisins, or with herbs such as mint." ;
+       <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Mint_bread_kvas.jpg/250px-Mint_bread_kvas.jpg" ;
+       <http://xmlns.com/foaf/0.1/name> "Kvass" .
+
+
+###  http://www.bem.ro/bem-schema#Lassi
+:Lassi rdf:type owl:Class ;
+       rdfs:subClassOf :Dairy ;
+       <http://purl.org/dc/elements/1.1/description> """This traditional Indian yogurt-based drink hails from the pre-refrigeration era when Punjabi farmers mixed their milk with sugar and curd, and kept the concoction in clay pots. Lassi is often flavored with a variety of fresh herbs, different spices, fruits, and floral essences.
+
+It is typically mixed with ice and served as an accompaniment to hot and spicy dishes, as it provides refreshment for the palate and soothes the body, especially on hot summer days. Sweet lassi is called metha lassi and it often contains ginger, mint, rosewater, cardamom, and exotic fruits like mango.""" ;
+       :allergens "Lactose" ;
+       <http://www.schema.org/image> "https://cdn.tasteatlas.com//images/ingredients/0b3d9b954a6d4da1aa4dd7588d3f0070.jpg?w=905&h=510" ;
+       <http://xmlns.com/foaf/0.1/name> "Lassi" .
+
+
+###  http://www.bem.ro/bem-schema#Latte
+:Latte rdf:type owl:Class ;
+       rdfs:subClassOf :Coffee ;
+       <http://purl.org/dc/elements/1.1/description> """Caffè latte (Italian: [kafˌfɛ lˈlatte]), often shortened to just latte (/ˈlɑːteɪ, ˈlæteɪ/) in English, is a coffee drink of Italian origin made with espresso and steamed milk.
+
+The term comes from the Italian caffellatte or caffè latte, from caffè e latte, literally \"coffee and milk\"; in English orthography either or both words sometimes have an accent on the final e (a hyperforeignism or to indicate it is pronounced, not the more-common silent final e of English). In northern Europe and Scandinavia, the term café au lait has traditionally been used for the combination of espresso and milk. In France, café latte is from the original name of the drink (caffè latte); a combination of espresso and steamed milk equivalent to a \"latte\" is in French called grand crème and in German Milchkaffee or (in Austria) Wiener Melange.
+
+Variants include the chocolate-flavored mocha or replacing the coffee with another drink base such as masala chai (spiced Indian tea), mate, matcha, turmeric or rooibos; other types of milk, such as soy milk or almond milk, are also used.""" ;
+       :allergens "Caffeine" ;
+       <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Latte_art_3.jpg/220px-Latte_art_3.jpg" ;
+       <http://xmlns.com/foaf/0.1/name> "Latte" .
+
+
+###  http://www.bem.ro/bem-schema#Lavender_Lemonade
+:Lavender_Lemonade rdf:type owl:Class ;
+                   rdfs:subClassOf :Mocktails ;
+                   <http://purl.org/dc/elements/1.1/description> "Bring water and honey to a boil in a large pot over medium-high heat. Gently crush the lavender in a mortar and pestle or in a bowl with a meat tenderizer. Add the crushed lavender to the pot then remove it from the heat. Cover, refrigerate, and steep for 2 hours. Strain the liquid through a fine mesh sieve. Stir in the lemon juice and serve over ice." ;
+                   <http://www.schema.org/image> "https://hips.hearstapps.com/toc.h-cdn.co/assets/15/36/2048x3073/lavendar-lemonade.jpg" ;
+                   <http://xmlns.com/foaf/0.1/name> "Lavender Lemonade" .
+
+
+###  http://www.bem.ro/bem-schema#Lemonade
+:Lemonade rdf:type owl:Class ;
+          rdfs:subClassOf :Beverages ;
+          <http://purl.org/dc/elements/1.1/description> """Lemonade is a sweetened lemon-flavored beverage.
+
+There are varieties of lemonade found throughout the world. In North America and South Asia, cloudy lemonade dominates. It is traditionally a homemade drink using lemon juice, water, and a sweetener such as cane sugar, simple syrup or honey. In the United Kingdom, Ireland and Australia, a carbonated lemonade is more common. Despite the differences between the drinks, each is known simply as \"lemonade\" in countries where it is dominant.
+
+The suffix \"-ade\" may also be applied to other similar drinks made with different fruits, such as limeade, orangeade, or cherryade.""" ;
+          <http://xmlns.com/foaf/0.1/name> "Lemonade" .
+
+
+###  http://www.bem.ro/bem-schema#Licuado
+:Licuado rdf:type owl:Class ;
+         rdfs:subClassOf :Dairy ;
+         <http://purl.org/dc/elements/1.1/description> """Licuado is a Mexican blended beverage consisting of milk, fresh fruit, and ice. The drink is popular throughout Latin America, where it is also known as batido. The beverage gained fame in the USA during the immigration period in the 1990s.
+
+Licuado, which means blended or liquefied, may also contain nuts, honey, and spices such as vanilla, cloves, or cinnamon, while in some varieties fruit can be replaced with chocolate. Due to its nutritive value, licuado is considered a quintessential breakfast food providing energy for the day, and it is usually served in a tall glass garnished with fruit.""" ;
+         :allergens "Lactose, Test, Test2" ;
+         <http://www.schema.org/image> "https://cdn.tasteatlas.com//images/ingredients/a5443ef88fb84a1bbb1c91cc75da0aaf.jpg?w=905&h=510" ;
+         <http://xmlns.com/foaf/0.1/name> "Licuado" .
+
+
+###  http://www.bem.ro/bem-schema#Magic_Apple
+:Magic_Apple rdf:type owl:Class ;
+             rdfs:subClassOf :Mocktails ;
+             <http://purl.org/dc/elements/1.1/description> "Combine first three ingredients in a tall glass with ice. Stir until cold. Pour over fresh ice, garnish with cinnamon stick and apple slice, and serve." ;
+             <http://www.schema.org/image> "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/web-ritual-magic-apple-1603382050.jpg" ;
+             <http://xmlns.com/foaf/0.1/name> "Magic Apple" .
+
+
+###  http://www.bem.ro/bem-schema#Mango_Mule
+:Mango_Mule rdf:type owl:Class ;
+            rdfs:subClassOf :Mocktails ;
+            <http://purl.org/dc/elements/1.1/description> "Muddle cucumber and honey syrup in the bottom of a cocktail shaker. Add the mango puree and lime juice and shake with ice vigorously. Strain into a copper mug. Top with ginger beer and stir." ;
+            <http://www.schema.org/image> "https://hips.hearstapps.com/toc.h-cdn.co/assets/15/36/mango_mule.jpg" ;
+            <http://xmlns.com/foaf/0.1/name> "Mango Mule" .
+
+
+###  http://www.bem.ro/bem-schema#Mocktails
+:Mocktails rdf:type owl:Class ;
+           rdfs:subClassOf :Beverages ;
+           <http://purl.org/dc/elements/1.1/description> "Just because a mocktail is non-alcoholic doesn't mean it has to be boring! Between the plethora on non-alcoholic wine, champagne, and beer, nowadays its easier than ever to avoid imbibing without feeling left out. And whether it's for your guests or yourself, it's always a good idea to add a fun and refreshing mocktail into the mix. Here are our favorite easy, delicious, and non-alcoholic recipes to serve up at your next event." ;
+           <http://xmlns.com/foaf/0.1/name> "Mocktails" .
+
+
+###  http://www.bem.ro/bem-schema#Monster
+:Monster rdf:type owl:Class ;
+         rdfs:subClassOf :Energy ;
+         <http://purl.org/dc/elements/1.1/description> """Monster Energy is an energy drink that was introduced by Hansen Natural Company (now Monster Beverage Corporation) in April 2002. As of 2019, Monster Energy has a 35% share of the energy drink market, the second highest share after Red Bull.
+
+There are 39 different drinks under the Monster brand in North America, including its core Monster Energy line, Java Monster, Juice, Hydro, Extra Strength, Dragon Tea, Muscle, Import, and Rehab.""" ;
+         :allergens "Taurine, Caffeine" ;
+         <http://www.schema.org/image> "https://www.sparscotland.co.uk/images/products/brandbank/006a9c8d-49f2-f73c-be5a-9bac0b1ceabe.png" ;
+         <http://xmlns.com/foaf/0.1/name> "Monster" .
+
+
+###  http://www.bem.ro/bem-schema#NOS
+:NOS rdf:type owl:Class ;
+     rdfs:subClassOf :Energy ;
+     <http://purl.org/dc/elements/1.1/description> "NOS Energy Drink is an energy drink sold in 16-and-24-US-fluid-ounce (470 and 710 mL) cans. The drink was also distributed in a bottle designed to look like a NOS (Nitrous Oxide Systems) tank but this bottle has been discontinued. Formerly a property of The Coca-Cola Company, it is currently produced by Monster Beverage and licensed by Holley Performance, which owns the trademark. NOS contains high levels of taurine and caffeine, and it also contains guarana. L-Theanine was removed as a \"CMPLX6\" ingredient in 2016, with inositol becoming listed as one of the six featured ingredients on the can. NOS Energy is currently available in Original, GT Grape, Nitro Mango, Sonic Sour, Power Punch and Turbo." ;
+     :allergens "Taurine, Coffeine" ;
+     <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/8-7-08_-_NOS%21_%282753598084%29.jpg/1024px-8-7-08_-_NOS%21_%282753598084%29.jpg" ;
+     <http://xmlns.com/foaf/0.1/name> "NOS" .
+
+
+###  http://www.bem.ro/bem-schema#Non_Alcoholic_Beer
+:Non_Alcoholic_Beer rdf:type owl:Class ;
+                    rdfs:subClassOf :Fermented ;
+                    <http://purl.org/dc/elements/1.1/description> "Low-alcohol beer is beer with little or no alcohol content and aims to reproduce the taste of beer while eliminating (or at least reducing) the inebriating effects of standard alcoholic brews. Most low-alcohol beers are lagers, but there are some low-alcohol ales. Low-alcohol beer is also known as light beer, non-alcoholic beer, small beer, small ale, or near-beer." ;
+                    <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Low-alcohol_beer%2C_Iran.jpg/1280px-Low-alcohol_beer%2C_Iran.jpg" ;
+                    <http://xmlns.com/foaf/0.1/name> "Non-Alcoholic Beer" .
+
+
+###  http://www.bem.ro/bem-schema#Pepsi_Max
+:Pepsi_Max rdf:type owl:Class ;
+           rdfs:subClassOf :Energy ;
+           <http://purl.org/dc/elements/1.1/description> """Pepsi Max (also known as Pepsi Black in some countries) is a low-calorie, sugar-free cola, marketed by PepsiCo as an alternative to Pepsi and Diet Pepsi. It is primarily sold in European and Asian markets.
+
+A drink with the same name but different formulation (containing ginseng and higher quantities of caffeine) was sold in the United States until it was renamed \"Pepsi Zero Sugar\" in late 2016.""" ;
+           :allergens "Taurine, Coffeine" ;
+           <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/en/6/66/Pepsi_Black_bottle.png" ;
+           <http://xmlns.com/foaf/0.1/name> "Pepsi Max" .
+
+
+###  http://www.bem.ro/bem-schema#Pink
+:Pink rdf:type owl:Class ;
+      rdfs:subClassOf :Lemonade ;
+      <http://purl.org/dc/elements/1.1/description> """Pink lemonade often gets its pink color from red dye, cranberry juice, grenadine, or strawberries. I wanted to skip the food coloring completely, so I opted to use fresh watermelon to give this lemonade its color.
+
+I tested this recipe with strawberries and raspberries but I found that they imparted a strong berry flavor, and they made the lemonade more red than pink. Watermelon was subtle enough to let the lemonade flavor shine while lending a beautiful pink hue.""" ;
+      <http://www.schema.org/image> "https://celebratingsweets.com/wp-content/uploads/2020/07/Pink-Lemonade-1-3.jpg" ;
+      <http://xmlns.com/foaf/0.1/name> "Pink Lemonade" .
+
+
+###  http://www.bem.ro/bem-schema#Profile
+:Profile rdf:type owl:Class ;
+         <http://xmlns.com/foaf/0.1/knows> :Beverage_Context .
+
+
+###  http://www.bem.ro/bem-schema#Raspberry_Tea
+:Raspberry_Tea rdf:type owl:Class ;
+               rdfs:subClassOf :Tea ;
+               <http://purl.org/dc/elements/1.1/description> "Raspberry leaf tea is a herbal remedy that is thought to tone the muscles of your uterus (womb), to help it work during labour. The idea is not so much to speed up labour but to help it progress at a steady pace." ;
+               <http://www.schema.org/image> "https://www.tasteofhome.com/wp-content/uploads/2018/01/Bella-Basil-Raspberry-Tea_EXPS_CWMJJ20_143733_B02_14_1b.jpg" ;
+               <http://xmlns.com/foaf/0.1/name> "Raspberry Tea" .
+
+
+###  http://www.bem.ro/bem-schema#Red_Bull
+:Red_Bull rdf:type owl:Class ;
+          rdfs:subClassOf :Energy ;
+          <http://purl.org/dc/elements/1.1/description> """Red Bull is a brand of energy drinks sold by Austrian company Red Bull GmbH. With 38%, Red Bull has the highest market share among energy drinks as of 2019. Since its launch in 1987, more than 82 billion cans of Red Bull have been sold worldwide, including 7.9 billion in 2020.
+
+Austrian entrepreneur Dietrich Mateschitz was inspired by an existing energy drink, Krating Daeng, which was introduced in 1976 in Thailand by Chaleo Yoovidhya. He modified the ingredients to suit the tastes of Westerners, and in partnership with Chaleo, founded Red Bull GmbH in 1984 in Fuschl am See, Austria. In Thai, daeng means red, and a krating (known in English as a gaur or Indian bison) is a large species of wild bovine native to the Indian subcontinent. Yoovidhya's heirs own majority stakes in both brands, and they both use the same red bull on yellow sun logo while continuing to market the separate drinks to the respective Thai and Western markets.""" ;
+          :allergens "Taurine, Caffeine" ;
+          <http://www.schema.org/image> "https://images.ctfassets.net/lcr8qbvxj7mh/4rHHTTfRz8bXVd3gcRWS2T/478ec562bc534d4b07be051d40729573/UK_RBED_250_Single-Unit_close_ambient_ORIGINAL_canwidth500px.png" ;
+          <http://xmlns.com/foaf/0.1/name> "Red Bull" .
+
+
+###  http://www.bem.ro/bem-schema#Red_Tea
+:Red_Tea rdf:type owl:Class ;
+         rdfs:subClassOf :Tea ;
+         <http://purl.org/dc/elements/1.1/description> """Rooibos (/ˈrɔɪbɒs/ ROY-boss; Afrikaans: [rɔːibɔs]; Aspalathus linearis), meaning \"red bush\"; is a broom-like member of the plant family Fabaceae that grows in South Africa's fynbos.
+
+The leaves are used to make a herbal tea that is called by the names: rooibos (especially in Southern Africa), bush tea, red tea, or redbush tea (predominantly in Great Britain).
+
+The tea has been popular in Southern Africa for generations, and since the 2000s has gained popularity internationally. The tea has an earthy flavor, similar to yerba mate or tobacco.""" ;
+         <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Frisch_aufgebr%C3%BChter_Rooibos.jpg/1280px-Frisch_aufgebr%C3%BChter_Rooibos.jpg" ;
+         <http://xmlns.com/foaf/0.1/name> "Red Tea" .
+
+
+###  http://www.bem.ro/bem-schema#Ristretto
+:Ristretto rdf:type owl:Class ;
+           rdfs:subClassOf :Coffee ;
+           <http://purl.org/dc/elements/1.1/description> """Ristretto (Italian pronunciation: [risˈtretto]) is a \"short shot\" (30 ml from a double basket) of a more highly concentrated espresso coffee. It is made with the same amount of ground coffee, but extracted with a finer grind (also in from 20 to 30 seconds) using half as much water. A normal short shot might look like a Ristretto, but in reality, would only be a weaker, more diluted, shot. The opposite of a Ristretto (which means in Italian, \"shortened, narrow\") is a lungo (\"long\"), which is a double shot. The French call a ristretto a café serré.
+
+Regardless of whether one uses a hand pressed machine or an automatic, a regular double shot is generally considered to be around 14–18 grams of ground coffee extracted into 60 ml (2 fl oz or two shot glasses). Thus, a \"double ristretto\" consumes the same amount of coffee beans but fills only a single shot glass.
+
+Coffee contains over a thousand aroma compounds. A ristretto's chemical composition and taste differ from those of a full-length extraction for three reasons:
+
+More concentrated: The first part of any extraction is the most concentrated, its color typically lying between dark chocolate and umber, whereas the tail end of shots are much lighter, varying from the color of dark pumpkin pie to varying shades of tan (see photo, above right). This is an important factor when drinking straight espresso shots.
+Different balance: Different chemical compounds in ground coffee dissolve into hot water at different rates. A ristretto contains a greater relative proportion of faster extracting compounds, proportionally fewer of the compounds characteristic of over-extraction, and thus, a different balance.
+Fewer total extracts: Relative proportions aside, fewer total coffee compounds—caffeine being just one—are extracted into ristrettos versus full length shots. This is an important factor when diluting shots into water or milk.
+Straight ristrettos—shots that are traditionally drunk from a demitasse and not diluted into a larger cup containing milk or water—could be described as bolder, fuller, with more body and less bitterness. These characteristics are usually attributed to espresso in general but are more pronounced in a ristretto. Diluted into a cup of water (e.g. Americano or long black) or milk (e.g. latte or cappuccino), ristrettos are less bitter and exhibit a more intense “espresso” character.""" ;
+           :allergens "Caffeine" ;
+           <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Doppio_ristretto_Chiang_Mai.jpg/1280px-Doppio_ristretto_Chiang_Mai.jpg" ;
+           <http://xmlns.com/foaf/0.1/name> "Ristretto" .
+
+
+###  http://www.bem.ro/bem-schema#Rockstar
+:Rockstar rdf:type owl:Class ;
+          rdfs:subClassOf :Energy ;
+          <http://purl.org/dc/elements/1.1/description> "Rockstar (stylized as ROCKST★R or ЯR) is an energy drink created in 2001, which, as of 2020, has a 0.3% market share of the US energy drink market. Rockstar is based in Purchase, New York. As of January 2013, Rockstar Energy Drink was available in more than 20 flavors and in more than 30 countries. In March 2020, PepsiCo announced it had agreed to acquire Rockstar for $3.85 billion." ;
+          :allergens "Taurine, Coffeine" ;
+          <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Rockstar_Energy_Drink.jpg/1280px-Rockstar_Energy_Drink.jpg" ;
+          <http://xmlns.com/foaf/0.1/name> "Rockstar" .
+
+
+###  http://www.bem.ro/bem-schema#Ryazhenka
+:Ryazhenka rdf:type owl:Class ;
+           rdfs:subClassOf :Dairy ;
+           <http://purl.org/dc/elements/1.1/description> """Popular throughout Ukraine, Belarus, and Russia, ryazhenka is a dairy product that is made by fermenting milk after it has been baked for a long time at low temperature. The fermentation is achieved by the addition of sour cream, kefir, or buttermilk.
+
+Once prepared, ryazhenka has a thick and creamy texture, sweet flavor, and a milky yellowish color, which is why it is especially popular with children.""" ;
+           :allergens "Lactose" ;
+           <http://www.schema.org/image> "https://cdn.tasteatlas.com//images/ingredients/a9b86088eb604b1c83d87f9ee6ef696d.jpg?w=905&h=510" ;
+           <http://xmlns.com/foaf/0.1/name> "Ryazhenka" .
+
+
+###  http://www.bem.ro/bem-schema#Season
+:Season rdf:type owl:Class .
+
+
+###  http://www.bem.ro/bem-schema#Shirley_Ginger
+:Shirley_Ginger rdf:type owl:Class ;
+                rdfs:subClassOf :Mocktails ;
+                <http://purl.org/dc/elements/1.1/description> "Stir ginger beer, club soda, lime juice, and grenadine in a pitcher. Pour into tall glasses with ice. Garnish with lime rounds and or maraschino cherries." ;
+                <http://www.schema.org/image> "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/shirley-ginger-1543942674.jpg" ;
+                <http://xmlns.com/foaf/0.1/name> "Shirley Ginger" .
+
+
+###  http://www.bem.ro/bem-schema#Still
+:Still rdf:type owl:Class ;
+       rdfs:subClassOf :Water ;
+       <http://purl.org/dc/elements/1.1/description> "Still Water" ;
+       <http://www.schema.org/image> "https://www.collinsdictionary.com/images/full/stillwater_129616916_1000.jpg" ;
+       <http://xmlns.com/foaf/0.1/name> "Still Water" .
+
+
+###  http://www.bem.ro/bem-schema#Tea
+:Tea rdf:type owl:Class ;
+     rdfs:subClassOf :Beverages ;
+     <http://purl.org/dc/elements/1.1/description> """Tea is an aromatic beverage prepared by pouring hot or boiling water over cured or fresh leaves of Camellia sinensis, an evergreen shrub native to China and other East Asian countries. After water, it is the most widely consumed drink in the world. There are many different types of tea; some have a cooling, slightly bitter, and astringent flavour, while others have vastly different profiles that include sweet, nutty, floral, or grassy notes. Tea has a stimulating effect in humans primarily due to its caffeine content.
+
+Tea plants are native to East Asia and probably originated in the borderlands of southwestern China and north Burma. An early credible record of tea drinking dates to the 3rd century AD, in a medical text written by Hua Tuo. It was popularised as a recreational drink during the Chinese Tang dynasty, and tea drinking spread to other East Asian countries. Portuguese priests and merchants introduced it to Europe during the 16th century. During the 17th century, drinking tea became fashionable among the English, who started to plant tea on a large scale in India.""" ;
+     <http://xmlns.com/foaf/0.1/name> "Tea" .
+
+
+###  http://www.bem.ro/bem-schema#Vantage_Point
+:Vantage_Point rdf:type owl:Class ;
+               rdfs:subClassOf :Mocktails ;
+               <http://purl.org/dc/elements/1.1/description> "Place all the ingredients in a Boston shaker with plenty of ice. Shake for 15 seconds and strain into a tumbler over a large ice cube. Garnish with a twist of orange peel." ;
+               <http://www.schema.org/image> "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/shot-06-espresso-309-rt-1623353325.jpg" ;
+               <http://xmlns.com/foaf/0.1/name> "Vantage Point" .
+
+
+###  http://www.bem.ro/bem-schema#Virgin_Cucumber_Gimlet
+:Virgin_Cucumber_Gimlet rdf:type owl:Class ;
+                        rdfs:subClassOf :Mocktails ;
+                        <http://purl.org/dc/elements/1.1/description> "Combine all ingredients and shake with ice. Serve in a rocks glass over crushed ice. Garnish with a rolled cucumber slice." ;
+                        <http://www.schema.org/image> "https://hips.hearstapps.com/toc.h-cdn.co/assets/16/20/1463781698-cucumer-gimlet-alex-staniloff-op-ny6.jpg" ;
+                        <http://xmlns.com/foaf/0.1/name> "Virgin Cucumber Gimlet" .
+
+
+###  http://www.bem.ro/bem-schema#Virgin_Watermelon_Margarita
+:Virgin_Watermelon_Margarita rdf:type owl:Class ;
+                             rdfs:subClassOf :Mocktails ;
+                             <http://purl.org/dc/elements/1.1/description> "In a blender, puree enough watermelon chunks so that you have 4 cups of watermelon puree. Add lime juice and agave and mix again. Pour into 4 cups. Top with sparkling water." ;
+                             <http://www.schema.org/image> "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/healthy-virgin-watermelon-margarita-8546-1498061314.jpg" ;
+                             <http://xmlns.com/foaf/0.1/name> "Virgin Watermelon Margarita" .
+
+
+###  http://www.bem.ro/bem-schema#Water
+:Water rdf:type owl:Class ;
+       rdfs:subClassOf :Beverages ;
+       <http://purl.org/dc/elements/1.1/description> "Water (chemical formula H2O) is an inorganic, transparent, tasteless, odorless, and nearly colorless chemical substance, which is the main constituent of Earth's hydrosphere and the fluids of all known living organisms (in which it acts as a solvent[1]). It is vital for all known forms of life, even though it provides no calories or organic nutrients. Its chemical formula, H2O, indicates that each of its molecules contains one oxygen and two hydrogen atoms, connected by covalent bonds. The hydrogen atoms are attached to the oxygen atom at an angle of 104.45°.[2] \"Water\" is the name of the liquid state of H2O at standard conditions for temperature and pressure." ;
+       <http://xmlns.com/foaf/0.1/name> "Water" .
+
+
+###  http://www.bem.ro/bem-schema#White_Tea
+:White_Tea rdf:type owl:Class ;
+           rdfs:subClassOf :Tea ;
+           <http://purl.org/dc/elements/1.1/description> """White tea may refer to one of several styles of tea which generally feature young or minimally processed leaves of the Camellia sinensis plant.
+
+Currently there is no generally accepted definition of white tea and very little international agreement; some sources use the term to refer to tea that is merely dried with no additional processing, some to tea made from the buds and immature tea leaves picked shortly before the buds have fully opened and allowed to wither and dry in natural sun,[citation needed] while others include tea buds and very young leaves which have been steamed or fired before drying. Most definitions agree, however, that white tea is not rolled or oxidized[citation needed], resulting in a flavor characterized as \"lighter\" than most green or traditional black teas.
+
+In spite of its name, sweet, brewed white tea is pale yellow. Its name derives from the fine silvery-white hairs on the unopened buds of the tea plant, which give the plant a whitish appearance. The unopened buds are used for some types of white tea.
+
+It is harvested primarily in China, mostly in the Fujian province, but more recently produced in Eastern Nepal, Taiwan, Thailand, Galle (Southern Sri Lanka) and northeast India.""" ;
+           <http://www.schema.org/image> "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Bai_Hao_Yinzhen_or_Silver_needle_White_Tea.JPG/1280px-Bai_Hao_Yinzhen_or_Silver_needle_White_Tea.JPG" ;
+           <http://xmlns.com/foaf/0.1/name> "White Tea" .
+
+
+###  http://www.bem.ro/bem-schema#Yogurt
+:Yogurt rdf:type owl:Class ;
+        rdfs:subClassOf :Dairy ;
+        <http://purl.org/dc/elements/1.1/description> """Often referred to as one of the oldest fermented ingredients in the world, yogurt is produced by bacterial fermentation of milk. This versatile ingredient can vary in texture and consistency, depending on the origin, choice of milk, and techniques involved in its production, but its flavor is usually subtly tangy.
+
+The widely accepted belief is that yogurt was discovered by accident when fresh milk was transported in animal skins. The enzymes present in the skin enabled milk to ferment and curdle, creating yogurt. It is estimated that its discovery dates back to 6000 BC, and though the word stems from Turkish, it was probably invented simultaneously in different places, mainly in the Middle East, Central Asia, and the Balkans.""" ;
+        :allergens "Lactose" ;
+        <http://www.schema.org/image> "https://cdn.tasteatlas.com//images/ingredients/0c7b48d43a5b4e9b821e7b67202cc60b.jpg?w=905&h=510" ;
+        <http://xmlns.com/foaf/0.1/name> "Yogurt" .
+
+
+###  http://www.bem.ro/bem-schema#5-hour_Energy
+<http://www.bem.ro/bem-schema#5-hour_Energy> rdf:type owl:Class ;
+                                             rdfs:subClassOf :Energy ;
+                                             <http://purl.org/dc/elements/1.1/description> "5-hour Energy (stylized as 5-hour ENERGY) is an American-made \"energy shot\" manufactured by Living Essentials LLC. The company was founded by CEO Manoj Bhargava and launched in 2004." ;
+                                             :allergens "Taurine, Caffeine" ;
+                                             <http://www.schema.org/image> "https://www.ubuy.com.ro/productimg/?image=aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNzFQYkFzenJQVEwuX1NMMTMwMF8uanBn.jpg" ;
+                                             <http://xmlns.com/foaf/0.1/name> "5 Hour Energy" .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.bem.ro/bem-schema#Spring
+:Spring rdf:type owl:NamedIndividual .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Black_Tea
+                :Blackberry_Tea
+                :Green_Tea
+                :Raspberry_Tea
+                :Red_Tea
+                :White_Tea
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Carbonated
+                :Coffee
+                :Dairy
+                :Energy
+                :Fermented
+                :Flavored_Syrup
+                :Iced_Tea
+                :Lemonade
+                :Mocktails
+                :Tea
+                :Water
+              )
+] .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi

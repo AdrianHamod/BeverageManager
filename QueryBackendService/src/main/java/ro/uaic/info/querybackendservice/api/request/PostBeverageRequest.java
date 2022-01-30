@@ -18,5 +18,6 @@ public class PostBeverageRequest {
     private String beverageName;
     private String parentName;
     private String description;
+    private String image;
     private List<String> allergens;
 }

@@ -12,6 +12,7 @@ public class IRILabel {
     public final static String DESCRIBES_HRS =  "http://www.bem.ro/bem-schema#DescribesHealthRestrictions";
     public final static String ALLERGENS =  "http://www.bem.ro/bem-schema#allergens";
 
+    public final static String IMAGE = "http://www.schema.org/image";
     public final static String USER_PROFILE = "http://www.bem.ro/bem-schema#profile";
     public final static String FROM = "http://www.bem.ro/bem-schema#From";
     public final static String PREFERENCE = "http://www.bem.ro/bem-schema#preference";
