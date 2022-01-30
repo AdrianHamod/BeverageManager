@@ -23,6 +23,8 @@ import ro.uaic.info.querybackendservice.service.BeverageService;
 import ro.uaic.info.querybackendservice.service.ResourceService;
 
 import javax.validation.Valid;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -94,7 +96,9 @@ public class BeverageController {
 
     @GetMapping("/search/{term}")
     public List<Beverage> getBeveragesByTermInDescription(@PathVariable String term) {
-        return beverageService.fullTextSearchOnDescription(term);
+        String decodedTerm = URLDecoder.decode(term, StandardCharsets.UTF_8);
+        log.info("Searching for term {}", decodedTerm);
+        return beverageService.fullTextSearchOnDescription(decodedTerm);
     }
 
     @GetMapping("/{id}/children")
