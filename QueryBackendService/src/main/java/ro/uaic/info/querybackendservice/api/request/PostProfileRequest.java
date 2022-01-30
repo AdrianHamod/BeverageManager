@@ -26,6 +26,6 @@ public class PostProfileRequest {
     private int age;
     @NotNull
     private Gender gender;
-    private CountryCode countryCode;
+    private String countryCode;
     private List<BeverageContext> beveragePreferences;
 }

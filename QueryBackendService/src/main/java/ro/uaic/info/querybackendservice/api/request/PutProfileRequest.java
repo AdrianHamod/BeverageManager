@@ -13,5 +13,5 @@ public class PutProfileRequest {
     private String username;
     private int age;
     private Gender gender;
-    private CountryCode countryCode;
+    private String countryCode;
 }
