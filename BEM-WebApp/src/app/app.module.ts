@@ -23,6 +23,7 @@ import {MdbCollapseModule} from "mdb-angular-ui-kit/collapse";
 import {BeveragesModule} from "./beverages/beverages.module";
 import { MessageService } from 'primeng/api';
 import {ToastModule} from "primeng/toast";
+import {MatSelectCountryModule} from "@angular-material-extensions/select-country";
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import {ToastModule} from "primeng/toast";
     MatIconModule,
     BrowserAnimationsModule,
     MdbCollapseModule,
-    ToastModule
+    ToastModule,
+    MatSelectCountryModule.forRoot('en')
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

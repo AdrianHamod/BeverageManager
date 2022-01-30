@@ -32,7 +32,7 @@ import {CardModule} from "primeng/card";
     CommonModule,
     RouterModule.forChild([
       {path: 'beverages', component: BeverageListComponent},
-      {path: 'beverages/:id', component: BeverageDetailComponent}
+      {path: 'beverages/:name', component: BeverageDetailComponent}
     ]),
     SharedModule,
     DataViewModule,

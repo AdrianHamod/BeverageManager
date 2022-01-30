@@ -3,13 +3,16 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, Observable, of, tap} from "rxjs";
 import { Beverages } from './models/beverages';
 import { MessageService } from 'primeng/api';
+import {environment} from "../../environments/environment";
+import {Beverage} from "./models/beverage";
+import {BeverageModel} from "./models/beverage-model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BeverageService {
 
-  httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})}
+  httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})}
 
   constructor(
     private http: HttpClient,
@@ -17,18 +20,18 @@ export class BeverageService {
 
   getDrinks(): Observable<Beverages>{
 
-    return this.http.get<Beverages>('https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic')
+    return this.http.get<Beverages>(`${environment.apiUrl}/beverages`)
       .pipe(
         tap(_ => this.log('got beverages')),
-        catchError(this.handleError<Beverages>('getTeams'))
+        catchError(this.handleError<Beverages>('getBeverages'))
       );
   }
 
-  getDrinkById(drinkId: number): Observable<Beverages>{
-    return this.http.get<Beverages>(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${drinkId}`)
+  getDrinkByName(drinkName: string): Observable<BeverageModel>{
+    return this.http.get<BeverageModel>(`${environment.apiUrl}/beverages/${drinkName}`)
     .pipe(
       tap(_ => this.log('got beverage')),
-      catchError(this.handleError<Beverages>('getDrink'))
+      catchError(this.handleError<BeverageModel>('getDrink'))
     );
   }
 

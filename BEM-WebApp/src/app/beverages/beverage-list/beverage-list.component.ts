@@ -3,6 +3,7 @@ import {map, Observable, startWith, Subscription} from "rxjs";
 import {FormControl} from "@angular/forms";
 import {Beverage} from "../models/beverage";
 import {BeverageService} from "../beverage.service";
+import {Beverages} from "../models/beverages";
 
 @Component({
   selector: 'app-beverage-list',
@@ -40,10 +41,10 @@ export class BeverageListComponent implements OnInit, OnDestroy {
     this.sub = this.beverageService.getDrinks().subscribe({
       next: value => {
         console.log(value);
-        this.beverages = value.drinks;
+        this.beverages = value.beverages;
         this.filteredBeverages = this.beverages;
 
-        this.results = value.drinks.map(x => x.strDrink);
+        this.results = value.beverages.map(x => x.name);
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
           map(query => this._filter(query))
@@ -65,7 +66,7 @@ export class BeverageListComponent implements OnInit, OnDestroy {
   performFilter(filterBy: string): Beverage[]{
     filterBy = filterBy.toLocaleLowerCase();
 
-    return this.beverages.filter((beverage: Beverage) => beverage.strDrink.toLocaleLowerCase().includes(filterBy));
+    return this.beverages.filter((beverage: Beverage) => beverage.name.toLocaleLowerCase().includes(filterBy));
   }
 
 }

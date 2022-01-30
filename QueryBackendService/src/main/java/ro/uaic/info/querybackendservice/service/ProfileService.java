@@ -38,6 +38,7 @@ public class ProfileService {
                 beverageContextDao.save(context);
             }
         }
+        log.info("Profile to save: {}", profile);
         return profileDao.save(profile);
     }
 

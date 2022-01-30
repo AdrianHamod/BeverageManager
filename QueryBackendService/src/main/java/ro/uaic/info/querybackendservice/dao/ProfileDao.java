@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.LOCN;
+import org.eclipse.rdf4j.model.vocabulary.OWL;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
@@ -98,13 +99,13 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
     protected String getReadQuery() {
         SelectQuery selectQuery = Queries.SELECT();
         String readQuery = selectQuery.select(
-                        ID, USERNAME, AGE, GENDER, COUNTRY_CODE, BEVERAGE_PREFERENCES)
-                .where(ID.isA(ObjectType.USER_PROFILE)
+                        ID, USERNAME, AGE, GENDER, COUNTRY_CODE)
+                .where(ID.isA(OWL.CLASS)
                         .andHas(FOAF.NAME, USERNAME)
                         .andHas(FOAF.AGE, AGE)
                         .andHas(FOAF.GENDER, GENDER)
                         .andHas(LOCN.LOCATION, COUNTRY_CODE)
-                        .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
+//                        .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
                 )
                 .getQueryString();
         log.info("[READ_QUERY] {}", readQuery);
@@ -124,11 +125,12 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
     @Override
     protected NamedSparqlSupplier getInsertSparql(Profile profile) {
         return NamedSparqlSupplier.of("insert", () -> Queries.INSERT(
-                (TriplePattern) ID.isA(ObjectType.USER_PROFILE)
+                (TriplePattern) ID.isA(OWL.CLASS)
                                 .andHas(FOAF.NAME, USERNAME)
                                 .andHas(FOAF.AGE, AGE)
                                 .andHas(FOAF.GENDER, GENDER)
                                 .andHas(LOCN.LOCATION, COUNTRY_CODE)
+//                                .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
                                 .andHas(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)
 //                                .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
                         )

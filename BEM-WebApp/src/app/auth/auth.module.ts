@@ -10,6 +10,9 @@ import {MatInputModule} from "@angular/material/input";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSelectCountryModule} from "@angular-material-extensions/select-country";
+import {InputTextModule} from "primeng/inputtext";
+import {DropdownModule} from "primeng/dropdown";
 
 @NgModule({
   imports: [
@@ -26,6 +29,9 @@ import {MatButtonModule} from "@angular/material/button";
     FlexLayoutModule,
     MatCardModule,
     MatButtonModule,
+    MatSelectCountryModule,
+    InputTextModule,
+    DropdownModule,
   ],
   declarations: [
     LoginPageComponent,

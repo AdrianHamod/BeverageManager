@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Router} from "@angular/router";
 import {map} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {IUser} from "../models/user/user";
 
@@ -11,6 +11,8 @@ import {IUser} from "../models/user/user";
 export class AuthService {
 
   user: IUser | undefined;
+
+  httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded', 'Access-Control-Allow-Origin': '*'})}
 
   constructor(private router: Router, private http: HttpClient) {
     this.getUserFromStorage();
@@ -79,6 +81,10 @@ export class AuthService {
         }
         return x;
       }));
+  }
+
+  createProfile(username: string, age: number, countryCode: string, gender: string){
+    return this.http.post(`${environment.apiUrl}/profiles`, {username, age, countryCode, gender});
   }
 
   saveToken(token: string) {

@@ -21,12 +21,15 @@ export class BeverageDetailComponent implements OnInit {
 
   ngOnInit(): void {
 
-    const drinkId = Number(this.route.snapshot.paramMap.get('id'));
+    const drinkId = this.route.snapshot.paramMap.get('name');
 
-    this.sub = this.beverageService.getDrinkById(Number(drinkId)).subscribe({
+    if (drinkId === null)
+      return;
+
+    this.sub = this.beverageService.getDrinkByName(drinkId.toString()).subscribe({
       next: value => {
         console.log(value);
-        this.beverage = value.drinks[0];
+        this.beverage = value.beverage;
       }
     })
   }
