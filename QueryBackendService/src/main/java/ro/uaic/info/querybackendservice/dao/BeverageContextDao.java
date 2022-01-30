@@ -84,9 +84,9 @@ public class BeverageContextDao extends SimpleRDF4JCRUDDao<BeverageContext, IRI>
                         BEVERAGE_CTX_ID.isA(OWL.CLASS)
                                 .andHas(FOAF.KNOWS, BEVERAGE)
                                 .andHas(RDFS.LABEL, IS_PREFERRED)
-                                .and(BEVERAGE_CTX_ID.has(LOCN.LOCATION, EVENT).optional())
-                                .and(BEVERAGE_CTX_ID.has(LOCN.LOCATION, LOCATION).optional())
-                                .and(BEVERAGE_CTX_ID.has(TIME.TEMPORAL_ENTITY, SEASON).optional())
+                                .and(BEVERAGE_CTX_ID.has(ObjectType.CTX_EVENT, EVENT).optional())
+                                .and(BEVERAGE_CTX_ID.has(ObjectType.CTX_LOCATION, LOCATION).optional())
+                                .and(BEVERAGE_CTX_ID.has(ObjectType.CTX_SEASON, SEASON).optional())
                 )
                 .getQueryString();
         log.info("[READ_QUERY] {}", readQuery);
