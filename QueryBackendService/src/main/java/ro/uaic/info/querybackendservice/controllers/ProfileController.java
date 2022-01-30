@@ -45,7 +45,7 @@ public class ProfileController {
         return profileService.getProfileById(iri(IRILabel.NS, id));
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @PostMapping
     Profile createProfile(@Valid @RequestBody PostProfileRequest req) {
         return profileService.createProfile(
                 new Profile(
