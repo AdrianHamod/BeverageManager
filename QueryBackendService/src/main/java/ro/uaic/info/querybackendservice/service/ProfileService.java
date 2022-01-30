@@ -32,9 +32,11 @@ public class ProfileService {
 
     @Transactional
     public Profile createProfile(Profile profile) {
-        for (BeverageContext context :
-                profile.getBeveragePreferences()) {
-            beverageContextDao.save(context);
+        if (profile.getBeveragePreferences() != null) {
+            for (BeverageContext context :
+                    profile.getBeveragePreferences()) {
+                beverageContextDao.save(context);
+            }
         }
         return profileDao.save(profile);
     }
