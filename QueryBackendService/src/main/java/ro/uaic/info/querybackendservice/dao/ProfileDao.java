@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
+import static ro.uaic.info.querybackendservice.model.Beverage.ALLERGENS;
+import static ro.uaic.info.querybackendservice.model.Beverage.BEVERAGE_ID;
+import static ro.uaic.info.querybackendservice.model.Beverage.NAME;
 import static ro.uaic.info.querybackendservice.model.Profile.AGE;
 import static ro.uaic.info.querybackendservice.model.Profile.BEVERAGE_PREFERENCES;
 import static ro.uaic.info.querybackendservice.model.Profile.COUNTRY_CODE;
@@ -126,7 +129,8 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
                                 .andHas(FOAF.AGE, AGE)
                                 .andHas(FOAF.GENDER, GENDER)
                                 .andHas(LOCN.LOCATION, COUNTRY_CODE)
-                                .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
+                                .andHas(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)
+//                                .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
                         )
                         .getQueryString());
     }
