@@ -99,13 +99,13 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
     protected String getReadQuery() {
         SelectQuery selectQuery = Queries.SELECT();
         String readQuery = selectQuery.select(
-                        ID, USERNAME, AGE, GENDER, COUNTRY_CODE)
+                        ID, USERNAME, AGE, GENDER, COUNTRY_CODE, BEVERAGE_PREFERENCES)
                 .where(ID.isA(OWL.CLASS)
                         .andHas(FOAF.NAME, USERNAME)
                         .andHas(FOAF.AGE, AGE)
                         .andHas(FOAF.GENDER, GENDER)
                         .andHas(LOCN.LOCATION, COUNTRY_CODE)
-//                        .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
+                        .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
                 )
                 .getQueryString();
         log.info("[READ_QUERY] {}", readQuery);
@@ -130,9 +130,7 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
                                 .andHas(FOAF.AGE, AGE)
                                 .andHas(FOAF.GENDER, GENDER)
                                 .andHas(LOCN.LOCATION, COUNTRY_CODE)
-//                                .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
                                 .andHas(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)
-//                                .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES).optional())
                         )
                         .getQueryString());
     }
