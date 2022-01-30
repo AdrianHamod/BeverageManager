@@ -111,12 +111,12 @@ public class BeverageContextDao extends SimpleRDF4JCRUDDao<BeverageContext, IRI>
     protected NamedSparqlSupplier getInsertSparql(BeverageContext beverage) {
         return NamedSparqlSupplier.of("insert", () ->
                 Queries.INSERT(
-                    (TriplePattern) BEVERAGE_CTX_ID.isA(OWL.CLASS)
+                     BEVERAGE_CTX_ID.isA(OWL.CLASS)
                             .andHas(FOAF.KNOWS, BEVERAGE)
                             .andHas(RDFS.LABEL, IS_PREFERRED)
-                            .and(BEVERAGE_CTX_ID.has(LOCN.LOCATION, EVENT).optional())
-                            .and(BEVERAGE_CTX_ID.has(LOCN.LOCATION, LOCATION).optional())
-                            .and(BEVERAGE_CTX_ID.has(TIME.TEMPORAL_ENTITY, SEASON).optional())
+                            .andHas(ObjectType.CTX_EVENT, EVENT)
+                            .andHas(ObjectType.CTX_LOCATION, LOCATION)
+                            .andHas(ObjectType.CTX_SEASON, SEASON)
                         )
                 .getQueryString());
     }
