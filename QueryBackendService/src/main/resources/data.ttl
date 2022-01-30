@@ -141,8 +141,7 @@ While green tea usually loses its flavor within a year, black tea retains its fl
 
 ###  http://www.bem.ro/bem-schema#Carbonated
 :Carbonated rdf:type owl:Class ;
-            rdfs:subClassOf :Beverages ,
-                            :Water ;
+            rdfs:subClassOf :Water ;
             <http://purl.org/dc/elements/1.1/description> "Carbonated Water" ;
             <http://www.schema.org/image> "https://static01.nyt.com/images/2021/09/21/well/ASKWELL-SELTZER2/ASKWELL-SELTZER2-mobileMasterAt3x.jpg" ;
             <http://xmlns.com/foaf/0.1/name> "Carbonated Water" .
