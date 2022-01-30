@@ -1,15 +1,12 @@
 package ro.uaic.info.querybackendservice.dao;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.vocabulary.DC;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.OWL;
-import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.graphpattern.TriplePattern;
@@ -22,11 +19,6 @@ import org.springframework.stereotype.Component;
 import ro.uaic.info.querybackendservice.model.Beverage;
 import ro.uaic.info.querybackendservice.model.ObjectType;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,11 +105,6 @@ public class BeverageDao extends SimpleRDF4JCRUDDao<Beverage, IRI> {
                 "PREFIX owl: <http://www.w3.org/2002/07/owl#> " +
                 "SELECT ?beverage_id " +
                 "WHERE { ?beverage_id rdfs:subClassOf ?beverage_parent . } ";
-//                "WHERE { ?beverage_id rdf:type owl:Class ; ?beverage_parent rdfs:subClassOf ?parent_id . } ";
-
-//                "WHERE { ?beverage_id search:matches [" +
-//                " search:query ?parent_id ; " +
-//                " search:snippet ?beverage_parent ] } ";
 
         return preparer.forKey(QUERY_KEYS.DESCRIPTION_FULL_TEXT_SEARCH)
                 .supplySparql(descriptionFullTextSearch)
