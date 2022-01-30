@@ -8,6 +8,7 @@ import org.eclipse.rdf4j.model.vocabulary.LOCN;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
+import org.eclipse.rdf4j.sparqlbuilder.graphpattern.TriplePattern;
 import org.eclipse.rdf4j.spring.dao.SimpleRDF4JCRUDDao;
 import org.eclipse.rdf4j.spring.dao.support.bindingsBuilder.MutableBindings;
 import org.eclipse.rdf4j.spring.dao.support.sparql.NamedSparqlSupplier;
@@ -56,6 +57,10 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
                 .add(GENDER, profile.getGender().name())
                 .add(COUNTRY_CODE, profile.getCountryCode().getAlpha2());
 
+        if (profile.getBeveragePreferences() == null) {
+            bindingsBuilder.add(BEVERAGE_PREFERENCES, "");
+            return;
+        }
         bindingsBuilder.add(BEVERAGE_PREFERENCES, profile.getBeveragePreferences().stream().map(
                 pref -> pref.getId().getLocalName()
         ).collect(Collectors.joining(", ")));
@@ -96,7 +101,7 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
                         .andHas(FOAF.AGE, AGE)
                         .andHas(FOAF.GENDER, GENDER)
                         .andHas(LOCN.LOCATION, COUNTRY_CODE)
-                        .andHas(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)
+                        .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)).optional()
                 )
                 .getQueryString();
         log.info("[READ_QUERY] {}", readQuery);
@@ -116,12 +121,12 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
     @Override
     protected NamedSparqlSupplier getInsertSparql(Profile profile) {
         return NamedSparqlSupplier.of("insert", () ->
-                Queries.INSERT(ID.isA(ObjectType.USER_PROFILE)
+                Queries.INSERT((TriplePattern) ID.isA(ObjectType.USER_PROFILE)
                                 .andHas(FOAF.NAME, USERNAME)
                                 .andHas(FOAF.AGE, AGE)
                                 .andHas(FOAF.GENDER, GENDER)
                                 .andHas(LOCN.LOCATION, COUNTRY_CODE)
-                                .andHas(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)
+                                .and(ID.has(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)).optional()
                         )
                         .getQueryString());
     }
