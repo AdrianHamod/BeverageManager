@@ -62,8 +62,11 @@ public class BeverageController {
             @RequestParam(required = false) String profileId
     ) {
         Beverage beverage = beverageService.getBeverageById(iri(IRILabel.NS, id));
-        Optional<Profile> profile = profileService.getProfileByIdOptional(iri(IRILabel.NS, id));
         GetBeverageByIdResponse.GetBeverageByIdResponseBuilder responseBuilder = GetBeverageByIdResponse.builder();
+        if (profileId == null) {
+            return ResponseEntity.ok(responseBuilder.beverage(beverage).build());
+        }
+        Optional<Profile> profile = profileService.getProfileByIdOptional(iri(IRILabel.NS, profileId));
         if (profile.isPresent() && profile.get().getBeveragePreferences() != null) {
             for (BeverageContext context :
                     profile.get().getBeveragePreferences()) {
