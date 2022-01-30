@@ -10,6 +10,7 @@ import ro.uaic.info.querybackendservice.dao.ProfileDao;
 import ro.uaic.info.querybackendservice.model.BeverageContext;
 import ro.uaic.info.querybackendservice.model.Profile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +63,9 @@ public class ProfileService {
             throw new RuntimeException("BeverageContext with id " + beverageContext.getId() + " already exists");
         }
         BeverageContext context = beverageContextDao.save(beverageContext);
+        if (profile.getBeveragePreferences() == null) {
+            profile.setBeveragePreferences(new ArrayList<>());
+        }
         profile.getBeveragePreferences().add(context);
         return profileDao.save(profile);
     }
