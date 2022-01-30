@@ -70,7 +70,7 @@ public class BeverageController {
         if (profile.isPresent() && profile.get().getBeveragePreferences() != null) {
             for (BeverageContext context :
                     profile.get().getBeveragePreferences()) {
-                if (context.getBeverage() == beverage.getBeverageId()) {
+                if (context.getBeverage().equals(beverage.getBeverageId())) {
                     responseBuilder.beverageContext(context);
                     break;
                 }
