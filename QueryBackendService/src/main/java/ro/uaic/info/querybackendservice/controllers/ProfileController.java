@@ -1,5 +1,6 @@
 package ro.uaic.info.querybackendservice.controllers;
 
+import com.neovisionaries.i18n.CountryCode;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.rdf4j.model.IRI;
 import org.springframework.http.MediaType;
@@ -51,7 +52,7 @@ public class ProfileController {
                         req.getUsername(),
                         req.getAge(),
                         req.getGender(),
-                        req.getCountryCode(),
+                        CountryCode.getByAlpha2Code(req.getCountryCode()),
                         req.getBeveragePreferences()
                 )
         );
@@ -67,7 +68,7 @@ public class ProfileController {
         profile.setUsername(req.getUsername());
         profile.setAge(req.getAge());
         profile.setGender(req.getGender());
-        profile.setCountryCode(req.getCountryCode());
+        profile.setCountryCode(CountryCode.getByAlpha2Code(req.getCountryCode()));
         Profile updatedProfile = profileService.updateProfile(profile);
         if (updatedProfile == null) {
             return ResponseEntity.badRequest().build();

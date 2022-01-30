@@ -54,7 +54,7 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
                 .add(USERNAME, profile.getUsername())
                 .add(AGE, profile.getAge())
                 .add(GENDER, profile.getGender().name())
-                .add(COUNTRY_CODE, profile.getCountryCode().name());
+                .add(COUNTRY_CODE, profile.getCountryCode().getAlpha2());
 
         bindingsBuilder.add(BEVERAGE_PREFERENCES, profile.getBeveragePreferences().stream().map(
                 pref -> pref.getId().getLocalName()
@@ -69,7 +69,7 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
         profile.setAge(Integer.parseInt(QueryResultUtils.getString(querySolution, AGE)));
         profile.setGender(Gender.valueOf(QueryResultUtils.getString(querySolution, GENDER)));
         profile.setCountryCode(
-                CountryCode.getByCode(
+                CountryCode.getByAlpha2Code(
                 QueryResultUtils.getString(querySolution, COUNTRY_CODE)));
 
         String beveragePreferences = QueryResultUtils.getStringMaybe(querySolution, BEVERAGE_PREFERENCES);
