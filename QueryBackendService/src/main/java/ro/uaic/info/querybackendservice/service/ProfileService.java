@@ -11,6 +11,7 @@ import ro.uaic.info.querybackendservice.model.BeverageContext;
 import ro.uaic.info.querybackendservice.model.Profile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,11 @@ public class ProfileService {
     @Transactional
     public Profile getProfileById(IRI id) {
         return profileDao.getById(id);
+    }
+
+    @Transactional
+    public Optional<Profile> getProfileByIdOptional(IRI id) {
+        return profileDao.getByIdOptional(id);
     }
 
     @Transactional

@@ -20,14 +20,13 @@ public class QueryBackendServiceApplication {
         SpringApplication.run(QueryBackendServiceApplication.class, args);
     }
 
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer(){
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry){
-//                registry.addMapping("/**");
-//            }
-//        };
-//    }
-
+    @Bean
+    public WebMvcConfigurer corsConfigurer(){
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry){
+                registry.addMapping("/**");
+            }
+        };
+    }
 }

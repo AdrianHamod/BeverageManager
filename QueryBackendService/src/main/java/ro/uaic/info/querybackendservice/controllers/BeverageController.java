@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ro.uaic.info.querybackendservice.api.errors.ErrorData;
 import ro.uaic.info.querybackendservice.api.request.PostBeverageRequest;
 import ro.uaic.info.querybackendservice.api.response.DeleteBeverageByIdResponse;
 import ro.uaic.info.querybackendservice.api.response.GetAllBeveragesResponse;
@@ -19,13 +21,16 @@ import ro.uaic.info.querybackendservice.api.response.PostBeverageResponse;
 import ro.uaic.info.querybackendservice.model.Beverage;
 import ro.uaic.info.querybackendservice.model.BeverageContext;
 import ro.uaic.info.querybackendservice.model.IRILabel;
+import ro.uaic.info.querybackendservice.model.Profile;
 import ro.uaic.info.querybackendservice.service.BeverageService;
+import ro.uaic.info.querybackendservice.service.ProfileService;
 import ro.uaic.info.querybackendservice.service.ResourceService;
 
 import javax.validation.Valid;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
@@ -36,6 +41,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 public class BeverageController {
 
     private final BeverageService beverageService;
+    private final ProfileService profileService;
     private final ResourceService resourceService;
 
     /**
@@ -51,11 +57,23 @@ public class BeverageController {
      * Does not fetch anything and throws an exception
      */
     @GetMapping("/{id}")
-    public ResponseEntity<GetBeverageByIdResponse> getBeverageById(@PathVariable String id) {
-        return ResponseEntity.ok(
-                GetBeverageByIdResponse.builder().beverage(beverageService.getBeverageById(iri(
-                        "http://www.bem.ro/bem-schema#" + id))).build()
-        );
+    public ResponseEntity<GetBeverageByIdResponse> getBeverageById(
+            @PathVariable String id,
+            @RequestParam(required = false) String profileId
+    ) {
+        Beverage beverage = beverageService.getBeverageById(iri(IRILabel.NS, id));
+        Optional<Profile> profile = profileService.getProfileByIdOptional(iri(IRILabel.NS, id));
+        GetBeverageByIdResponse.GetBeverageByIdResponseBuilder responseBuilder = GetBeverageByIdResponse.builder();
+        if (profile.isPresent() && profile.get().getBeveragePreferences() != null) {
+            for (BeverageContext context :
+                    profile.get().getBeveragePreferences()) {
+                if (context.getBeverage() == beverage.getBeverageId()) {
+                    responseBuilder.beverageContext(context);
+                    break;
+                }
+            }
+        }
+        return ResponseEntity.ok(responseBuilder.beverage(beverage).build());
     }
 
     @GetMapping("/context/{id}")
