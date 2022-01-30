@@ -1,12 +1,10 @@
 package ro.uaic.info.querybackendservice.dao;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.i18n.CountryCode;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
+import org.eclipse.rdf4j.model.vocabulary.LOCN;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
@@ -16,13 +14,17 @@ import org.eclipse.rdf4j.spring.dao.support.sparql.NamedSparqlSupplier;
 import org.eclipse.rdf4j.spring.support.RDF4JTemplate;
 import org.eclipse.rdf4j.spring.util.QueryResultUtils;
 import org.springframework.stereotype.Component;
+import ro.uaic.info.querybackendservice.model.BeverageContext;
 import ro.uaic.info.querybackendservice.model.Gender;
+import ro.uaic.info.querybackendservice.model.IRILabel;
 import ro.uaic.info.querybackendservice.model.ObjectType;
 import ro.uaic.info.querybackendservice.model.Profile;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.eclipse.rdf4j.model.util.Values.iri;
 import static ro.uaic.info.querybackendservice.model.Profile.AGE;
 import static ro.uaic.info.querybackendservice.model.Profile.BEVERAGE_PREFERENCES;
 import static ro.uaic.info.querybackendservice.model.Profile.COUNTRY_CODE;
@@ -34,10 +36,11 @@ import static ro.uaic.info.querybackendservice.model.Profile.USERNAME;
 @Slf4j
 public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final BeverageContextDao beverageContextDao;
 
-    public ProfileDao(RDF4JTemplate rdf4JTemplate) {
+    public ProfileDao(RDF4JTemplate rdf4JTemplate, BeverageContextDao beverageContextDao) {
         super(rdf4JTemplate);
+        this.beverageContextDao = beverageContextDao;
     }
 
     @Override
@@ -53,11 +56,9 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
                 .add(GENDER, profile.getGender().name())
                 .add(COUNTRY_CODE, profile.getCountryCode().name());
 
-        try {
-            bindingsBuilder.add(BEVERAGE_PREFERENCES, mapper.writeValueAsString(profile.getBeveragePreferences()));
-        } catch (JsonProcessingException ex) {
-            throw new RuntimeException("Unable to serialize beverage preferences");
-        }
+        bindingsBuilder.add(BEVERAGE_PREFERENCES, profile.getBeveragePreferences().stream().map(
+                pref -> pref.getId().getLocalName()
+        ).collect(Collectors.joining(", ")));
     }
 
     @Override
@@ -71,16 +72,16 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
                 CountryCode.getByCode(
                 QueryResultUtils.getString(querySolution, COUNTRY_CODE)));
 
-        String beveragePref = QueryResultUtils.getString(querySolution, BEVERAGE_PREFERENCES);
-
-        try {
-            Map<Boolean, Set<IRI>> beveragePrefMapping = mapper.readValue(
-                    beveragePref, new TypeReference<Map<Boolean, Set<IRI>>>() {
-                    });
-            profile.setBeveragePreferences(beveragePrefMapping);
-        } catch (JsonProcessingException ex) {
-            throw new RuntimeException("Unable to deserialize beverage preferences to a map");
+        String beveragePreferences = QueryResultUtils.getStringMaybe(querySolution, BEVERAGE_PREFERENCES);
+        if (beveragePreferences == null || beveragePreferences.isEmpty()) {
+            return profile;
         }
+
+        List<BeverageContext> beverageContexts = Arrays.stream(beveragePreferences.split(", "))
+                .map(iriStr -> beverageContextDao.getById(iri(IRILabel.NS, iriStr)))
+                        .collect(Collectors.toList());
+
+        profile.setBeveragePreferences(beverageContexts);
 
         return profile;
     }
@@ -94,7 +95,7 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
                         .andHas(FOAF.NAME, USERNAME)
                         .andHas(FOAF.AGE, AGE)
                         .andHas(FOAF.GENDER, GENDER)
-                        .andHas(ObjectType.FROM, COUNTRY_CODE)
+                        .andHas(LOCN.LOCATION, COUNTRY_CODE)
                         .andHas(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)
                 )
                 .getQueryString();
@@ -119,7 +120,7 @@ public class ProfileDao extends SimpleRDF4JCRUDDao<Profile, IRI> {
                                 .andHas(FOAF.NAME, USERNAME)
                                 .andHas(FOAF.AGE, AGE)
                                 .andHas(FOAF.GENDER, GENDER)
-                                .andHas(ObjectType.FROM, COUNTRY_CODE)
+                                .andHas(LOCN.LOCATION, COUNTRY_CODE)
                                 .andHas(ObjectType.PREFERENCE, BEVERAGE_PREFERENCES)
                         )
                         .getQueryString());

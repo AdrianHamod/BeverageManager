@@ -10,8 +10,10 @@ public class IRILabel {
     public final static String CTX_EVENT = "http://www.bem.ro/bem-schema#BeverageContextEvent";
     public final static String CTX_HRS = "http://www.bem.ro/bem-schema#BeverageContextHealthRestrictions";
     public final static String DESCRIBES_HRS =  "http://www.bem.ro/bem-schema#DescribesHealthRestrictions";
+    public final static String ALLERGENS =  "http://www.bem.ro/bem-schema#allergens";
 
-    public final static String USER_PROFILE = "http://www.bem.ro/bem-schema#UserProfile";
+    public final static String IMAGE = "http://www.schema.org/image";
+    public final static String USER_PROFILE = "http://www.bem.ro/bem-schema#profile";
     public final static String FROM = "http://www.bem.ro/bem-schema#From";
-    public final static String PREFERENCE = "http://www.bem.ro/bem-schema#Preference";
+    public final static String PREFERENCE = "http://www.bem.ro/bem-schema#preference";
 }

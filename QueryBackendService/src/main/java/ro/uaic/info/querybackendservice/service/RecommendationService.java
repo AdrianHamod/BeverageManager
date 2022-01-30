@@ -8,16 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 import ro.uaic.info.querybackendservice.dao.BeverageContextDao;
 import ro.uaic.info.querybackendservice.dao.BeverageDao;
 import ro.uaic.info.querybackendservice.dao.ProfileDao;
+import ro.uaic.info.querybackendservice.model.Beverage;
+import ro.uaic.info.querybackendservice.model.BeverageContext;
 import ro.uaic.info.querybackendservice.model.Profile;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,10 +40,13 @@ public class RecommendationService {
     @Transactional
     public Set<IRI> getSearchbarRecommendations(IRI profileId, int recommendations) {
         Profile profile = profileDao.getById(profileId);
-        Map<Boolean, Set<IRI>> preferences = profile.getBeveragePreferences();
-        Set<IRI> positivePreferences = preferences.get(true);
+        Set<IRI> preferences = profile.getBeveragePreferences()
+                        .stream()
+                        .filter(BeverageContext::isContextBeveragePreferred)
+                        .map(BeverageContext::getBeverage)
+                        .collect(Collectors.toSet());
 
-        return roundRobinNeighboursSearch(positivePreferences, recommendations);
+        return roundRobinNeighboursSearch(preferences, recommendations);
     }
 
     private Set<IRI> roundRobinNeighboursSearch(Set<IRI> currentNeighbours, int neighboursToGather) {
@@ -63,7 +65,6 @@ public class RecommendationService {
                     neighboursToGather--;
                 }
                 if (current.isEmpty()) {
-                    // may produce infinite loop?
                     emptyListsToRemove.add(current);
                     continue;
                 }
@@ -82,12 +83,18 @@ public class RecommendationService {
     }
 
     private IRI getParent(IRI current) {
-        return null;
+        Optional<Beverage> beverage = beverageDao.getByIdOptional(current);
+        if (beverage.isEmpty()) {
+            return null;
+        }
+        return beverage.get().getParent();
     }
 
     private List<IRI> getChildren(IRI current) {
-        return new ArrayList<>();
+        return beverageDao.listChildren(current)
+                .stream()
+                .map(Beverage::getBeverageId)
+                .collect(Collectors.toList());
     }
-
-
 }
+

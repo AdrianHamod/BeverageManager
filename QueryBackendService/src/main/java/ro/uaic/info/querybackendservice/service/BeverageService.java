@@ -10,10 +10,8 @@ import ro.uaic.info.querybackendservice.dao.BeverageDao;
 import ro.uaic.info.querybackendservice.model.Beverage;
 import ro.uaic.info.querybackendservice.model.BeverageContext;
 
+import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Map;
-
-import static org.eclipse.rdf4j.model.util.Values.iri;
 
 @Service
 @RequiredArgsConstructor
@@ -25,46 +23,37 @@ public class BeverageService {
 
     @Transactional
     public Beverage createBeverage(Beverage beverage) {
-        BeverageContext beverageContext = beverageContextDao.save(beverage.getContext());
-        Beverage result = beverageDao.save(beverage);
-        result.setContext(beverageContext);
-        return result;
+        return beverageDao.save(beverage);
     }
 
     @Transactional
     public List<Beverage> getAllBeverages() {
-        List<Beverage> beverages = beverageDao.list();
-        Map<IRI, List<BeverageContext>> beverageContexts = beverageContextDao.groupById();
-
-        for (Beverage beverage :
-                beverages) {
-            List<BeverageContext> context = beverageContexts.get(
-                    iri(beverage.getBeverageId().stringValue() + "Context"));
-
-            if (context == null || context.isEmpty()) {
-                continue;
-            }
-            beverage.setContext(context.get(0));
-        }
-        return beverages;
+        return beverageDao.list();
     }
 
     @Transactional
     public Beverage getBeverageById(IRI id) {
-        log.info("[SearchingById] {}", id);
         return beverageDao.getById(id);
     }
 
     @Transactional
     public BeverageContext getBeverageContextById(IRI id) {
-        log.info("[SearchingByContextId] {}", id);
         return beverageContextDao.getById(id);
     }
 
     @Transactional
     public IRI deleteBeverage(IRI id) {
         beverageDao.delete(id);
-        beverageContextDao.delete(iri(id.stringValue() + "Context"));
         return id;
+    }
+
+    @Transactional
+    public List<Beverage> fullTextSearchOnDescription(String term) {
+        return beverageDao.searchBeveragesMatchingDescription(term);
+    }
+
+    @Transactional
+    public List<Beverage> getAllChildrenByParentId(IRI id) {
+        return beverageDao.listChildren(id);
     }
 }
