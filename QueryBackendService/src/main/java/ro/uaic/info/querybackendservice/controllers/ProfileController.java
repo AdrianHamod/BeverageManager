@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ro.uaic.info.querybackendservice.api.request.PatchProfileBeverageContextRequest;
 import ro.uaic.info.querybackendservice.api.request.PostProfileRequest;
 import ro.uaic.info.querybackendservice.api.request.PutProfileRequest;
 import ro.uaic.info.querybackendservice.model.BeverageContext;
@@ -81,13 +82,19 @@ public class ProfileController {
     @PatchMapping("/{profileId}")
     ResponseEntity<Profile> addBeverageContext(
             @PathVariable String profileId,
-            @RequestBody BeverageContext beverageContext) {
+            @RequestBody PatchProfileBeverageContextRequest req) {
+        BeverageContext context = new BeverageContext();
+        context.setId(iri(IRILabel.NS, profileId + req.getBeverage() + "Context"));
+        context.setBeverage(iri(IRILabel.NS, req.getBeverage()));
+        context.setEvent(req.getEvent());
+        context.setSeason(req.getSeason());
+        context.setLocation(req.getLocation());
+        context.setContextBeveragePreferred(req.isContextBeveragePreferred());
         IRI profileIri = iri(IRILabel.NS, profileId);
-        beverageContext.setId(iri(IRILabel.NS,
-                profileId + beverageContext.getBeverage().getLocalName() + "Context"));
+
         Profile profile = profileService.addBeverageContext(
                 profileIri,
-                beverageContext
+                context
         );
 
         if (profile != null) {
