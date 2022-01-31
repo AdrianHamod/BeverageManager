@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ro.uaic.info.querybackendservice.model.Beverage;
 import ro.uaic.info.querybackendservice.model.IRILabel;
+import ro.uaic.info.querybackendservice.service.BeverageService;
 import ro.uaic.info.querybackendservice.service.RecommendationService;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
@@ -19,6 +22,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 public class RecommendationController {
 
     private final RecommendationService recommendationService;
+    private final BeverageService beverageService;
 
     @GetMapping
     Set<IRI> getRecommendations(@RequestParam String user, @RequestParam(required = false) Integer count) {
@@ -27,5 +31,15 @@ public class RecommendationController {
             return recommendationService.getSearchbarRecommendations(profile);
         }
         return recommendationService.getSearchbarRecommendations(profile, count);
+    }
+
+    @GetMapping("/beverages")
+    Set<Beverage> getRecommendationsBeverages(
+            @RequestParam String user,
+            @RequestParam(required = false) Integer count) {
+        return this.getRecommendations(user, count)
+                .stream()
+                .map(beverageService::getBeverageById)
+                .collect(Collectors.toSet());
     }
 }
