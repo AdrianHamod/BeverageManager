@@ -88,7 +88,7 @@ public class ProfileService {
     @Transactional
     public Profile removeBeverageContext(IRI id, IRI contextId) {
         Profile profile = profileDao.getById(id);
-        if (!profile.getBeveragePreferences().removeIf(context -> context.getId() == contextId)) {
+        if (!profile.getBeveragePreferences().removeIf(context -> context.getId().equals(contextId))) {
             return null;
         }
         beverageContextDao.delete(contextId);
