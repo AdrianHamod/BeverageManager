@@ -1,178 +1,221 @@
 <!doctype html>
-  <head>
+<html lang="enlgish">
+<head>
     <style type="text/css">
-      body {
-        width: 21cm;
-        height: 29.7cm;
-        margin: 30mm 45mm 30mm 45mm; 
-      } 
+        body {
+            width: 21cm;
+            height: 29.7cm;
+            margin: 30mm 45mm 30mm 45mm;
+        }
     </style>
     <meta charset="utf-8">
     <title>Beverage Manager technical report</title>
-  </head>
+</head>
 
-  <article>
+<article>
     <header>
-      <h1>Beverage Manager technical report</h1>
-      <div role="contentinfo">
-        <section typeof="sa:AuthorsList">
-          <h2>Contributors</h2>
-          <ul>
-            <li typeof="sa:ContributorRole" property="schema:author">
+        <h1>Beverage Manager technical report</h1>
+        <div role="contentinfo">
+            <section typeof="sa:AuthorsList">
+                <h2>Contributors</h2>
+                <ul>
+                    <li typeof="sa:ContributorRole" property="schema:author">
               <span typeof="schema:Person">
                 <meta property="schema:givenName" content="Adrian">
                 <meta property="schema:familyName" content="Hamod">
                 <span property="schema:name">Adrian Hamod</span>
               </span>
-              <ul>
-                <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
-                  <a href="mailto:adrianhamod@gmail.com" property="schema:email"> adrianhamod@gmail.com
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li typeof="sa:ContributorRole" property="schema:author">
+                        <ul>
+                            <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
+                                <a href="mailto:adrianhamod@gmail.com" property="schema:email"> adrianhamod@gmail.com
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li typeof="sa:ContributorRole" property="schema:author">
               <span typeof="schema:Person">
                 <meta property="schema:givenName" content="Dorian">
                 <meta property="schema:additionalName" content="Gheorghe">
                 <meta property="schema:familyName" content="Olărescu">
                 <span property="schema:name">Dorian Olărescu</span>
               </span>
-              <ul>
-                <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
-                  <a href="mailto:dorian.olarescu@gmail.com" property="schema:email"> dorian.olarescu@gmail.com
-                  </a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-        <section>
-          <h2>License and copyright</h2>
-          <h3>
-            <a href="https://creativecommons.org/licenses/by/4.0/" property="schema:license" typeof="CreativeWork">License</a>
-            <h3>
-          <div property="schema:copyrightYear"></div>
-          <h3>Copyright</h3>
-          <ul>
-            <li property="schema:copyrightYear">2021</li>
-            <li property="schema:copyrightHolder" typeof="schema:Organization">
-              Facultatea de Informatică - Universitatea Alexandru Ioan Cuza
-            </li>
-          </ul>
-        </section>
-        <section typeof="sa:Abstract">
-          <h2>Abstract</h2>
-          This report details the technical aspects of building a web application
-          around an ontological model describing the most common non-alcoholic beverages.
-          The application described is stateful by design allowing users interacting
-          with it to express preferences towards beverages. The mentioned preferences are
-          modelled as a knowledge graph whereas the beverage resources are be modelled
-          to include speciffic metadata (e.g.: category, price, ingredients etc.). In terms of features the application should also support browsing, filtering and even
-          suggestions or correlations.
-          The report show cases topics such as internal data structures, linked data principles, technologies used, cost of infrastructure, SLAs. For convinience, in the following sections we will reffer to the application as BEM - abvreviation for Beverage Manager, title of the project and application.
-        </section>
-        <section>
-          <h2>1.0 BEM overview</h2>
-          <section>
-            <h3>1.1 Service overview</h3>
-            The BEM service handles requests over an http connection. Over this connection authenticated clients can view queried resources rendered in html format. The frontend service handles delivery of static assets (html, css, js) and forwarding the queries to the query backend service. The backend service exposes and API for retrieving json representations of interlinked resources in RDF format. The API can also be made available for programmatic access or unauthenticated access as long as it accesses immutable resources describing non-user data (beverages excepting user preferences). Beverage related resources can be accessed via the /beverage/{resource} path where {resource} is a path parameter indicating the name of the resource. User preferences are available through the /profile/{user} route where {user} is a path parameter indicating the name of the user. The backend service queries the internal RDF storage to retrieve data and It can also be extended to run SPARQL queries on public sets of data such as DBPedia in order to merge additional metadata and link to external sources of data. RDF4J supports queries on remote SPARKQL endpoints such as DBPedia through the SPARKQLRepository API https://rdf4j.org/documentation/programming/setup/#accessing-a-sparql-endpoint
-          </section>
-          <section>
-            <h3>1.2 Internal data representation</h3>
-            The service internal model representation of data and resources is divided into 2 categories. As mentioned before accessing RDF data stores is done through the RDF4J Repository API. This enables us to work directly with the RDF4J Model API which provides class containers for the abstract RDF concepts. Resources are defined as IRI objects, literals are modeled as Literal objects, Statement objects abstract the concepts of subject, predicate and object through the use of IRIs and lastly blank nodes are represented through BNode object or null values. This model classes are used as entity objects when communicating with a data store such as DBPedia or our own ontology storage.
-            When serving response the http requests the body of the response will contain a JSON-ld representation of the data.
-          </section>
-          <section>
-            <h3>1.3 Internal storage</h3>
-            For our internal ontology storage, we use a dedicated ElasticSearch instance since the Repository API offers a direct integration with it. Storing the data on a separate instance, as opposed to a in memory storage enables us to future proof for extensions such as database replication if there are concerns regarding availability or durability. One advantage of an in-memory storage is the fast access to data. Even so, the data retrievals from a remote server can be improved through caching solutions such as Redis if there are concerns in this sense. 
-          </section>
-          <section>
-            <h3>1.4 Linked data principles</h3>
-            We can outline several ideas mentioned above that describe the linked data feature of the application. Stored data is available on the web through the use of an HTTP connection. The ontology resources are described through unique URIs. The internal data is modelled in RDF format using the RDF4J API and the output is in JSON-LD representation. Outputted resources include links to other internal resources to which they describe relations. This linking is done through metadata links to those resources. This linking can be further improved through querying/merging external data available in other public stores such as DBPedia
-          </section>
-        </section>
-        <section>
-          <h2>2.0 Technologies used</h2>
-          <section>
-            <h3>2.1 Design and architecture</h3>
-            A general architecture of the application and preliminary design considerations
-            are available in the <a href="https://github.com/AdrianHamod/BeverageManager/tree/main/architecture">project repository</a>. This includes a diagram describing the service oriented architecture, preliminary UML representation of the backend service, OpenAPI specification of the public APIs exposed and descriptions of the application flow, query service and end client use cases. 
-          </section>
-          <section>
-            <section>
-              <h4>2.1.1 Angular</h4>
-              Angular was our choice as the platform for building the user interface of the application. It is a platform and framework for building single-page web applications using modern web platform capabilities delivering high performance, offline and zero-step installation.
-              Single-Page Applications (or SPAs) refer to the application being dynamic, that is, when a user navigates the app, no page reloading is happening, but the data is received and sent back to the server, but the app itself does not load new pages from the server every time there is some action happening.
+                        <ul>
+                            <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
+                                <a href="mailto:dorian.olarescu@gmail.com" property="schema:email"> dorian.olarescu@gmail.com
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </section>
             <section>
-              Angular is considered by many a 'default' front-end tool and some of the reasons are because it is very versatile, has the ability of combining business logic and UI elements offering a lot of features that help to scale, optimize and speed up web applications.
-              It includes numerous structural elements like Injectors, Components, Directives, Pipes, Services, etc. that raise the complexity of Angular as a platform, but creates high quality applications as a result.
-              Some other benefits of using Angular are its very detailed documentation, two-way data binding that allows apps to update in real time if the binding source has changed (the backing value), differential loading that allow creating of two kinds of bundles, one for modern browsers that support ES2015+, and another one for older ones that support ES5 making the app more efficient and speedy by loading less code and polyfills.
-              And finally, it was created by Google, so it has its support with small updates every 6 months, gradually improving the framework.
+                <h2>License and copyright</h2>
+                <h3>
+                    <a href="https://creativecommons.org/licenses/by/4.0/" property="schema:license" typeof="CreativeWork">License</a>
+                    </h3>
+                        <div property="schema:copyrightYear"></div>
+                        <h3>Copyright</h3>
+                        <ul>
+                            <li property="schema:copyrightYear">2021</li>
+                            <li property="schema:copyrightHolder" typeof="schema:Organization">
+                                Facultatea de Informatică - Universitatea Alexandru Ioan Cuza
+                            </li>
+                        </ul>
+            </section>
+            <section typeof="sa:Abstract">
+                <h2>Abstract</h2>
+                This report details the technical aspects of building a web application
+                around an ontological model describing the most common non-alcoholic beverages.
+                The application described is stateful by design allowing users interacting
+                with it to express preferences towards beverages. The mentioned preferences are
+                modelled as a knowledge graph whereas the beverage resources are be modelled
+                to include speciffic metadata (e.g.: category, price, ingredients etc.). In terms of features the application should also support browsing, filtering and even
+                suggestions or correlations.
+                The report show cases topics such as internal data structures, linked data principles, technologies used, cost of infrastructure, SLAs. For convinience, in the following sections we will reffer to the application as BEM - abvreviation for Beverage Manager, title of the project and application.
             </section>
             <section>
-              For our use-case, Angular helps with providing a solid web application, that can easily support very large amounts of data, while being fast and responsive, with a minimal footprint.
-              Using Angular with Spring was a very easy choice since the two form a powerful combination. One such benefit it has the controls necessary for displaying complex lists of data, with two way binding allowing for the UI to receive data from the API, but also send UI updates to the API, such as when you click to rate, the rate controller is already bound to a value that, when changed, updates it at API level.
+                <h2>1.0 BEM overview</h2>
+                <section>
+                    <h3>1.1 Service overview</h3>
+                    The BEM service handles requests over an http connection. Over this connection authenticated clients can view queried resources rendered in html format. The frontend service handles delivery of static assets (html, css, js) and forwarding the queries to the query backend service. The backend service exposes and API for retrieving json representations of interlinked resources in RDF format. The API can also be made available for programmatic access or unauthenticated access as long as it accesses immutable resources describing non-user data (beverages excepting user preferences). Beverage related resources can be accessed via the /beverage/{resource} path where {resource} is a path parameter indicating the name of the resource. User preferences are available through the /profile/{user} route where {user} is a path parameter indicating the name of the user. The backend service queries the internal RDF storage to retrieve data and It can also be extended to run SPARQL queries on public sets of data such as DBPedia in order to merge additional metadata and link to external sources of data. RDF4J supports queries on remote SPARKQL endpoints such as DBPedia through the SPARKQLRepository API https://rdf4j.org/documentation/programming/setup/#accessing-a-sparql-endpoint
+                </section>
+                <section>
+                    <h3>1.2 Internal data representation</h3>
+                    The service internal model representation of data and resources is divided into 2 categories. As mentioned before accessing RDF data stores is done through the RDF4J Repository API. This enables us to work directly with the RDF4J Model API which provides class containers for the abstract RDF concepts. Resources are defined as IRI objects, literals are modeled as Literal objects, Statement objects abstract the concepts of subject, predicate and object through the use of IRIs and lastly blank nodes are represented through BNode object or null values. This model classes are used as entity objects when communicating with a data store such as DBPedia or our own ontology storage.
+                    When serving response the http requests the body of the response will contain a JSON-ld representation of the data.
+                </section>
+                <section>
+                    <h3>1.3 Internal storage</h3>
+                    For our internal ontology storage, we use a dedicated ElasticSearch instance since the Repository API offers a direct integration with it. Storing the data on a separate instance, as opposed to a in memory storage enables us to future proof for extensions such as database replication if there are concerns regarding availability or durability. One advantage of an in-memory storage is the fast access to data. Even so, the data retrievals from a remote server can be improved through caching solutions such as Redis if there are concerns in this sense.
+                </section>
+                <section>
+                    <h3>1.4 Linked data principles</h3>
+                    We can outline several ideas mentioned above that describe the linked data feature of the application. Stored data is available on the web through the use of an HTTP connection. The ontology resources are described through unique URIs. The internal data is modelled in RDF format using the RDF4J API and the output is in JSON-LD representation. Outputted resources include links to other internal resources to which they describe relations. This linking is done through metadata links to those resources. This linking can be further improved through querying/merging external data available in other public stores such as DBPedia
+                </section>
             </section>
-          </section>
-          <section>
-            <h4>2.1.2 Spring</h4>
-            We have chosen to use Spring to develop a solid backend for our app. It is the most popular application framework for Java. It provides a comprehensive programming and configuration model as well as great support for a SOA architecture with microservices.
-            Spring also offers spring-boot which is an easy solution to make stand-alone, production-grade Spring applications that can just be run with metrics, health checks and externalized configuration with no code generation and no XML configuration requirement.
-            Spring uses servlets behind the scenes, which are based upon a low-level API for handling requests and responses. That means that every part of the web api flow is made much easier, from returning a JSON using @ResponseBody to RESTful URLs, input validation, form data binding to object and much much more.
-            It is also multithreaded, supporting asynchronous request processing where, instead of returning a value, the controller method can return a Callable object and produce the return value from a separate thread, while the main Servlet container thread is released and ready to process other requests. It does so using the TaskExecutor and when the Callable object returns, the request is dispatched back to the Servlet container to resume processing with the value returned by the Callable.
-            In our case, using Spring and Spring-Boot kickstarts our project by having ready-made project templates, easy Angular support, by exposing controllers through API Gateway and rich documentation for AWS integration. It is a strong foundation for any size the app could reach.
-          </section>
+            <section>
+                <h2>2.0 Technologies used</h2>
+                <section>
+                    <h3>2.1 Design and architecture</h3>
+                    A general architecture of the application and preliminary design considerations
+                    are available in the <a href="https://github.com/AdrianHamod/BeverageManager/tree/main/architecture">project repository</a>. This includes a diagram describing the service oriented architecture, preliminary UML representation of the backend service, OpenAPI specification of the public APIs exposed and descriptions of the application flow, query service and end client use cases.
+                </section>
+                <section>
+                    <section>
+                        <h4>2.1.1 Angular</h4>
+                        Angular was our choice as the platform for building the user interface of the application. It is a platform and framework for building single-page web applications using modern web platform capabilities delivering high performance, offline and zero-step installation.
+                        Single-Page Applications (or SPAs) refer to the application being dynamic, that is, when a user navigates the app, no page reloading is happening, but the data is received and sent back to the server, but the app itself does not load new pages from the server every time there is some action happening.
+                    </section>
+                    <section>
+                        Angular is considered by many a 'default' front-end tool and some of the reasons are because it is very versatile, has the ability of combining business logic and UI elements offering a lot of features that help to scale, optimize and speed up web applications.
+                        It includes numerous structural elements like Injectors, Components, Directives, Pipes, Services, etc. that raise the complexity of Angular as a platform, but creates high quality applications as a result.
+                        Some other benefits of using Angular are its very detailed documentation, two-way data binding that allows apps to update in real time if the binding source has changed (the backing value), differential loading that allow creating of two kinds of bundles, one for modern browsers that support ES2015+, and another one for older ones that support ES5 making the app more efficient and speedy by loading less code and polyfills.
+                        And finally, it was created by Google, so it has its support with small updates every 6 months, gradually improving the framework.
+                    </section>
+                    <section>
+                        For our use-case, Angular helps with providing a solid web application, that can easily support very large amounts of data, while being fast and responsive, with a minimal footprint.
+                        Using Angular with Spring was a very easy choice since the two form a powerful combination. One such benefit it has the controls necessary for displaying complex lists of data, with two way binding allowing for the UI to receive data from the API, but also send UI updates to the API, such as when you click to rate, the rate controller is already bound to a value that, when changed, updates it at API level.
+                    </section>
+                </section>
+                <section>
+                    <h4>2.1.2 Spring</h4>
+                    We have chosen to use Spring to develop a solid backend for our app. It is the most popular application framework for Java. It provides a comprehensive programming and configuration model as well as great support for a SOA architecture with microservices.
+                    Spring also offers spring-boot which is an easy solution to make stand-alone, production-grade Spring applications that can just be run with metrics, health checks and externalized configuration with no code generation and no XML configuration requirement.
+                    Spring uses servlets behind the scenes, which are based upon a low-level API for handling requests and responses. That means that every part of the web api flow is made much easier, from returning a JSON using @ResponseBody to RESTful URLs, input validation, form data binding to object and much much more.
+                    It is also multithreaded, supporting asynchronous request processing where, instead of returning a value, the controller method can return a Callable object and produce the return value from a separate thread, while the main Servlet container thread is released and ready to process other requests. It does so using the TaskExecutor and when the Callable object returns, the request is dispatched back to the Servlet container to resume processing with the value returned by the Callable.
+                    In our case, using Spring and Spring-Boot kickstarts our project by having ready-made project templates, easy Angular support, by exposing controllers through API Gateway and rich documentation for AWS integration. It is a strong foundation for any size the app could reach.
+                </section>
 
-          <section>
-            <h3>2.2 Cloud services</h3>
-            In order to orchestrate, deploy and ease the resource management several AWS services are used. 
-            <section>
-              <h4>2.2.1 API Gateway</h4>
-              API Gateway is a service for managing API routing at service level as opposed to how popular web frameworks manage API routing at application domain level. What this means is requests are handled by central unit which resolves the service appropirate to delegate the request to. This is particularly useful in service oriented architectures where microservices are standalone applications and require an orchestration logic for the application flow to be implemented.
-              API Gateway, being the application entry point, can conveniently handle authorization. We opt for using a 3rd party JWT authorizer which we directly integrate with API Gateway. Thus, once authenticated using the application internal logic, we can delegate authorization to API Gateway and authorize requests based on a speciffic header value.
-              Lastly, we use API Gateway to manage throttling. Managing thortling at service level and delegating it to a trusted 3rd party such as AWS puts aside the operational burden of using intercepetor classes at the framework level with a proprietary implementation which must be maintained and tested.
+                <section>
+                    <h3>2.2 Cloud services</h3>
+                    In order to orchestrate, deploy and ease the resource management several AWS services are used.
+                    <section>
+                        <h4>2.2.1 API Gateway</h4>
+                        API Gateway is a service for managing API routing at service level as opposed to how popular web frameworks manage API routing at application domain level. What this means is requests are handled by central unit which resolves the service appropirate to delegate the request to. This is particularly useful in service oriented architectures where microservices are standalone applications and require an orchestration logic for the application flow to be implemented.
+                        API Gateway, being the application entry point, can conveniently handle authorization. We opt for using a 3rd party JWT authorizer which we directly integrate with API Gateway. Thus, once authenticated using the application internal logic, we can delegate authorization to API Gateway and authorize requests based on a speciffic header value.
+                        Lastly, we use API Gateway to manage throttling. Managing thortling at service level and delegating it to a trusted 3rd party such as AWS puts aside the operational burden of using intercepetor classes at the framework level with a proprietary implementation which must be maintained and tested.
+                    </section>
+                    <section>
+                        <h4>2.2.2 AWS EC2</h4>
+                        The second service in the service flow is a load balancer. Besides being a hosting service, AWS EC2 also provides neat integrations with said hosts such as load balancing, scaling groups, AMI market etc. In order to offload requests of our microservices an Application Load Balancer is used.
+                        A first version of the application also considers self managing and deploying the ElasticSearch storage to an EC2 instance.
+                    </section>
+                    <section>
+                        <h4>2.2.3 Elastic Container Service</h4>
+                        The mentioned load balancer front faces an ECS cluster. Amazon ECS is a fully managed container orchestration service with the purpose of easing deployment, service and resources management and scaling. What makes deployments easier is the fact that the ECS cluster is a hybrid enironment in regards to the runtimes and types of applications deployed. Elastic container registry is a service like feature integrated with ECS with the purpose of centralizing docker images used in deployment. We use ECS to deploy the frontend service, the authentication service and the query backend service in sepparate containers. ECS allows us to customize the host resources of each service, which helps with optimizing resource allocation. This also means that each type of service is scaled individually with respect to each container traffic load and each custom setting configured prior to deployment.
+                        In addition to the scaling feature, Amazon also provides it's own on demand serverless containers to use with ECS. ECS with Fargate is the managed AWS alternative to using Kubernetes. The main advantage for us in using Fargate is that there are no upfront expenses since it follows the pay for only what you use paradigm.
+                    </section>
+                    <section>
+                        <h4>2.2.4 Amazon Relational Database Service</h4>
+                        Amazon RDS, specifically their in house built engine Aurora is a high performance serverless SQL database. The main role of the database is to store user data, including hashed credentials and profile data. The advantages of using Amazon RDS include high performance and scalability while still paying for only what you are using, fully delegation of management and integrations with AWS ecosystem from which main benefits is the ease of securing the database through VPCs and encrpytion services such as AWS KMS.
+                    </section>
+                    <section>
+                        <h4>2.2.5 Authentication</h4>
+                        Authenticating the user is a very important step of the work-flow of the appliction. While not required, authenticating enables filtering and context based suggestions to a registered user.
+                        The authentication flow starts at the signup/login web page. After the user enters his existing email address and password, or registers for a new account, the app sends his credentials through API Gateway to a spring microservice that hashes the password and stores the user's email address and password, along with all the other required fields, inside RDS, returning a JWT token for further authentication of requests later on.
+                        If the user is already registered, sending his login information only verifies it to the existing information based on the email addres the user has provided. If it the hashed password matches the existing one for that email address, the rest is the same as for registering, where the app returns a JWT token for further authentication. In case the password is not a match, the user is prompted with an error, with the ability of trying again.
+                    </section>
+                </section>
             </section>
             <section>
-              <h4>2.2.2 AWS EC2</h4>
-              The second service in the service flow is a load balancer. Besides being a hosting service, AWS EC2 also provides neat integrations with said hosts such as load balancing, scaling groups, AMI market etc. In order to offload requests of our microservices an Application Load Balancer is used. 
-              A first version of the application also considers self managing and deploying the ElasticSearch storage to an EC2 instance. 
+                <h2>3.0 Infrastructure cost</h2>
+                Although we can't estimate the monthly cost of the infrastructure, we can outline the cost of each provided service as of the time of publishing this report.
+                <p>
+                    API Gateway charges 0.9 USD per a million requests. Keep in mind that each use case encapsulates several requests due to the service oriented architecture. On average each client request will retrieve static assets from the frontend service, the frontend service will forward the request to the backend through the same domain, hitting API Gateway resulting in 2 requests.
+                </p>
+                <p>
+                    The load balancer has a fixed cost of 0.0225 USD per hour since it will always be up and running. As for the EC2 instance hosting the ElasticSearch storage, ideally a m5.2xlarge type instance would be used. For an hourly 0.384 USD the ElasticSearch would benefit from a 8 vCPU, 32 Gb of RAM and high performance network traffic.
+                </p>
+                <p>
+                    ECS Fargate containers price is calculated per second with a 1 minute minimum. For Linux instances the hourly prices per vCPU and GB of RAM are 0.04048 USD, respectively 0.004445 USD. Depending on the necessities of the service multiple incremental configurations are available ranging from 0.25 vCPU and 0.5 GB to 2 GB of ram to 4 vCPU and 8 GB to 30 GB.
+                </p>
+                <p>
+                    Lastly Amazon Aurora charges 0.1 USD per GB of monthly storage along with 0.2 USD per 1 million requests consisting of I/O operations.
+                </p>
             </section>
             <section>
-              <h4>2.2.3 Elastic Container Service</h4>
-              The mentioned load balancer front faces an ECS cluster. Amazon ECS is a fully managed container orchestration service with the purpose of easing deployment, service and resources management and scaling. What makes deployments easier is the fact that the ECS cluster is a hybrid enironment in regards to the runtimes and types of applications deployed. Elastic container registry is a service like feature integrated with ECS with the purpose of centralizing docker images used in deployment. We use ECS to deploy the frontend service, the authentication service and the query backend service in sepparate containers. ECS allows us to customize the host resources of each service, which helps with optimizing resource allocation. This also means that each type of service is scaled individually with respect to each container traffic load and each custom setting configured prior to deployment. 
-              In addition to the scaling feature, Amazon also provides it's own on demand serverless containers to use with ECS. ECS with Fargate is the managed AWS alternative to using Kubernetes. The main advantage for us in using Fargate is that there are no upfront expenses since it follows the pay for only what you use paradigm. 
-            </section>   
-            <section>
-              <h4>2.2.4 Amazon Relational Database Service</h4>
-              Amazon RDS, specifically their in house built engine Aurora is a high performance serverless SQL database. The main role of the database is to store user data, including hashed credentials and profile data. The advantages of using Amazon RDS include high performance and scalability while still paying for only what you are using, fully delegation of management and integrations with AWS ecosystem from which main benefits is the ease of securing the database through VPCs and encrpytion services such as AWS KMS. 
+                <h2>4.0 Implementation</h2>
+                <section>
+                    <h3>4.1 RDF Store</h3>
+                    <section>
+                        <h4>4.1.1 Initial plan divergence and caveats</h4>
+                        <p> One of the most important factors in choosing to use Eclipse RDF4J was its integration features
+                        with several components we considered using in order to build a solid application, those being
+                        ElasticSearch noSql for database, Spring Boot for microservices and transactional APIs. More
+                        specifically we planned to use the RDF4J repository API for ElasticSearch stores which
+                        trivially integrates with a running ES host, only requiring the host's address, cluster name and
+                        index to be used. The repository's connection could then be used to execute SparQL queries,
+                        file loading, or simple triples operations such as searching, adding or removing. The Spring
+                        integration adds a DAO layer with an implemented CRUD interface which should be agnostic
+                        in terms of the repository implementation used. After several attempts of integrating, we
+                        got an answer from the developers, suggesting this specific integration between ES repository
+                            and Spring DAO interfaces was not yet attempted. </p>
+                        <p> We decided to follow the developers advice and use in-memory storage. Taking this a step
+                        further, to encourage forward compatibility, once the ES repo - Spring DAO integration is tested
+                        , with different storage systems, we opted to use a remote host and repository for the in-memory
+                         storage using the RDF4J server feature</p>
+                        <p> This solution raises drawbacks in terms of horizontal scalability, data replication
+                            and the option of delegating host maintenance to a 3rd party such as a cloud service
+                            provider to ensure high availability and durability. In terms of the desired features
+                            from an RDF store, this solution is viable as it still very fast in terms of read/write
+                         operations, and it can be extended with full text search capabilities. </p>
+
+                    </section>
+                    <section>
+                        <h4>4.1.2 RD4J Server</h4>
+                    </section>
+                    <section>
+                        <h4>4.1.3 Native storage</h4>
+                    </section>
+                    <section>
+                        <h4>4.1.4 Lucene index</h4>
+                    </section>
+                    <section>
+                        <h4>4.1.5 Repository API</h4>
+                    </section>
+                </section>
             </section>
-            <section>
-              <h4>2.2.5 Authentication</h4>
-              Authenticating the user is a very important step of the work-flow of the appliction. While not required, authenticating enables filtering and context based suggestions to a registered user. 
-              The authentication flow starts at the signup/login web page. After the user enters his existing email address and password, or registers for a new account, the app sends his credentials through API Gateway to a spring microservice that hashes the password and stores the user's email address and password, along with all the other required fields, inside RDS, returning a JWT token for further authentication of requests later on.
-              If the user is already registered, sending his login information only verifies it to the existing information based on the email addres the user has provided. If it the hashed password matches the existing one for that email address, the rest is the same as for registering, where the app returns a JWT token for further authentication. In case the password is not a match, the user is prompted with an error, with the ability of trying again.
-            </section>
-          </section>
-        </section>
-        <section>
-          <h2>3.0 Infrastructure cost</h2>
-          Although we can't estimate the monthly cost of the infrastructure, we can outline the cost of each provided service as of the time of publishing this report.
-          <p> 
-          API Gateway charges 0.9 USD per a million requests. Keep in mind that each use case encapsulates several requests due to the service oriented architecture. On average each client request will retrieve static assets from the frontend service, the frontend service will forward the request to the backend through the same domain, hitting API Gateway resulting in 2 requests. 
-          </p>
-          <p>
-          The load balancer has a fixed cost of 0.0225 USD per hour since it will always be up and running. As for the EC2 instance hosting the ElasticSearch storage, ideally a m5.2xlarge type instance would be used. For an hourly 0.384 USD the ElasticSearch would benefit from a 8 vCPU, 32 Gb of RAM and high performance network traffic. 
-          </p>
-          <p>
-          ECS Fargate containers price is calculated per second with a 1 minute minimum. For Linux instances the hourly prices per vCPU and GB of RAM are 0.04048 USD, respectively 0.004445 USD. Depending on the necessities of the service multiple incremental configurations are available ranging from 0.25 vCPU and 0.5 GB to 2 GB of ram to 4 vCPU and 8 GB to 30 GB. 
-          </p>
-          <p>
-          Lastly Amazon Aurora charges 0.1 USD per GB of monthly storage along with 0.2 USD per 1 million requests consisting of I/O operations.
-          </p>
-        </section>
-      </div>
+        </div>
     </header>
-  </article> 
+</article>
 </html>
