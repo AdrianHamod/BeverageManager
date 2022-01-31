@@ -1,0 +1,45 @@
+.header-image {
+  background-size: cover;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.card {
+  width: 80%;
+  max-width: 80%;
+  margin-top: 2%;
+}
+
+.main-div {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-table {
+  overflow-x: scroll;
+}
+
+.mat-cell,
+.mat-header-cell {
+  word-wrap: initial;
+  display: table-cell;
+  padding: 0px 10px;
+  line-break: unset;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.mat-row,
+.mat-header-row {
+  display: table-row;
+}

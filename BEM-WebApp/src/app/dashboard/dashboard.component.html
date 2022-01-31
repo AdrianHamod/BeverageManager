@@ -1,5 +1,5 @@
 <div class="card">
-  <p-dataView #dv [value]="filteredBeverages" [paginator]="true" [rows]="12" filterBy="name" layout="list">
+  <p-dataView #dv [value]="filteredBeverages" [paginator]="true" [rows]="12" filterBy="name" layout="list" emptyMessage="No Recommandations Found. Like some beverages first.">
     <ng-template pTemplate="header">
       <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
         <span class="p-input-icon-left p-mb-2 p-mb-md-0">
@@ -11,7 +11,6 @@
             </mat-option>
           </mat-autocomplete>
         </span>
-        <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
       </div>
     </ng-template>
     <ng-template let-beverage pTemplate="listItem">
@@ -27,27 +26,6 @@
           </div>
 
           <div class="product-list-action">
-            <a mat-raised-button color="primary" [routerLink]="['/pdp']"
-               [queryParams]="{beverage: beverage.beverageId.localName}">
-              <mat-icon>info</mat-icon>
-              More Info</a>
-          </div>
-        </div>
-      </div>
-    </ng-template>
-    <ng-template let-beverage pTemplate="gridItem">
-      <div class="p-col-12 p-xl-2 p-mb-6 p-sm-4" *ngIf="beverage.imageUrl">
-        <div class="product-grid-item card">
-          <div class="product-grid-item-top">
-            <bem-tag-list *ngIf="beverage.allergens[0] != ''" [beverage]="beverage"></bem-tag-list>
-          </div>
-          <div class="product-grid-item-content">
-            <img [src]="beverage.imageUrl" [alt]="beverage.name"/>
-            <div class="product-name">{{beverage.name}}</div>
-            <div class="product-description">{{beverage.description | slice:0:500}}</div>
-            <!--            <p-rating [ngModel]="team.id" [readonly]="true" [cancel]="false"></p-rating>-->
-          </div>
-          <div class="product-grid-item-bottom">
             <a mat-raised-button color="primary" [routerLink]="['/pdp']"
                [queryParams]="{beverage: beverage.beverageId.localName}">
               <mat-icon>info</mat-icon>

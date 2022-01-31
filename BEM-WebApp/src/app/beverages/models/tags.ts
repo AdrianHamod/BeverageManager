@@ -1,4 +1,4 @@
-import { SeverityEnum } from "../enums/severity-enum";
+import {SeverityEnum} from "../enums/severity-enum";
 
 export interface Tags {
   name: string;

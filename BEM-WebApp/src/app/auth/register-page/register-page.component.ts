@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../auth.service";
-import {Form, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {first} from "rxjs";
 import {IUser} from "../../models/user/user";
 import {MessageService} from "primeng/api";
-import {Profile} from "../../models/profile";
 
 @Component({
   selector: 'app-register-page',
@@ -24,6 +23,9 @@ export class RegisterPageComponent implements OnInit {
     "Other"
   ]
 
+  countries: any[];
+  selectedCountry: any;
+
   user: IUser
 
   constructor(
@@ -32,6 +34,21 @@ export class RegisterPageComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private messageService: MessageService) {
+
+    this.countries = [
+      {name: 'Australia', code: 'AU'},
+      {name: 'Brazil', code: 'BR'},
+      {name: 'China', code: 'CN'},
+      {name: 'Egypt', code: 'EG'},
+      {name: 'France', code: 'FR'},
+      {name: 'Germany', code: 'DE'},
+      {name: 'India', code: 'IN'},
+      {name: 'Japan', code: 'JP'},
+      {name: 'Romania', code: 'RO'},
+      {name: 'Spain', code: 'ES'},
+      {name: 'United States', code: 'US'},
+    ];
+
   }
 
   ngOnInit(): void {
@@ -46,15 +63,35 @@ export class RegisterPageComponent implements OnInit {
     });
   }
 
-  get firstName() { return this.form.get('firstName'); }
-  get lastName() { return this.form.get('lastName'); }
-  get emailAddress() { return this.form.get('emailAddress'); }
-  get password() { return this.form.get('password'); }
-  get age() {return this.form.get('age');}
-  get country() {return this.form.get('country');}
-  get gender() {return this.form.get('gender');}
+  get firstName() {
+    return this.form.get('firstName');
+  }
 
-  onSubmit(){
+  get lastName() {
+    return this.form.get('lastName');
+  }
+
+  get emailAddress() {
+    return this.form.get('emailAddress');
+  }
+
+  get password() {
+    return this.form.get('password');
+  }
+
+  get age() {
+    return this.form.get('age');
+  }
+
+  get country() {
+    return this.form.get('country');
+  }
+
+  get gender() {
+    return this.form.get('gender');
+  }
+
+  onSubmit() {
     this.submitted = true;
 
     this.messageService.clear();
@@ -66,18 +103,22 @@ export class RegisterPageComponent implements OnInit {
     this.authService.register(this.form.value)
       .pipe(first())
       .subscribe({
-        next: () =>{
+        next: () => {
 
           this.authService.createProfile(
             this.form.value.firstName,
             this.form.value.age,
-            this.form.value.country.alpha2Code,
+            this.form.value.country.code,
             this.form.value.gender.toUpperCase()
           )
             .pipe(first())
             .subscribe({
-              next: () =>{
-                this.messageService.add({ severity: 'success', summary: 'register page', detail: 'Registration successful'});
+              next: () => {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'register page',
+                  detail: 'Registration successful'
+                });
                 this.router.navigate(['../login'], {relativeTo: this.route});
               },
               error: err => {

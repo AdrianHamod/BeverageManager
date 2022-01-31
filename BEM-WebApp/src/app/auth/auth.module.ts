@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {LoginPageComponent} from "./login-page/login-page.component";
@@ -38,4 +38,5 @@ import {DropdownModule} from "primeng/dropdown";
     RegisterPageComponent
   ]
 })
-export class AuthModule { }
+export class AuthModule {
+}

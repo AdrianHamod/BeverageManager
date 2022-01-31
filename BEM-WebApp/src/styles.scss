@@ -10,6 +10,13 @@
 // MDB SCSS
 @import "~mdb-angular-ui-kit/assets/scss/mdb.scss";
 
+// Roboto
+@font-face {
+  font-family: 'Roboto';
+  src: url('assets/Roboto-Regular.ttf') format('truetype');
+}
+
+
 html,
 body {
   height: 100%;
@@ -132,6 +139,7 @@ div.card {
 a {
   text-decoration: none;
 }
+
 a:hover {
   text-decoration: none;
 }

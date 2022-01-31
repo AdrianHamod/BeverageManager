@@ -1,0 +1,49 @@
+<form [formGroup]="preferenceForm">
+
+  <div class="form-group">
+    <label for="like">Do you like this product? </label>
+    <p-selectButton id="like" formControlName="like" [options]="likeOptions" [(ngModel)]="likeOption"
+                    optionLabel="label" optionValue="value"></p-selectButton>
+  </div>
+
+  <div class="form-group">
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Event</mat-label>
+      <input type="text" formControlName="event" matInput
+             placeholder="Enter an event where you usually drink this beverage">
+    </mat-form-field>
+    <div *ngIf="submitted && event?.errors" class="invalid-feedback">
+      <div *ngIf="event?.errors?.['required']">An event is required</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Location</mat-label>
+      <input type="text" formControlName="location" matInput
+             placeholder="Enter a location where you usually drink this beverage">
+    </mat-form-field>
+    <div *ngIf="submitted && location?.errors" class="invalid-feedback">
+      <div *ngIf="location?.errors?.['required']">A location is required</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Season</mat-label>
+      <input type="text" formControlName="season" matInput
+             placeholder="Enter season when you usually drink this beverage">
+    </mat-form-field>
+    <div *ngIf="submitted && season?.errors" class="invalid-feedback">
+      <div *ngIf="season?.errors?.['required']">A season is required</div>
+    </div>
+  </div>
+
+  <div class="float-right">
+    <p-button [disabled]="loading" (click)="savePreference()">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      Save
+    </p-button>
+  </div>
+
+</form>

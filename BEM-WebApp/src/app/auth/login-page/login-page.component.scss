@@ -5,9 +5,24 @@
 
 .container {
   position: absolute;
-  top: 20em;
-  width: 20em;
-  height: 30em;
+  top: 60%;
   left: 50%;
-  margin-left: -10em;
+  transform: translate(-50%, -60%);
+}
+
+h1 {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: xxx-large;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  width: 651px;
+  height: 400px;
+  transform: translate(-50%, -90%);
+}
+
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: xx-large;
+  }
 }

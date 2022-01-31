@@ -1,1 +1,71 @@
-<p>profile-page works!</p>
+<div *ngIf="authService.user as user" class="main-div">
+  <mat-card class="card">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <img
+          src="https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png"
+          class="header-image">
+      </div>
+      <mat-card-title>{{userProfile.firstName}} {{userProfile.lastName}}</mat-card-title>
+      <mat-card-subtitle>{{userProfile.emailAddress}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Username: {{userProfile.firstName}}</p>
+      <p>Age: {{userProfile.age}}</p>
+      <p>Gender: {{userProfile.gender}}</p>
+      <p>Country: {{userProfile.nationality}}</p>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="main-div" *ngIf="profileModel.beveragePreferences">
+  <mat-card class="card">
+    <mat-card-header class="card-header">
+      <mat-card-title>{{userProfile.firstName}}'s Preferences</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mat-card-content">
+      <div *ngIf="profileModel.beveragePreferences">
+        <mat-table [dataSource]="profileModel.beveragePreferences" class="mat-elevation-z4">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let element">
+              <a [routerLink]="['/pdp']"
+                 [queryParams]="{beverage: element.beverage.localName}">{{element.beverage.localName}}</a>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="preference">
+            <th mat-header-cell *matHeaderCellDef>Preference</th>
+            <td mat-cell *matCellDef="let element">{{element.isContextBeveragePreferred ? 'You like' : 'You dislike'}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="event">
+            <th mat-header-cell *matHeaderCellDef>Event</th>
+            <td mat-cell *matCellDef="let element">{{element.event}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef>Location</th>
+            <td mat-cell *matCellDef="let element">{{element.location}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="season">
+            <th mat-header-cell *matHeaderCellDef>Season</th>
+            <td mat-cell *matCellDef="let element">{{element.season}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell style="text-align: center" *matHeaderCellDef>Actions</th>
+            <td mat-cell style="text-align: center" *matCellDef="let element">
+              <button mat-button (click)="openPreferencesPane(element)">Edit</button>
+              <button mat-button (click)="deleteUserPreference(element)">Delete</button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </mat-table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

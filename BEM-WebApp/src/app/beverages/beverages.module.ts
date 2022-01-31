@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BeverageListComponent } from './beverage-list/beverage-list.component';
-import { BeverageDetailComponent } from './beverage-detail/beverage-detail.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {BeverageListComponent} from './beverage-list/beverage-list.component';
+import {BeverageDetailComponent} from './beverage-detail/beverage-detail.component';
 import {RouterModule} from "@angular/router";
 import {SharedModule} from "primeng/api";
 import {DataViewModule} from "primeng/dataview";
@@ -17,41 +17,53 @@ import {MatInputModule} from "@angular/material/input";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
-import { TagListComponent } from '../shared/tag-list/tag-list.component';
-import { ImageModule } from 'primeng/image';
+import {TagListComponent} from '../shared/tag-list/tag-list.component';
+import {ImageModule} from 'primeng/image';
 import {MatCardModule} from "@angular/material/card";
 import {CardModule} from "primeng/card";
+import {BreadcrumbModule} from "primeng/breadcrumb";
+import {BeverageContextModalComponent} from './beverage-context-modal/beverage-context-modal.component';
+import {DynamicDialogModule} from "primeng/dynamicdialog";
+import {SelectButtonModule} from "primeng/selectbutton";
 
 @NgModule({
-  declarations: [
-    BeverageListComponent,
-    BeverageDetailComponent,
-    TagListComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild([
-      {path: 'beverages', component: BeverageListComponent},
-      {path: 'beverages/:name', component: BeverageDetailComponent}
-    ]),
-    SharedModule,
-    DataViewModule,
-    DropdownModule,
-    RatingModule,
-    FormsModule,
-    MatListModule,
-    InputTextModule,
-    ButtonModule,
-    TagModule,
-    AutoCompleteModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatIconModule,
-    ImageModule,
-    MatCardModule,
-    CardModule
-  ]
+    declarations: [
+        BeverageListComponent,
+        BeverageDetailComponent,
+        TagListComponent,
+        BeverageContextModalComponent
+    ],
+    exports: [
+        TagListComponent
+    ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild([
+            {path: 'beverages/:name', component: BeverageListComponent},
+            {path: 'pdp', component: BeverageDetailComponent}
+        ]),
+        SharedModule,
+        DataViewModule,
+        DropdownModule,
+        RatingModule,
+        FormsModule,
+        MatListModule,
+        InputTextModule,
+        ButtonModule,
+        TagModule,
+        AutoCompleteModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+        ImageModule,
+        MatCardModule,
+        CardModule,
+        BreadcrumbModule,
+        DynamicDialogModule,
+        SelectButtonModule
+    ]
 })
-export class BeveragesModule { }
+export class BeveragesModule {
+}

@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { MockBackendInterceptor } from './mock-backend.interceptor';
+import {MockBackendInterceptor} from './mock-backend.interceptor';
 
 describe('MockBackendInterceptor', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       MockBackendInterceptor
-      ]
+    ]
   }));
 
   it('should be created', () => {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -22,7 +22,9 @@ export class LoginPageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public authService: AuthService,
-    private messageService: MessageService) {  }
+    private messageService: MessageService) {
+    authService.skippedAuth = false;
+  }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -31,13 +33,18 @@ export class LoginPageComponent implements OnInit {
     });
   }
 
-  get emailAddress() { return this.form.get('emailAddress'); }
-  get password() { return this.form.get('password'); }
+  get emailAddress() {
+    return this.form.get('emailAddress');
+  }
+
+  get password() {
+    return this.form.get('password');
+  }
 
   onSubmit() {
     this.submitted = true;
 
-    if (this.form.invalid){
+    if (this.form.invalid) {
       return;
     }
 
@@ -46,14 +53,19 @@ export class LoginPageComponent implements OnInit {
     this.authService.login(this.loginEmailAddress, this.loginPassword)
       .pipe(first())
       .subscribe({
-        next: () =>{
-          this.router.navigateByUrl("/");
+        next: () => {
+          this.router.navigateByUrl("/beverages");
         },
         error: err => {
           this.messageService.add({severity: 'error', summary: 'login page', detail: err});
           this.loading = false;
         }
       })
+  }
+
+  skipAuthentication(){
+    this.authService.skippedAuth = true;
+    this.router.navigateByUrl('/beverages');
   }
 
 }

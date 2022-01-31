@@ -1,63 +1,89 @@
 <div class="container">
-<div class="card">
-  <h4 class="card-header">Register</h4>
-  <div class="card-body">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input id="firstName" type="text" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && firstName?.errors }" />
-        <div *ngIf="submitted && firstName?.errors" class="invalid-feedback">
-          <div *ngIf="firstName?.errors?.['required']">First Name is required</div>
+  <h1 style="text-align: center;">Welcome to BEM app!</h1>
+  <div class="card">
+    <h4 class="card-header">Register</h4>
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input id="firstName" type="text" formControlName="firstName" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && firstName?.errors }"/>
+          <div *ngIf="submitted && firstName?.errors" class="invalid-feedback">
+            <div *ngIf="firstName?.errors?.['required']">First Name is required</div>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="lastName">Last Name</label>
-        <input id="lastName" type="text" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && lastName?.errors }" />
-        <div *ngIf="submitted && lastName?.errors" class="invalid-feedback">
-          <div *ngIf="lastName?.errors?.['required']">Last Name is required</div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input id="lastName" type="text" formControlName="lastName" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && lastName?.errors }"/>
+          <div *ngIf="submitted && lastName?.errors" class="invalid-feedback">
+            <div *ngIf="lastName?.errors?.['required']">Last Name is required</div>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="emailAddress">Email Address</label>
-        <input id="emailAddress" type="text" formControlName="emailAddress" class="form-control" [ngClass]="{ 'is-invalid': submitted && emailAddress?.errors }" />
-        <div *ngIf="submitted && emailAddress?.errors" class="invalid-feedback">
-          <div *ngIf="emailAddress?.errors?.['required']">Email Address is required</div>
+        <div class="form-group">
+          <label for="emailAddress">Email Address</label>
+          <input id="emailAddress" type="text" formControlName="emailAddress" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && emailAddress?.errors }"/>
+          <div *ngIf="submitted && emailAddress?.errors" class="invalid-feedback">
+            <div *ngIf="emailAddress?.errors?.['required']">Email Address is required</div>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password" class="form-control" pPassword [ngClass]="{ 'is-invalid': submitted && password?.errors }" />
-        <div *ngIf="submitted && password?.errors" class="invalid-feedback">
-          <div *ngIf="password?.errors?.['required']">Password is required</div>
-          <div *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="password" formControlName="password" class="form-control" pPassword
+                 [ngClass]="{ 'is-invalid': submitted && password?.errors }"/>
+          <div *ngIf="submitted && password?.errors" class="invalid-feedback">
+            <div *ngIf="password?.errors?.['required']">Password is required</div>
+            <div *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</div>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="age">Age</label>
-        <input id="age" type="number" formControlName="age" class="form-control" [ngClass]="{ 'is-invalid': submitted && firstName?.errors }" />
-        <div *ngIf="submitted && firstName?.errors" class="invalid-feedback">
-          <div *ngIf="firstName?.errors?.['required']">First Name is required</div>
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input id="age" type="number" formControlName="age" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && firstName?.errors }"/>
+          <div *ngIf="submitted && firstName?.errors" class="invalid-feedback">
+            <div *ngIf="firstName?.errors?.['required']">First Name is required</div>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label>Select Country</label>
-        <mat-select-country formControlName="country" appearance="outline" placeHolder=''></mat-select-country>
-      </div>
-      <div class="form-group">
-        <p-dropdown placeholder="Gender" [options]="genders" formControlName="gender" ></p-dropdown>
-        <div *ngIf="submitted && gender?.errors" class="invalid-feedback">
-          <div *ngIf="gender?.errors?.['required']">Gender is required</div>
-        </div>
-      </div>
+        <div class="form-group">
+          <label>Select Country</label>
+          <!--        <mat-select-country formControlName="country" appearance="outline" placeHolder=''></mat-select-country>-->
+          <!--        <p-dropdown [options]="countries" formControlName="country" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Country">-->
+          <!--          <ng-template pTemplate="selectedItem">-->
+          <!--            <div class="country-item country-item-value"  *ngIf="country">-->
+          <!--&lt;!&ndash;              <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" />&ndash;&gt;-->
+          <!--              <div>{{country}}</div>-->
+          <!--            </div>-->
+          <!--          </ng-template>-->
+          <!--          <ng-template let-country pTemplate="item">-->
+          <!--            <div class="country-item">-->
+          <!--&lt;!&ndash;              <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" />&ndash;&gt;-->
+          <!--              <div>{{country.name}}</div>-->
+          <!--            </div>-->
+          <!--          </ng-template>-->
+          <!--        </p-dropdown>-->
 
-      <div class="form-group">
-        <button [disabled]="loading" class="btn btn-primary">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-          Register
-        </button>
-        <a routerLink="../login" class="btn btn-link">Cancel</a>
-      </div>
-    </form>
+          <select class="custom-select" formControlName="country">
+            <option value="" disabled>Choose your country</option>
+            <option *ngFor="let country of countries" [ngValue]="country">{{country.name}}</option>
+          </select>
+
+        </div>
+        <div class="form-group">
+          <p-dropdown placeholder="Gender" [options]="genders" formControlName="gender"></p-dropdown>
+          <div *ngIf="submitted && gender?.errors" class="invalid-feedback">
+            <div *ngIf="gender?.errors?.['required']">Gender is required</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Register
+          </button>
+          <a routerLink="../login" class="btn btn-link">Cancel</a>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 </div>

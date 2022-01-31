@@ -1,4 +1,4 @@
-import { Beverage } from "./beverage";
+import {Beverage} from "./beverage";
 
 export interface Beverages {
   beverages: Beverage[]
