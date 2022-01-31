@@ -11,6 +11,7 @@ import ro.uaic.info.querybackendservice.model.IRILabel;
 import ro.uaic.info.querybackendservice.service.BeverageService;
 import ro.uaic.info.querybackendservice.service.RecommendationService;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,9 @@ public class RecommendationController {
             @RequestParam(required = false) Integer count) {
         return this.getRecommendations(user, count)
                 .stream()
-                .map(beverageService::getBeverageById)
+                .map(beverageService::getBeverageByIdOptional)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toSet());
     }
 }

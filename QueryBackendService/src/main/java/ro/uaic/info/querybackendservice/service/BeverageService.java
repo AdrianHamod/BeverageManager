@@ -12,6 +12,7 @@ import ro.uaic.info.querybackendservice.model.BeverageContext;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,11 @@ public class BeverageService {
     @Transactional
     public Beverage getBeverageById(IRI id) {
         return beverageDao.getById(id);
+    }
+
+    @Transactional
+    public Optional<Beverage> getBeverageByIdOptional(IRI id) {
+        return beverageDao.getByIdOptional(id);
     }
 
     @Transactional
