@@ -73,7 +73,10 @@ public class ProfileService {
     @Transactional
     public Profile updateBeverageContext(IRI id, BeverageContext beverageContext) {
         Profile profile = profileDao.getById(id);
-        if (!profile.getBeveragePreferences().removeIf(context -> context.getId() == beverageContext.getId())) {
+        if (profile.getBeveragePreferences() == null || profile.getBeveragePreferences().isEmpty()) {
+            return null;
+        }
+        if (!profile.getBeveragePreferences().removeIf(context -> context.getId().equals(beverageContext.getId()))) {
             return null;
         }
         BeverageContext context = beverageContextDao.getById(beverageContext.getId());
