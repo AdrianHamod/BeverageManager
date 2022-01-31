@@ -14,4 +14,8 @@ public class PatchProfileBeverageContextRequest {
     private String event;
     private String location;
     private String season;
+
+    public void setIsContextBeveragePreferred(boolean isContextBeveragePreferred) {
+        this.isContextBeveragePreferred = isContextBeveragePreferred;
+    }
 }
