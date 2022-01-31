@@ -61,20 +61,21 @@ public class RecommendationService {
             List<Queue<IRI>> emptyListsToRemove = new ArrayList<>();
             for (Queue<IRI> current :
                     allDirectNeighbours) {
-                if (gatheredNeighbours.add(current.remove())) {
+                IRI currentIri = current.remove();
+                if (gatheredNeighbours.add(currentIri)) {
                     neighboursToGather--;
                 }
-                if (current.isEmpty()) {
-                    emptyListsToRemove.add(current);
-                    continue;
-                }
 
-                List<IRI> children = getChildren(current.peek());
+                List<IRI> children = getChildren(currentIri);
                 current.addAll(children);
 
-                IRI parent = getParent(current.peek());
+                IRI parent = getParent(currentIri);
                 if (parent != null) {
                     current.add(parent);
+                }
+
+                if (current.isEmpty()) {
+                    emptyListsToRemove.add(current);
                 }
             }
             allDirectNeighbours.removeAll(emptyListsToRemove);
