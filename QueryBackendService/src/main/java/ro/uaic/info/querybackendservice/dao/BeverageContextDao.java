@@ -56,7 +56,7 @@ public class BeverageContextDao extends SimpleRDF4JCRUDDao<BeverageContext, IRI>
     protected void populateBindingsForUpdate(MutableBindings bindingsBuilder, BeverageContext context) {
         bindingsBuilder
                 .add(BEVERAGE, context.getBeverage())
-                .add(IS_PREFERRED, context.isContextBeveragePreferred())
+                .add(IS_PREFERRED, String.valueOf(context.isContextBeveragePreferred()))
                 .add(EVENT, context.getEvent())
                 .add(LOCATION, context.getLocation())
                 .add(SEASON, context.getSeason());
@@ -67,7 +67,7 @@ public class BeverageContextDao extends SimpleRDF4JCRUDDao<BeverageContext, IRI>
         BeverageContext context = new BeverageContext();
         context.setId(QueryResultUtils.getIRI(querySolution, BEVERAGE_CTX_ID));
         context.setBeverage(QueryResultUtils.getIRI(querySolution, BEVERAGE));
-        context.setContextBeveragePreferred(QueryResultUtils.getBoolean(querySolution, IS_PREFERRED));
+        context.setContextBeveragePreferred(Boolean.parseBoolean(QueryResultUtils.getString(querySolution, IS_PREFERRED)));
         context.setEvent(QueryResultUtils.getStringOptional(querySolution, EVENT).orElse(null));
         context.setLocation(QueryResultUtils.getStringOptional(querySolution, LOCATION).orElse(null));
         context.setSeason(QueryResultUtils.getStringOptional(querySolution, SEASON).orElse(null));
