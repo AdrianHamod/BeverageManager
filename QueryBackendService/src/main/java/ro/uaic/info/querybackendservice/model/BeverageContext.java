@@ -1,5 +1,6 @@
 package ro.uaic.info.querybackendservice.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,4 +26,9 @@ public class BeverageContext {
     private String event;
     private String location;
     private String season;
+
+    @JsonProperty(value = "isContextBeveragePreferred")
+    public boolean isContextBeveragePreferred() {
+        return isContextBeveragePreferred;
+    }
 }
