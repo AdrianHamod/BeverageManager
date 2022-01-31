@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import ro.uaic.info.querybackendservice.model.Beverage;
 import ro.uaic.info.querybackendservice.model.ObjectType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

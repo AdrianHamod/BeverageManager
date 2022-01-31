@@ -13,6 +13,7 @@ import ro.uaic.info.querybackendservice.model.BeverageContext;
 import ro.uaic.info.querybackendservice.model.Profile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +41,9 @@ public class RecommendationService {
     @Transactional
     public Set<IRI> getSearchbarRecommendations(IRI profileId, int recommendations) {
         Profile profile = profileDao.getById(profileId);
+        if (profile.getBeveragePreferences() == null) {
+            return Collections.emptySet();
+        }
         Set<IRI> preferences = profile.getBeveragePreferences()
                         .stream()
                         .filter(BeverageContext::isContextBeveragePreferred)
@@ -62,15 +66,23 @@ public class RecommendationService {
             for (Queue<IRI> current :
                     allDirectNeighbours) {
                 IRI currentIri = current.remove();
+
                 if (gatheredNeighbours.add(currentIri)) {
                     neighboursToGather--;
+                } else if (current.isEmpty()){
+                    emptyListsToRemove.add(current);
+                    continue;
                 }
 
                 List<IRI> children = getChildren(currentIri);
-                current.addAll(children);
+                current.addAll(
+                        children.stream()
+                                .filter(c -> !gatheredNeighbours.contains(c))
+                                .collect(Collectors.toList())
+                );
 
                 IRI parent = getParent(currentIri);
-                if (parent != null) {
+                if (parent != null && !gatheredNeighbours.contains(parent)) {
                     current.add(parent);
                 }
 
@@ -84,6 +96,7 @@ public class RecommendationService {
     }
 
     private IRI getParent(IRI current) {
+        log.info("Current parent search for: {}", current);
         Optional<Beverage> beverage = beverageDao.getByIdOptional(current);
         if (beverage.isEmpty()) {
             return null;
@@ -92,6 +105,7 @@ public class RecommendationService {
     }
 
     private List<IRI> getChildren(IRI current) {
+        log.info("Current children search for: {}", current);
         return beverageDao.listChildren(current)
                 .stream()
                 .map(Beverage::getBeverageId)
