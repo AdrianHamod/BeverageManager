@@ -104,7 +104,7 @@ public class ProfileController {
         return ResponseEntity.notFound().build();
     }
 
-    @PatchMapping("/{profileId}/{beverageContextId}")
+    @DeleteMapping("/{profileId}/{beverageContextId}")
     ResponseEntity<Profile> removeBeverageContext(
             @PathVariable String profileId,
             @PathVariable String beverageContextId
@@ -116,6 +116,32 @@ public class ProfileController {
         if (updatedProfile != null) {
             return ResponseEntity.ok(updatedProfile);
         }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{profileId}/{beverageContextId}")
+    ResponseEntity<Profile> updateBeverageContext(
+            @PathVariable String profileId,
+            @PathVariable String beverageContextId,
+            @RequestBody PatchProfileBeverageContextRequest req) {
+        BeverageContext context = new BeverageContext();
+        context.setId(iri(IRILabel.NS, beverageContextId));
+        context.setBeverage(iri(IRILabel.NS, req.getBeverage()));
+        context.setEvent(req.getEvent());
+        context.setSeason(req.getSeason());
+        context.setLocation(req.getLocation());
+        context.setContextBeveragePreferred(req.isContextBeveragePreferred());
+        IRI profileIri = iri(IRILabel.NS, profileId);
+
+        Profile profile = profileService.updateBeverageContext(
+                profileIri,
+                context
+        );
+
+        if (profile != null) {
+            return ResponseEntity.ok(profile);
+        }
+
         return ResponseEntity.notFound().build();
     }
 
