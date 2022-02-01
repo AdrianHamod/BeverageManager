@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="enlgish">
+<head>
+    <style type="text/css">
+        body {
+            width: 7in;
+            height: 9.25in;
+            margin: 27mm 16mm 27mm 16mm;
+        }
+    </style>
+    <meta charset="utf-8">
+    <title>Beverage Manager technical report</title>
+</head>
+
+<article>
+    <header>
+    <h1>Beverage Manager User Guide</h1>
+        <div role="contentinfo">
+            <section typeof="sa:AuthorsList">
+                <h2>Contributors</h2>
+                <ul>
+                    <li typeof="sa:ContributorRole" property="schema:author">
+              <span typeof="schema:Person">
+                <meta property="schema:givenName" content="Adrian">
+                <meta property="schema:familyName" content="Hamod">
+                <span property="schema:name">Adrian Hamod</span>
+              </span>
+                        <ul>
+                            <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
+                                <a href="mailto:adrianhamod@gmail.com" property="schema:email"> adrianhamod@gmail.com
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li typeof="sa:ContributorRole" property="schema:author">
+              <span typeof="schema:Person">
+                <meta property="schema:givenName" content="Dorian">
+                <meta property="schema:additionalName" content="Gheorghe">
+                <meta property="schema:familyName" content="Olărescu">
+                <span property="schema:name">Dorian Olărescu</span>
+              </span>
+                        <ul>
+                            <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
+                                <a href="mailto:dorian.olarescu@gmail.com" property="schema:email"> dorian.olarescu@gmail.com
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>License and copyright</h2>
+                <h3>
+                    <a href="https://creativecommons.org/licenses/by/4.0/" property="schema:license" typeof="CreativeWork">License</a>
+                    </h3>
+                        <div property="schema:copyrightYear"></div>
+                        <h3>Copyright</h3>
+                        <ul>
+                            <li property="schema:copyrightYear">2021</li>
+                            <li property="schema:copyrightHolder" typeof="schema:Organization">
+                                Facultatea de Informatică - Universitatea Alexandru Ioan Cuza
+                            </li>
+                        </ul>
+            </section>
+            <section typeof="sa:Abstract">
+                <h2>Abstract - What is BEM</h2>
+                This report serves as a user-guide for the Beverage Manager Web Application,
+                showcasing three use-cases of the service.
+                The purpose of the application is the discovery of new non-alcoholic beverages where
+                the user can specify his or her feelings about a certain beverage, and the app will take
+                that into consideration with meaningful recommandations.
+            </section>
+
+            <section>
+                <h2>Startup</h2>
+                When accessing the web application for the first time, you are greeted with a login screen.
+                On this page, you can either sign into the application using an account you've previously created,
+                you can register for a new account, or simply you can skip the login page altogether bringing you to the beverages page
+                where you can view all the beverages provided by the application. All beverages feature beautiful thumbnails
+                that provide the user with visual information about the beverage.
+            </section>
+            <section>
+                <h2>Using the application without an account</h2>
+                The application is built to work even if you don't have an account. This feature is specifically built
+                in order to provide anyone with useful information about non-alcoholic beverages.
+                As stated above, if you click the "Skip" button, you are immediately taken to the full beverage list where you can
+                get an overview of all the beverages provided by the application. You can even get into detail by clicking the "More Info" button next to each
+                beverage. There you are taken to the product page where you can see the full path of the beverage,
+                the allergens of a certain beverage as well as a short description about the beverage. Note that all beverages have a description
+                but the description message differs from beverage to beverage. Some descriptions offer information about the beverage history while
+                others offer tutorials on how to make them!
+                After viewing the beverages, you can continue to navigate as such, or create and account
+                and discover a world of recommandations.
+            </section>
+            <section>
+                <h2>Sign up</h2>
+                If you've decided to signup in the application, you are required to fill in a form with basic information such as
+                nationality, gender and more. After filling in the information, and setting up a password you are ready for
+                the next step, loggin in.
+                <figure id="fig1">
+                    <img
+                        src="./images/SignupPage.png"
+                        alt="SignupPage"
+                        style="width: 100%;">
+                    <figcaption>Signup page</figcaption>
+                </figure>
+            </section>
+            <section>
+                <h2>Log in</h2>
+                The login process is quick and easy if the you have an account. Just enter the email address used for the registration
+                process and the password created and voilá! You are now ready to experience the BEM application.
+                <figure id="fig2">
+                    <img
+                        src="./images/LoginPage.png"
+                        alt="LoginPage"
+                        style="width: 100%;">
+                    <figcaption>Login page</figcaption>
+                </figure>
+            </section>
+            <section>
+                <h2>Beverage Listing</h2>
+                After succesfully logging in or entering with an account you can view all the beverages the app has to offer.
+                You can change the aspect of the list, from, well, a list to a grid view, you can filter beverages using the seach bar
+                right above the list or you can navigate through each page browsing for beverages.
+                <figure id="fig3">
+                    <img
+                        src="./images/BeveragesPage.png"
+                        alt="BeveragesPage"
+                        style="width: 100%;">
+                    <figcaption>Beverages page</figcaption>
+                </figure>
+
+            </section>
+            <section>
+                <h2>Beverage Details</h2>
+                The beverage details page is the place to look for everything about that beverage. You can see a bigger image, you can see the beverage description,
+                the path to that beverage so you get a sense of where you are and, of course, if you are logged in, you can set or edit you preferences for this beverage.
+                This helps in finding other beverages that you might like based on this, and maybe previous preferences.
+                <figure id="fig4">
+                    <img
+                        src="./images/BeverageDetail.png"
+                        alt="BeverageDetail"
+                        style="width: 100%;">
+                    <figcaption>Beverage Detail page</figcaption>
+                </figure>
+            </section>
+            <section>
+                <h2>Beverage Preferences</h2>
+                Here you can add your own preferences for that beverage. It is a crucial aspect of the application because this is the way you can get personalized
+                recommandations. It is after these preferences our app looks for the best beverages you might like.
+                <figure id="fig5">
+                    <img
+                        src="./images/PreferencePane.png"
+                        alt="PreferencePane"
+                        style="width: 100%;">
+                    <figcaption>Beverage Preference Modal</figcaption>
+                </figure>
+            </section>
+            <section>
+                <h2>Profile Page</h2>
+                In the preference page you can see your account and all the data you've submitted. Also, if you've stated your preference for a beverage, or multiple ones, you
+                can find all of them here. You can click on the beverage to see why you've set a preference, you can edit the preference if you think it no longer reflects your opinion,
+                or you can even delete the preference.
+                <figure id="fig6">
+                    <img
+                        src="./images/ProfilePage.png"
+                        alt="ProfilePage"
+                        style="width: 100%;">
+                    <figcaption>Profile Page</figcaption>
+                </figure>
+            </section>
+            <section>
+                <h2>Dashboard Page</h2>
+                In the dashboard page you can see your preferences come alive! Here is a list of recommended beverages based on your own preferences. You can find new drinks to try out,
+                or see the ones you've already likes. The interface is the same as in the beverages page, with a show more button taking you to the beverage details page so you can either
+                see information about the beverage, or add/edit preferences for that beverage.
+                <figure id="fig7">
+                    <img
+                        src="./images/DashboardPage.png"
+                        alt="DashboardPage"
+                        style="width: 100%;">
+                    <figcaption>Dashboard Page</figcaption>
+                </figure>
+            </section>
+            <section>
+                <h2>Smart Searching</h2>
+                Smart searching is only "smart" if you've taken the time to add some preferences. Otherwise you get PLOBS (Plain Old Boring Search!) and you get an autocomplete with all
+                the beverages name. If you've set some preferences, the search bar shows you only relevant results based on the feedback you've given to beverages.
+                <figure id="fig8">
+                    <img
+                        src="./images/AutocompleteSearch.png"
+                        alt="AutocompleteSearch"
+                        style="width: 100%;">
+                    <figcaption>Autocomplete Search Based on Preferences</figcaption>
+                </figure>
+            </section>
+            <section>
+                <h2>Global Search</h2>
+                Global search is different than Smart Search (or PLOBS for that matter) because it searches throughout the application not after the beverage title, but rather after
+                the beverage description. It's done that way in order to provide a simple search based on an ingredient maybe, or a location that the beverage description
+                might contain and you might be interested about.
+                <figure id="fig9">
+                    <img
+                        src="./images/CommentSearch.png"
+                        alt="CommentSearch"
+                        style="width: 100%;">
+                    <figcaption>Global Autocomplete Based on Beverage Comment</figcaption>
+                </figure>
+            </section>
+            <section>
+                <h2>Use Cases</h2>
+                The BEM application provides multiple use cases. We'll take a look at four of them
+                <section>
+                    <h4>Beverage Discovery</h4>
+                    The app can be used to simply discover beverages by using it without an account. You can get all the information
+                    needed, without recommandations. Browse and glance at multiple drinks, learning some trivia, finding out how they
+                    can be made.
+                </section>
+                <section>
+                    <h4>User Recommandations</h4>
+                    A user can see recommended beverages based on previous set preferences, so he can discover new and interesting beverages
+                    that he might like (most probably).
+                </section>
+                <section>
+                    <h4>Category Browsing</h4>
+                    What if you have a certain beverage in mind and you'd like to see similar beverages? Well, you can use the app and from the
+                    beverage details page just click on the route for the parent. You'll be taken to a filtered list based on that drink's category.
+                </section>
+                <section>
+                    <h4>Description Searching</h4>
+                    If you are interested in finding out what goes with, maybe, a certain food or at a certain event, you can use the Global Search
+                    feature to look inside each beverage description. =
+                </section>
+            </section>
+        </div>
+    </header>
+</article>
+</html>

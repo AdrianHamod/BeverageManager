@@ -481,6 +481,18 @@ protected NamedSparqlSupplierPreparer prepareNamedSparqlSuppliers(NamedSparqlSup
                     </section>
                     <section>
                         <h4>4.3.2 Frontend design </h4>
+                        For the frontend part of the application we've used Angular as our framework. Is is a very popular solution for
+                        web design, with strong support and maintenance, with powerful making development relatively easier, but still being
+                        a very powerful solution. For example, Angular uses TypeScript which greatly improves code writing by being strongly typed.
+                        In our project we've made use of multple Angular components that improved our workflow and reduced our code size.
+                        Also, we've adopted the MVVM pattern for the frontend design, having decoupled the Views from the ViewModels (mostly) which
+                        greatly improves reusability. We have separated the pages (components) into multiple modules that intuitively describe what each
+                        module contain. We have four main components, Auth, Beverages, Dashboard, Profile. Each module has its own service.
+                        Angular also provides a guard functionality that allows some pages to be accessed only if a certain condition is met. We are
+                        using this functionality to allow some pages to only be accessed if the user is logged in.
+                        On top of all this, we making use of interceptors to process API requests, such as an error interceptor for catching error codes
+                        and processing them in a single point, and JWT interceptor for adding a JWT token to the request header to make authenticated
+                        requests.
                     </section>
                 </section>
                 <section>
