@@ -7,9 +7,6 @@
             height: 9.25in;
             margin: 27mm 16mm 27mm 16mm;
         }
-        .img-container {
-            text-align: left;
-        }
     </style>
     <meta charset="utf-8">
     <title>Beverage Manager technical report</title>
@@ -235,7 +232,7 @@
                             we use 3 DAO classes that satisfy the mentioned requirements for handling the following
                             entities: Beverage, BeverageContext and Profile.
                         </p>
-                        <p> An important mention is that the data representation in the RDF store consists of triples,
+                        <p id="tripleMention"> An important mention is that the data representation in the RDF store consists of triples,
                          even though in the business layer we use OOP models. This can be best exemplified through the
                         fact that we populate the RDF store from a data.ttl file consisting of multiple beverages,
                         profiles and beverage contexts described as triples. After loading the triples through the
@@ -264,7 +261,7 @@
                     </section>
                 </section>
                 <section>
-                    <h3>4.3 Application </h3>
+                    <h3>4.2 Application </h3>
                     <p> A 3 tier architecture is used to build the application. As mentioned in the
                         <a href="#designAndArchitecture">design and architecture section</a>, an Angular application is
                         used in the presentation layer in order to render on client side data fetched from the APIs
@@ -274,17 +271,212 @@
                     </p>
                     <section>
                         <h4>4.3.1 Backend design </h4>
-                        <h5>4.3.1.1 Controller-Transactional-DAO UML</h5>
-                        <div class="img-container">
-                        <figure>
-                            <img src="https://raw.githubusercontent.com/AdrianHamod/BeverageManager/main/architecture/uml/query_backend_umlv4.jpg">
-                        </figure>
-                        </div>
                         <section>
-                            <h5>4.3.1.1 APIs</h5>
+                            <h5>4.3.1.1 Model UML</h5>
+                            <figure id="fig1">
+                                <img src="https://raw.githubusercontent.com/AdrianHamod/BeverageManager/main/architecture/uml/model_uml.jpg">
+                                <figcaption>fig. 1</figcaption>
+                            </figure>
+                            <p>&nbsp;</p>
                         </section>
                         <section>
-                            <h5>4.3.1.2 Queries</h5>
+                        <h5>4.3.1.2 Controller-Transactional-DAO UML</h5>
+                        <figure id="fig2" typeof="sa:image">
+                            <img src="https://raw.githubusercontent.com/AdrianHamod/BeverageManager/main/architecture/uml/query_backend_umlv4.jpg">
+                            <figcaption>fig. 2</figcaption>
+                        </figure>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        </section>
+                        <section>
+                            <h5>4.3.1.3 DAO Layer</h5>
+                            <p>As we mentioned in the <a href="#tripleMention">repository</a> section, the RDF store will
+                            store our data in triples format. Using the low level connection API enables us to work
+                            directly with the triples. The DAO classes enable us to abstract the triple processing through
+                            mapping them to real entities such as the classes described in the <a href="#fig1">model diagram</a>.
+                            Along with implementing the mapping, there are several steps required in order to abstract
+                            CRUD operations. We will go through the BeverageDao class to showcase a real example and explore
+                            current shortcomings.</p>
+                            <ol>
+                                <li>Class declaration</li>
+                                <figure typeof="schema:SoftwareSourceCode">
+                                    <pre>
+                                        <code class="language-java">
+@Component
+public class BeverageDao extends SimpleRDF4JCRUDDao&lt;Beverage, IRI>
+                                        </code>
+                                    </pre>
+                                </figure>
+                                The org.eclipse.rdf4j.spring.dao.SimpleRDF4JCRUDDao abstract class has to be extended
+                                with the appropriate generics. In this example, the ENTITY generic is set to Beverage
+                                class and the ID type of the Beverage is set to IRI. The BeverageDao constructor also
+                                has to match the base class constructor; annotating the class with @Component ensures
+                                the object will be managed by the Spring container and injected with the beans passed
+                                in the constructor, specifically the RDF4JTemplate. The RDF4JTemplate object is used
+                                internally to fetch the connection instance and implement the CRUD.
+                                <li>Input id generation</li>
+                                <figure typeof="schema:SoftwareSourceCode">
+                                    <pre>
+                                        <code class="language-java">
+@Override
+protected IRI getInputId(Beverage beverage) {
+    return beverage.getBeverageId();
+}
+                                        </code>
+                                    </pre>
+                                </figure>
+                                We can implement ourselves the id generation logic. This could be used to generate an id
+                                if the passed entity is missing the id value. We simply return the mandatory id configured
+                                at model level.
+                                <li>Setting bindings</li>
+                                <figure typeof="schema:SoftwareSourceCode">
+                                    <pre>
+                                        <code class="language-java">
+@Override
+protected void populateIdBindings(MutableBindings mutableBindings, IRI iri) {
+    mutableBindings.add(BEVERAGE_ID, iri);
+}
+
+@Override
+protected void populateBindingsForUpdate(MutableBindings bindingsBuilder, Beverage beverage) {
+    bindingsBuilder
+            .add(NAME, beverage.getName())
+            .add(PARENT, beverage.getParent())
+            .add(DESCRIPTION, beverage.getDescription())
+            .add(IMAGE_URL, beverage.getImageUrl());
+
+    bindingsBuilder.add(ALLERGENS, String.join(", ", beverage.getAllergens()));
+}
+                                        </code>
+                                    </pre>
+                                </figure>
+                                <p> The bindings are used by queries to populate the query parameters with the specified
+                                values. In order to implement *byId operations, there is a clear distinction between
+                                    the id field and the rest of mutable fields. </p>
+                                <p> Notice the allergens list attribute cast to String using the join operation. As of
+                                    now collection serialization is not supported, and we need to handle it ourselves.
+                                Later, when we are mapping the fetched the triples to entities,
+                                    we perform a similar operation in order to cast back to a List object. Although the
+                                Spring integration does not currently support collection bindings, it's important to
+                                    mention that the RDF4J API support collection operations through their Model API.</p>
+                                <li>Reading one entity</li>
+                                <figure typeof="schema:SoftwareSourceCode">
+                                    <pre>
+                                        <code class="language-java">
+@Override
+protected String getReadQuery() {
+    SelectQuery selectQuery = Queries.SELECT();
+    String readQuery = selectQuery.select(BEVERAGE_ID, NAME, PARENT, DESCRIPTION, NAME, IMAGE_URL, ALLERGENS)
+            .where(
+                    BEVERAGE_ID.isA(OWL.CLASS)
+                            .andHas(RDFS.SUBCLASSOF, PARENT)
+                            .andHas(DC.DESCRIPTION, DESCRIPTION)
+                            .and(BEVERAGE_ID.has(FOAF.NAME, NAME).optional())
+                            .and(BEVERAGE_ID.has(ObjectType.IMAGE, IMAGE_URL).optional())
+                            .and(BEVERAGE_ID.has(ObjectType.ALLERGENS, ALLERGENS).optional())
+            )
+            .getQueryString();
+    return readQuery;
+}
+                                        </code>
+                                    </pre>
+                                </figure>
+                                The getReadQuery is used to read exactly 1 entity (or none if not found). This is the
+                                building block method that is used in all read operations.
+                                <li>Mapping triples to entities</li>
+                                <figure typeof="schema:SoftwareSourceCode">
+                                    <pre>
+                                        <code class="language-java">
+@Override
+protected Beverage mapSolution(BindingSet querySolution) {
+    Beverage beverage = new Beverage();
+    beverage.setBeverageId(iri(QueryResultUtils.getString(querySolution, BEVERAGE_ID)));
+    beverage.setName(QueryResultUtils.getStringMaybe(querySolution, NAME));
+    beverage.setParent(QueryResultUtils.getIRI(querySolution, PARENT));
+    beverage.setDescription(QueryResultUtils.getString(querySolution, DESCRIPTION));
+    beverage.setImageUrl(QueryResultUtils.getStringMaybe(querySolution, IMAGE_URL));
+    beverage.setAllergens(
+            List.of(QueryResultUtils.getStringOptional(querySolution, ALLERGENS)
+                    .orElse("").split(", "))
+    );
+    return beverage;
+}
+                                        </code>
+                                    </pre>
+                                </figure>
+                                <p> The mapping method needs to be implemented by the library user. When fetched, the
+                                results consists in a collection of triples. These are accessed through the passed
+                                BindingSet parameter using the same binding constants used in the implemented
+                                    getReadQuery method. </p>
+                                <li>Insert one entity</li>
+                                <figure typeof="schema:SoftwareSourceCode">
+                                    <pre>
+                                        <code class="language-java">
+@Override
+protected NamedSparqlSupplier getInsertSparql(Beverage beverage) {
+    return NamedSparqlSupplier.of("insert", () -> Queries.INSERT(
+                    (TriplePattern) BEVERAGE_ID.isA(OWL.CLASS)
+                            .andHas(RDFS.SUBCLASSOF, PARENT)
+                            .andHas(DC.DESCRIPTION, DESCRIPTION)
+                            .andHas(DC.FOAF.NAME, NAME)
+                            .andHas(DC.ObjectType.IMAGE, IMAGE_URL)
+                            .andHas(ObjectType.ALLERGENS, ALLERGENS)
+            )
+            .getQueryString());
+}
+                                        </code>
+                                    </pre>
+                                </figure>
+                                Similarly the insert method needs to be implemented in order to use save/update
+                                operations.
+                                <li>Custom queries handled by DAO class</li>
+                                <figure typeof="schema:SoftwareSourceCode">
+                                    <pre>
+                                        <code class="language-java">
+@Override
+protected NamedSparqlSupplierPreparer prepareNamedSparqlSuppliers(NamedSparqlSupplierPreparer preparer) {
+    String descriptionFullTextSearch = "PREFIX search: &lt;http://www.openrdf.org/contrib/lucenesail#> " +
+            "SELECT ?beverage_id ?beverage_description " +
+            "WHERE { ?beverage_id search:matches [" +
+            " search:query ?term ; " +
+            " search:snippet ?beverage_description ] } ";
+
+    String listAllChildren = "PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#> " +
+            "PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
+            "PREFIX owl: &lt;http://www.w3.org/2002/07/owl#> " +
+            "SELECT ?beverage_id " +
+            "WHERE { ?beverage_id rdfs:subClassOf ?beverage_parent . } ";
+
+    return preparer.forKey(QUERY_KEYS.DESCRIPTION_FULL_TEXT_SEARCH)
+            .supplySparql(descriptionFullTextSearch)
+            .forKey(QUERY_KEYS.LIST_CHILDREN)
+            .supplySparql(listAllChildren);
+}
+                                        </code>
+                                    </pre>
+                                </figure>
+                                Finally, we can define custom queries TupleQueryEvaluationBuilder API; we provide a
+                                SPARQL query string, bind values to parameters as we need and finally evaluate and
+                                convert the execution to a list of bindings that we can map or fetch using the getById
+                                method. What is really neat is that we can wrap the customer queries as well in
+                                transactional operations inside the service classes.
+                            </ol>
+                        </section>
+                        <section>
+                            <h5>4.3.1.4 Controller and Transactional layers</h5>
+                            The transactional layer is mainly a thin layer over DAO, annotated with @Transactional in
+                            order to let the Spring container know that the TransactionManager should manage this
+                            operations given appropriate roll back methods are implemented. The controller layer is a
+                            think layer on top of the service layer that handles user input and allows the input to be
+                            simplified, by handling the request parameters to entities mapping. (the user does not need
+                            fill in IDs, or to build IRIs).
+                        </section>
+                        <section>
+                            <h5>4.3.1.5 Queries</h5>
+                            The queries we implement are the insert and select queries in the DAO layer. The mentioned
+                            overridden getReadQuery and getInsertSparql methods alongside our custom queries for
+                            retrieving beverages by a specified parent beverage and for indexed full text searches by
+                            a specified term upon the beverage description.
                         </section>
                     </section>
                     <section>
@@ -292,7 +484,45 @@
                     </section>
                 </section>
                 <section>
-                    <h3>4.2 Project requirements</h3>
+                    <h3>4.3 Ontology</h3>
+                    <p> In order to design the ontology we started with the project requirements, defined the frontend-backend
+                    contracted and the OOP models we will use. Going further we reverse mapped the entities to triples,
+                        considering the RDF4J workflow and chose a unclaimed domain for the namespace we were going to us.
+                    </p>
+                    <section>
+                        <h4>4.3.1 Reused ontologies</h4>
+                        <ul>
+                        We reused classes and properties from the following namespaces:
+                            <li>http://www.w3.org/2002/07/owl</li>
+                            <li>http://www.w3.org/1999/02/22-rdf-syntax-ns</li>
+                            <li>http://www.w3.org/2000/01/rdf-schema</li>
+                            <li>http://xmlns.com/foaf/0.1/</li>
+                            <li>http://purl.org/dc/elements/1.1/</li>
+                            <li>http://www.schema.org/</li>
+                        </ul>
+
+                        <p> The root of our hierarchical structure is the `owl:Class` class. Each of the defined classes
+                        are of type owl:Class.</p>
+                        <p> The type of class is described through the rdf:type predicate.</p>
+                        <p> All beverages, except the root beverage, are subclasses of another beverage. We use the
+                            rdfs:subClassOf to describe it.</p>
+                        <p> We use foaf:name to describe the name of a profile, of a beverage; we use foaf:gender to
+                            describe the profile gender; foaf:knows is used to describe the relation between a profile
+                        subject and a list of beverage preferences.</p>
+                        <p> The dc:description predicate is used to describe a beverage subject's description literal</p>
+                        <p> The http://www.schema.org/image of a beverage is used to describe the image url of a beverage</p>
+                    </section>
+                    <section>
+                        <h4>4.3.2 Ontology classes and properties</h4>
+                    </section>
+                    <p> The root class for beverages is the :Beverage class. (prefixed by the unclaimed domain used as
+                        namespace). Each beverage entry is either a subclass of :Beverage or another beverage subject.
+                    </p>
+                    <p> The properties we have to fill in ourselves are the following: `:allergens`, `:event`,
+                        `:season`, `:preference`.</p>
+                </section>
+                <section>
+                    <h3>4.4 Project requirements</h3>
                 </section>
             </section>
         </div>
