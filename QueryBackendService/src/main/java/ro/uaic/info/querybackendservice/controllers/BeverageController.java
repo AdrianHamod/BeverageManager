@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ro.uaic.info.querybackendservice.api.errors.ErrorData;
 import ro.uaic.info.querybackendservice.api.request.PostBeverageRequest;
 import ro.uaic.info.querybackendservice.api.response.DeleteBeverageByIdResponse;
 import ro.uaic.info.querybackendservice.api.response.GetAllBeveragesResponse;
@@ -24,7 +23,6 @@ import ro.uaic.info.querybackendservice.model.IRILabel;
 import ro.uaic.info.querybackendservice.model.Profile;
 import ro.uaic.info.querybackendservice.service.BeverageService;
 import ro.uaic.info.querybackendservice.service.ProfileService;
-import ro.uaic.info.querybackendservice.service.ResourceService;
 
 import javax.validation.Valid;
 import java.net.URLDecoder;
@@ -42,7 +40,6 @@ public class BeverageController {
 
     private final BeverageService beverageService;
     private final ProfileService profileService;
-    private final ResourceService resourceService;
 
     /**
      * Returns empty list each time
@@ -50,7 +47,7 @@ public class BeverageController {
     @GetMapping
     public ResponseEntity<GetAllBeveragesResponse> getAllBeverages() {
         return ResponseEntity.ok(
-                GetAllBeveragesResponse.builder().beverages(beverageService.getAllBeverages()).build());
+                GetAllBeveragesResponse.builder().beverages(beverageService.listBeverages()).build());
     }
 
     /**

@@ -36,7 +36,7 @@ public class ResourceService {
     }
 
     @Transactional
-    public void getAllData() {
+    public void displayAllData() {
         RepositoryResult<Statement> result = rdf4JTemplate.applyToConnection(con -> con.getStatements(null, null, null));
         for (Statement stms :
                 result) {

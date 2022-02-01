@@ -25,6 +25,6 @@ public class ResourceLoader {
 
     @GetMapping("/show")
     public void printAll() {
-        resourceService.getAllData();
+        resourceService.displayAllData();
     }
 }

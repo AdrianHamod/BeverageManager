@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatchProfileBeverageContextRequest {
+public class PatchProfileRequest {
 
     private String beverage;
     private boolean isContextBeveragePreferred;

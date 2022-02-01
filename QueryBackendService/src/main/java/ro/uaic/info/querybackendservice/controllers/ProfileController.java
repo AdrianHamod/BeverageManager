@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ro.uaic.info.querybackendservice.api.request.PatchProfileBeverageContextRequest;
+import ro.uaic.info.querybackendservice.api.request.PatchProfileRequest;
 import ro.uaic.info.querybackendservice.api.request.PostProfileRequest;
 import ro.uaic.info.querybackendservice.api.request.PutProfileRequest;
 import ro.uaic.info.querybackendservice.model.BeverageContext;
 import ro.uaic.info.querybackendservice.model.IRILabel;
 import ro.uaic.info.querybackendservice.model.Profile;
 import ro.uaic.info.querybackendservice.service.ProfileService;
-import ro.uaic.info.querybackendservice.service.RecommendationService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -36,10 +35,9 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 public class ProfileController {
 
     private final ProfileService profileService;
-    private final RecommendationService recommendationService;
 
     @GetMapping
-    List<Profile> getAllProfile() {
+    List<Profile> getAllProfiles() {
         return profileService.listProfiles();
     }
 
@@ -82,7 +80,7 @@ public class ProfileController {
     @PatchMapping("/{profileId}")
     ResponseEntity<Profile> addBeverageContext(
             @PathVariable String profileId,
-            @RequestBody PatchProfileBeverageContextRequest req) {
+            @RequestBody PatchProfileRequest req) {
         BeverageContext context = new BeverageContext();
         context.setId(iri(IRILabel.NS, profileId + req.getBeverage() + "Context"));
         context.setBeverage(iri(IRILabel.NS, req.getBeverage()));
@@ -105,13 +103,13 @@ public class ProfileController {
     }
 
     @DeleteMapping("/{profileId}/{beverageContextId}")
-    ResponseEntity<Profile> removeBeverageContext(
+    ResponseEntity<Profile> deleteBeverageContext(
             @PathVariable String profileId,
             @PathVariable String beverageContextId
     ) {
         IRI profileIri = iri(IRILabel.NS, profileId);
         IRI beverageContextIri = iri(IRILabel.NS, beverageContextId);
-        Profile updatedProfile = profileService.removeBeverageContext(profileIri, beverageContextIri);
+        Profile updatedProfile = profileService.deleteBeverageContext(profileIri, beverageContextIri);
 
         if (updatedProfile != null) {
             return ResponseEntity.ok(updatedProfile);
@@ -123,7 +121,7 @@ public class ProfileController {
     ResponseEntity<Profile> updateBeverageContext(
             @PathVariable String profileId,
             @PathVariable String beverageContextId,
-            @RequestBody PatchProfileBeverageContextRequest req) {
+            @RequestBody PatchProfileRequest req) {
         BeverageContext context = new BeverageContext();
         context.setId(iri(IRILabel.NS, beverageContextId));
         context.setBeverage(iri(IRILabel.NS, req.getBeverage()));
@@ -146,7 +144,7 @@ public class ProfileController {
     }
 
     @DeleteMapping("/{id}")
-    IRI deleteProfile(@PathVariable String id) {
+    IRI deleteProfileById(@PathVariable String id) {
         IRI iriId = iri(IRILabel.NS, id);
         profileService.deleteProfileById(iriId);
         return iriId;

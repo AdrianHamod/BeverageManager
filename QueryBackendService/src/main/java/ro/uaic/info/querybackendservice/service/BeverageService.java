@@ -28,7 +28,7 @@ public class BeverageService {
     }
 
     @Transactional
-    public List<Beverage> getAllBeverages() {
+    public List<Beverage> listBeverages() {
         return beverageDao.list();
     }
 
