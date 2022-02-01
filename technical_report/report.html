@@ -522,7 +522,36 @@ protected NamedSparqlSupplierPreparer prepareNamedSparqlSuppliers(NamedSparqlSup
                         `:season`, `:preference`.</p>
                 </section>
                 <section>
-                    <h3>4.4 Project requirements</h3>
+                    <h3>4.4 Project requirements assessment</h3>
+                    <p>Completed requirements</p>
+                    <ol>
+                        <li>Propose an ontological model regarding most common non-alcoholic beverages</li>
+                        The models we use describe the ontological model. The use ontology model is used in the
+                        data.ttl file we that use to load the RDF store.
+                        <li>Create the knowledge graph including the user's preferences about beverages</li>
+                        The initial knowledge graph is described in data.ttl file. Additional create operations update
+                         the RDF store with triples, enhancing the knowledge graph.
+                        <li>The beverage usage based on context</li>
+                        Each profile can create e personal context regarding one beverage, stating the profile
+                        preference on the beverage in question and additional data such as an event, a season or a
+                        location that fits the context. This context can be created, updated and deleted. If a profile
+                        accesses a beverage page, the beverage context will also be loaded if it exist.
+                        <li>Useful beverage metadata</li>
+                        We include a name, parent, description and an image in the Beverage model.
+                        <li>Developed web application</li>
+                        The application consists in a presentation layer, the Angular frontend, an application layer,
+                        the Spring backend, and a data layer, the RDF4J server rdf store.
+                        <li>Smart browsing and filtering</li>
+                        For smart browsing we included a search based on terms that tries to match descriptions of
+                        beverages. This search is based on the lucene index and lucene API. The executed query is
+                        SPARQL. Trivial searches and filters include search by name and filter by parent name.
+                        <li>Suggestions based on correlations</li>
+                        We use a suggestion api to fetch beverages for the recommendation page and the beverage search.
+                        This api is based on user preferences and correlations between beverages. More specifically
+                        we perform a round-robin like BFS search starting from the positive preferences of a user (likes)
+                        and searching around the liked beverage's knowledge graph, transversing based on a node's
+                        parent and/or children.
+                    </ol>
                 </section>
             </section>
         </div>
